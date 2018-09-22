@@ -28,7 +28,7 @@ function createWindow () {
 // 部分 API 在 ready 事件触发后才能使用。
 app.commandLine.appendSwitch('remote-debugging-port', '8315')
 app.commandLine.appendSwitch('host-rules', 'MAP * 127.0.0.1')
-app.on('ready', createWindow)
+app.on('ready', createWindow);
 
 // 当全部窗口关闭时退出。
 app.on('window-all-closed', () => {
