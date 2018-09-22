@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <!-- Insert this line above script imports  -->
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <!-- normal script imports etc  -->
+    <script src="../jslib/jquery-3.3.1.min.js"></script> 
+    <!-- Insert this line after script imports -->
+    <script>if (window.module) module = window.module;</script>
+
+    <link rel="stylesheet" href="../node_modules/xel/themes/vanilla.css">
+    <script src="../node_modules/xel/xel.min.js"></script>
+  </head>
+  <body>
+    <h1>Hello World!</h1>
+    We are using node <script>document.write(process.versions.node)</script>,
+    Chrome <script>document.write(process.versions.chrome)</script>,
+    and Electron <script>document.write(process.versions.electron)</script>. <br>
+    <button tag="test">Test</button>
+    <script>
+      $(()=>{
+        //require("electron").remote.console.log("hah");
+        console.log("hahaha")
+      });
+      $("button[tag=test]").on("click",()=>{
+        console.log("test clicked");
+      })
+    </script>
+  </body>
+</html>

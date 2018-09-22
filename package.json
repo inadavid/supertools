@@ -1,0 +1,15 @@
+{
+  "name": "supertools",
+  "version": "1.0.0",
+  "description": "SuperData SQL generation tools",
+  "main": "index.js",
+  "scripts": {
+    "test": "electron ."
+  },
+  "author": "David.Wei@schleuniger.com",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^3.0.0",
+    "xel": "0.0.155"
+  }
+}
