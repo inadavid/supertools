@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>SuperTools - SQL Generater</title>
     <!-- Insert this line above script imports  -->
     <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
     <!-- normal script imports etc  -->
@@ -10,23 +10,52 @@
     <!-- Insert this line after script imports -->
     <script>if (window.module) module = window.module;</script>
 
-    <link rel="stylesheet" href="../node_modules/xel/themes/vanilla.css">
-    <script src="../node_modules/xel/xel.min.js"></script>
+    <link rel="stylesheet" href="../css/photon.min.css">
+    <link rel="stylesheet" href="../css/main.css">
   </head>
   <body>
-    <h1>Hello World!</h1>
-    We are using node <script>document.write(process.versions.node)</script>,
-    Chrome <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>. <br>
-    <button tag="test">Test</button>
+  <div class="window">
+    <div class="window-content">
+      <div class="pane-group">
+          <div class="pane-sm sidebar">
+            <nav class="nav-group">
+              <h5 class="nav-group-title">功能选择</h5>
+              <span class="nav-group-item active" action="bomup"">
+                <span class="icon icon-doc-text"></span>
+                BOM导入
+              </span>
+              <span class="nav-group-item" action="bommass">
+                <span class="icon icon-doc-text-inv"></span>
+                批量更新BOM
+              </span>
+              <span class="nav-group-item" action="mdmass">
+                <span class="icon icon-vcard"></span>
+                批量更新MasterData
+              </span>
+            </nav>
+          </div>
+          <div class="pane" bid="main">
+          </div>
+      </div>
+    </div>
+    </div>
+    
     <script>
+      var action="bomup";
       $(()=>{
-        //require("electron").remote.console.log("hah");
-        console.log("hahaha")
+        loadPanel(action);
       });
-      $("button[tag=test]").on("click",()=>{
-        console.log("test clicked");
-      })
+      $("nav.nav-group span.nav-group-item").on("click",(p)=>{
+        var ts=$(p.currentTarget)
+        $("nav.nav-group span.nav-group-item").removeClass("active");
+        ts.addClass("active");
+        action=ts.attr("action");
+        loadPanel(action);
+      });
+
+      function loadPanel(pname){
+        
+      }
     </script>
   </body>
 </html>
