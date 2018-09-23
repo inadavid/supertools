@@ -4,6 +4,7 @@ let win = null;
 
 function createWindow () {
   win = new BrowserWindow({width: 800, height: 600})
+
   win.loadFile('file://${__dirname}/html/index.html')
 
   // 打开开发者工具
@@ -17,7 +18,8 @@ function createWindow () {
 
 app.commandLine.appendSwitch('remote-debugging-port', '8315')
 app.commandLine.appendSwitch('host-rules', 'MAP * 127.0.0.1')
-app.on('ready', createWindow)
+app.on('ready', createWindow);
+
 
 // app.on('window-all-closed', () => {
 //   if (process.platform !== 'darwin') {
