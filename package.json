@@ -4,7 +4,7 @@
   "description": "SuperData SQL generation tools",
   "main": "index.js",
   "scripts": {
-    "test": "electron ."
+    "start": "electron ."
   },
   "author": "David.Wei@schleuniger.com",
   "license": "MIT",

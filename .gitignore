@@ -71,3 +71,6 @@ typings/
 
 # Serverless directories
 .serverless
+
+#Electron-packager built packager
+SuperTools-*

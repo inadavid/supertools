@@ -7,4 +7,6 @@ Electron练笔项目，为SuperData 5000生成批量SQL语句。
 
 
 #### 使用说明
-
+    git clone https://gitee.com/schleuniger_tj/SuperTools.git
+    npm i
+    npm start
