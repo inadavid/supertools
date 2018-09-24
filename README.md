@@ -14,6 +14,7 @@ Electron练笔项目，为SuperData 5000生成批量SQL语句。
     npm start
 
 编译SuperTools:
+
     npm install electron-packager -g
     electron-packager ./ SuperTools --platform=win32 --arch=x64
 
