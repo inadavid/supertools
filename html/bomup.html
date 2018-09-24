@@ -1,7 +1,19 @@
 <div class="form-group">
     <label>Copy目前的Excel BOM表格内容（包含表头）</label>
-    <textarea class="form-control" rows="3"></textarea>
+    <textarea class="form-control" rows="3" meta="bomexcel"></textarea>
 </div>
 <div class="form-actions">
-    <button type="submit" class="btn btn-form btn-primary">下一步</button>
+    <button type="submit" class="btn btn-form btn-primary" meta="next" step="1">下一步</button>
 </div>
+
+<script>
+var bomexcel_arr=[];
+$("button[type=submit][step=1]").on("click",()=>{
+    var bomexcel=$("textarea[meta=bomexcel]").val();
+    if(bomexcel.length<100) {
+        alert("粘贴的数据过少，请检查后再试。");
+        return;
+    }
+    bomexcel_arr = SheetClip.parse(bomexcel);
+});
+</script>
