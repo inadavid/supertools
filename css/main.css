@@ -2,3 +2,14 @@ body {
     overflow-x: hidden;
     overflow-y: auto;
 }
+
+div[bid=main] {
+    padding: 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+textarea {
+    resize: none;
+    overflow: auto;
+}

@@ -1,0 +1,1035 @@
+Level	Material#	H	Drawing#	Name CN	Name EN	Desc	Mtype ID	Mtype Desc	Qty	Unit	Purchasing Type ID
+.1…….	3523000007	→	PF4300-00A	总装配图	Main assembly				1	ea	A
+..2……	2529005020	→	Assmebly in SOP	提升臂组装					1	ea	A
+…3…..	2523000046	→	SXJ(B)-C-02	钢丝绳轮	Wheel				1	ea	B
+…3…..	1402011006	→		无油润滑轴承	Bushing	JHIG20X23X15			1	ea	B
+…3…..	2523000359	→	PF4300-C-08	提升板	Lifting plate				1	ea	B
+….4….	2529005021	→	PF4300-C-08-01	提升板-件1	Lifting plate-1				1	ea	N
+….4….	2529005022	→	PF4300-C-08-02	提升板-件2	Lifting plate-2				1	ea	N
+….4….	2529005023	→	PF4300-C-08-03	提升板-件3	Lifting plate-3				1	ea	N
+….4….	2529005024	→	PF4300-C-08-04	提升板-件4	Lifting plate-4				2	ea	N
+….4….	2529005025	→	PF4300-C-08-05	提升板-件5	Lifting plate-5				1	ea	N
+….4….	2529005026	→	PF4300-C-08-06	提升板-件6	Lifting plate-6				1	ea	N
+….4….	2523000045	→	SXJ(B)-C-01	套	Bushing				1	ea	N
+….4….	2523000714		PF4300-C-12	套	Bushing				1	ea	N
+…3…..	1409016001	→		铜油嘴	Copper oil nipple	M10X1			1	ea	B
+…3…..	2523000047	→	SXJ(B)-C-03	轮轴	Wheel shaft				1	ea	B
+…3…..	1401015026	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X16不锈钢 GB/T 70.1-2008			1	ea	B
+…3…..	1401010005	→		平垫	Washer	D6不锈钢 GB/T 95-2002			1	ea	B
+…3…..	1401011005	→		弹垫	Spring washer	D6不锈钢 GB/T 94.1-2008			1	ea	B
+…3…..	2523000048	→	SXJ(B)-C-04	隔套	Spacer bushing				1	ea	B
+…3…..	2523000049	→	SXJ(B)-C-05	挡圈	Retainer ring				1	ea	B
+…3…..	1401015026	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X16不锈钢 GB/T 70.1-2008			1	ea	B
+…3…..	1401011005	→		弹垫	Spring washer	D6不锈钢 GB/T 94.1-2008			1	ea	B
+…3…..	1401015029	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X35不锈钢 GB/T 70.1-2008			2	ea	B
+…3…..	1401011005	→		弹垫	Spring washer	D6不锈钢 GB/T 94.1-2008			2	ea	B
+…3…..	1401010005	→		平垫	Washer	D6不锈钢 GB/T 95-2002			2	ea	B
+..2……	2529005027	→	Assmebly in SOP	驱动箱体组装					1	ea	A
+…3…..	2529000203	→	SXJ(B)-A-28A	箱体	Trunk				1	ea	B
+….4….	2529005028	→	SXJ(B)-A-28-01	箱体-件1	Trunk-1				1	ea	N
+….4….	2529005029	→	SXJ(B)-A-28-02	箱体-件2	Trunk-2				1	ea	N
+….4….	2529005030	→	SXJ(B)-A-28-03	箱体-件3	Trunk-3				1	ea	N
+….4….	2529005031	→	SXJ(B)-A-28-04A	箱体-件4	Trunk-4				1	ea	N
+….4….	2529005032	→	SXJ(B)-A-28-05	箱体-件5	Trunk-5				1	ea	N
+….4….	2529005033	→	SXJ(B)-A-28-06	箱体-件6	Trunk-6				2	ea	N
+….4….	2529005034	→	SXJ（B)-B-06-07	支撑箱-件7	Driven Trunk-7				2	ea	N
+….4….	2529005035	→	SXJ（B)-B-06-08	支撑箱-件8	Driven Trunk-8				1	ea	N
+….4….	2529005036	→	SXJ（B)-B-06-09	支撑箱-件9	Driven Trunk-9				1	ea	N
+….4….	2529005037	→	SXJ（B)-B-06-10A	支撑箱-件10	Driven Trunk-10				1	ea	N
+….4….	2529005038	→	SXJ（B)-B-06-13	支撑箱-件13	Driven Trunk-13				1	ea	N
+…3…..	2523000035	→	SXJ(B)-B-01A	上滑套A	Upper bushing A				1	ea	B
+…3…..	1401015043	→		内六角圆柱头螺钉	Hexagon socket head screw	M8X10不锈钢 GB/T 70.1-2008			2	ea	B
+…3…..	1401011006	→		弹垫	Spring washer	D8不锈钢 GB/T 94.1-2008			2	ea	B
+…3…..	2523000021	→	SXJ（B)-A-18	丝杠轴承	Screw bearing				1	ea	B
+…3…..	1401015016	→		内六角圆柱头螺钉	Hexagon socket head screw	M5X16不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	1401010008	→		平垫	Washer	D5不锈钢 GB/T 95-2002			4	ea	B
+…3…..	1401011003	→		弹垫	Spring washer	D5不锈钢 GB/T 94.1-2008			4	ea	B
+…3…..	2523000020	→	SXJ（B)-A-17	丝杠轴承	Screw bearing				1	ea	B
+…3…..	1401015016	→		内六角圆柱头螺钉	Hexagon socket head screw	M5X16不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	1401010008	→		平垫	Washer	D5不锈钢 GB/T 95-2002			4	ea	B
+…3…..	1401011003	→		弹垫	Spring washer	D5不锈钢 GB/T 94.1-2008			4	ea	B
+…3…..	2523000026	→	SXJ（B)-A-23	轮轴	Shaft				1	ea	B
+…3…..	2523000024	→	SXJ（B)-A-21	隔套	Spacer bushing				1	ea	B
+…3…..	2523000046	→	SXJ(B)-C-02	钢丝绳轮	Wheel				1	ea	B
+…3…..	1402011006	→		无油润滑轴承	Bushing	JHIG20X23X15			1	ea	B
+…3…..	2523000024	→	SXJ（B)-A-21	隔套	Spacer bushing				1	ea	B
+…3…..	2523000025	→	SXJ（B)-A-22	挡板	Plate				1	ea	B
+…3…..	1401015013	→		内六角圆柱头螺钉	Hexagon socket head screw	M5X10不锈钢 GB/T 70.1-2008			2	ea	B
+…3…..	1401011003	→		弹垫	Spring washer	D5不锈钢 GB/T 94.1-2008			2	ea	B
+…3…..	2529000193	→	SXJ（B)-A-11A	定位柱（扭力臂）	Column(Torquer)				1	ea	B
+…3…..	1401015026	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X16不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	1401010005	→		平垫	Washer	D6不锈钢 GB/T 95-2002			4	ea	B
+…3…..	1401011005	→		弹垫	Spring washer	D6不锈钢 GB/T 94.1-2008			4	ea	B
+..2……	2529005039	→	Assmebly in SOP	夹紧箱体组装					1	ea	B
+…3…..	2523000037	→	SXJ(B)-B-02	下滑套	Lower bushing				1	ea	B
+…3…..	2529000204	→	SXJ(B)-B-06A	支撑箱	Driven trunk				1	ea	B
+….4….	2529005040	→	SXJ(B)-B-06-01	支撑箱-件1	Driven Trunk-1				1	ea	N
+….4….	2529005041	→	SXJ(B)-B-06-02	支撑箱-件2	Driven Trunk-2				1	ea	N
+….4….	2529005042	→	SXJ(B)-B-06-03	支撑箱-件3	Driven Trunk-3				1	ea	N
+….4….	2529005043	→	SXJ(B)-B-06-04A	支撑箱-件4	Driven Trunk-4				1	ea	N
+….4….	2529005044	→	SXJ(B)-B-06-05	支撑箱-件5	Driven Trunk-5				1	ea	N
+….4….	2529005045	→	SXJ(B)-B-06-06	支撑箱-件6	Driven Trunk-6				1	ea	N
+….4….	2529005034	→	SXJ(B)-B-06-07	支撑箱-件7	Driven Trunk-7				2	ea	N
+….4….	2529005035	→	SXJ(B)-B-06-08	支撑箱-件8	Driven Trunk-8				1	ea	N
+….4….	2529005036	→	SXJ(B)-B-06-09	支撑箱-件9	Driven Trunk-9				1	ea	N
+….4….	2529005037	→	SXJ（B)-B-06-10A	支撑箱-件10	Driven Trunk-10				1	ea	N
+….4….	2529005050	→	SXJ(B)-B-06-11	支撑箱-件11	Driven Trunk-11				1	ea	N
+….4….	2529005051	→	SXJ(B)-B-06-12	支撑箱-件12	Driven Trunk-12				2	ea	N
+….4….	2529005038	→	SXJ(B)-B-06-13	支撑箱-件13	Driven Trunk-13				1	ea	N
+…3…..	1401015006	→		内六角圆柱头螺钉	Hexagon socket head screw	M12X20不锈钢 GB/T 70.1-2008			3	ea	B
+…3…..	1401011008	→		弹簧垫圈		D12不锈钢 GB/T 94.1-2008			3	ea	B
+…3…..	1401010002	→		平垫圈		D12不锈钢 GB/T 95-2002			3	ea	B
+…3…..	1409016001	→		铜油嘴	Copper oil nipple	M10X1			1	ea	B
+…3…..	2523000042	→	SXJ(B)-B-05	夹紧丝母	Clamping nuts				1	ea	B
+…3…..	1401015027	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X20不锈钢 GB/T 70.1-2008			6	ea	B
+…3…..	1401011005	→		弹垫	Spring washer	D6不锈钢 GB/T 94.1-2008			6	ea	B
+…3…..	1401010005	→		平垫	Washer	D6不锈钢 GB/T 95-2002			6	ea	B
+…3…..	2523000036	→	SXJ(B)-B-01B	上滑套B	Upper bushing B				1	ea	B
+…3…..	1401015043	→		内六角圆柱头螺钉	Hexagon socket head screw	M8X10不锈钢 GB/T 70.1-2008			1	ea	B
+…3…..	1401011006	→		弹垫	Spring washer	D8不锈钢 GB/T 94.1-2008			1	ea	B
+…3…..	1401015043	→		内六角圆柱头螺钉	Hexagon socket head screw	M8X10不锈钢 GB/T 70.1-2008			1	ea	B
+…3…..	1401011006	→		弹垫	Spring washer	D8不锈钢 GB/T 94.1-2008			1	ea	B
+…3…..	1409016001	→		铜油嘴	Copper oil nipple	M10X1			1	ea	B
+…3…..	2529005053	→	Assmebly in SOP	钢丝绳调节组件					2	ea	A
+….4….	2523000569	→	SXJ(B)-E-04-00	可调螺栓组件	Adjustable screw component				2	ea	B
+…..5…	2523000069	→	SXJ(B)-E-04	可调螺栓	Adjustable screw				2	ea	N
+…..5…	2523000072	→	SXJ(B)-E-07	焊母	Nut				2	ea	N
+…..5…	2523000073	→	SXJ(B)-E-08	铰座	Hinged supporter				2	ea	N
+….4….	2523000074	→	SXJ(B)-E-09	吊环	Hinged ring				2	ea	B
+….4….	2523000075	→	SXJ(B)-E-10	销轴	Pin				2	ea	B
+….4….	1401069004	→		开口销	Pin	￠2.5X25			2	ea	B
+….4….	1401010004	→		平垫	Washer	D4不锈钢 GB/T 95-2002			2	ea	B
+….4….	2523000070	→	SXJ(B)-E-05	钢丝绳可调接头	Adjustable screw				2	ea	B
+….4….	2523000056	→	SXJ(B)-D-02	撞块	Block				1	ea	B
+….4….	2523000071	→	SXJ(B)-E-06	销轴	Pin				1	ea	B
+….4….	1401069004	→		开口销	Pin	￠2.5X25			2	ea	B
+….4….	1401015028	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X30不锈钢 GB/T 70.1-2008			1	ea	B
+….4….	1401010005	→		平垫	Washer	D6不锈钢 GB/T 95-2002			2	ea	B
+….4….	1401019003	→		六角螺母	Nut	M6不锈钢 GB/T 41-2016			2	ea	B
+….4….	1403006009	→	SXJ(B)-D-04	拉簧	Pull spring				1	ea	B
+….4….	1401015028	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X30不锈钢 GB/T 70.1-2008			1	ea	B
+….4….	1401010005	→		平垫	Washer	D6不锈钢 GB/T 95-2002			2	ea	B
+….4….	1401019003	→		六角螺母	Nut	M6不锈钢 GB/T 41-2016			2	ea	B
+..2……	2529005057	→	Assmebly in SOP	放线架组装					1	ea	A
+…3…..	2529000249	→	PF4300-K-00B	送线机架	Wire feeding bracket				1	ea	B
+….4….	2529005058	→	PF4300-K-01	后上板	Back upper plate				1	ea	N
+….4….	2529005059	→	PF4300-K-02A	后下板	Back lower plate				1	ea	N
+….4….	2529005060	→	PF4300-K-02-01A	后下板-件1	Back lower plate-1				1	ea	N
+….4….	2529005061	→	PF4300-K-02-02A	后下板-件2	Back lower plate-2				1	ea	N
+….4….	2529005062	→	PF4300-K-02-03A	后下板-件3	Back lower plate-3				1	ea	N
+….4….	2529005063	→	PF4300-K-02-04A	后下板-件4	Back lower plate-4				1	ea	N
+….4….	2529005064	→	PF4300-K-03	焊母	Nut				1	ea	N
+….4….	2529005065	→	PF4300-K-04A	储线架-方管1	Wire feeding bracket-1				1	ea	N
+….4….	2529005066	→	PF4300-K-05A	储线架-方管2	Wire feeding bracket-2				1	ea	N
+….4….	2529005067	→	PF4300-K-06A	储线架-方管3	Wire feeding bracket-3				1	ea	N
+….4….	2529005068	→	PF4300-K-07	拼焊件（双螺纹）	Screw holder(drill 2 sides)				4	ea	N
+….4….	2529005069	→	PF4300-L-01	拼焊件	Screw holder				4	ea	N
+….4….	2529005070	→	PF4300-L-02	拼焊件	Screw holder				18	ea	N
+….4….	2529005071	→	PF4300-K-08B	送线机架-方管焊接	Wire feeding bracket-profie welding				1	ea	N
+…3…..	2523000514	→	PF4300-Z-12	过线管护套					5	ea	B
+…3…..	2523000675	→	PF4300-PACK-01A	送线机构装箱固定板1					1	ea	B
+…3…..	1401054039	→		内六角圆柱头螺钉	Hexagon socket head screw	M16X25			1	ea	B
+…3…..	2523000504	→	PF4300-PACK-02	送线机构装箱固定板2					1	ea	B
+…3…..	1401038061	→		内六角圆柱头螺钉	Hexagon socket head screw	M8X35			4	ea	B
+…3…..	1401019005	→		六角螺母	Hexagon nut	M8不锈钢 GB/T 41-2016			4	ea	B
+…3…..	1401055013	→		平垫	Washer	D8不锈钢 GB/T 95-2002			4	ea	B
+…3…..	1401011006	→		弹垫	Spring washer	8不锈钢 GB/T 94.1-2008			4	ea	B
+…3…..	2523000640	→	PF4300-S-00A	输送逆止机构	Feeding count-reverse assembly				1	ea	A
+….4….	2523000290	→	SXJ(B)-S-07-02	镶套	Bushing				1	ea	B
+….4….	1403003011	→		孔用挡圈	Retainer ring	D35			2	ea	B
+….4….	2523000136	→	SXJ(B)-J-附图	单向轴承键槽示意	One derection bearing				1	ea	B
+….4….	1103004069	→		标准平键	Standard Key	A4*4*10			1	ea	B
+….4….	2523000644	→	PF4300-S-04-01A	下轮	Lower wheel				1	ea	B
+….4….	1401015060	→		内六角圆柱头螺钉	Hexagon socket head screw	M4*12不锈钢 GB/T 70.1-2008			3	ea	B
+….4….	1409038104	→		手柄	Handle	M8*63			1	ea	B
+….4….	2523000648	→	PF4300-S-09A	摆动杆					1	ea	B
+….4….	2523000646	→	PF4300-S-07-01A	上轮					1	ea	B
+….4….	2523000647	→	PF4300-S-08A	上轮轴					1	ea	B
+….4….	1401015014	→		内六角圆柱头螺钉	Hexagon socket head screw	M5*12不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1401024014	→		大平垫		D6*25			1	ea	B
+….4….	1401015021	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X10不锈钢 GB/T 70.1-2008			1	ea	B
+….4….	1401036007	→		弹垫	Spring washer	6不锈钢 GB/T 94.1-2008			1	ea	B
+….4….	1403006010	→	SXJ(B)-J-13	外购弹簧					1	ea	B
+….4….	2529000186	→	PF4300-S-01A	输送逆止机构-基座	Feeding count-reverse frame				1	ea	B
+…..5…	2529005072	→	PF4300-S-01-01A	逆止机构固定钣金座	Feeding count-reverse frame				1	ea	N
+…..5…	2529005073	→	PF4300-S-01-02A	基座-件4	Frame-4				1	ea	N
+…..5…	2529005074	→	PF4300-S-01-03	焊圈	Frame-ring				1	ea	N
+….4….	2523000645	→	PF4300-S-05A	下轮轴					1	ea	B
+….4….	1401015013	→		内六角圆柱头螺钉	Hexagon socket head screw	M5X10不锈钢 GB/T 70.1-2008			4	ea	B
+….4….	1401011003	→		弹簧垫圈	Spring washer	D5不锈钢 GB/T 94.1-2008			4	ea	B
+….4….	2523000649	→	PF4300-S-10A	安装轴					1	ea	B
+….4….	1401015020	→		内六角圆柱头螺钉	Hexagon socket head screw	M5X8不锈钢 GB/T 70.1-2008			4	ea	B
+….4….	1401024014	→		大平垫圈	Big washer	D6*25			1	ea	B
+….4….	1401015021	→		内六角圆柱头螺钉	Hexagon socket head screw	M6*10不锈钢 GB/T 70.1-2008			1	ea	B
+….4….	1401036007	→		弹垫	Spring washer	D6不锈钢 GB/T 94.1-2008			1	ea	B
+….4….	1502000003	→		弹簧销	Spring pin	PMXSB8			1	ea	B
+….4….	1103004071	→		标准平键	Standard Key	A4*4*10			1	ea	B
+….4….	1402002003	→		深沟球轴承	Bearing	6202 GB/T 276-1994			1	ea	B
+….4….	1401024014	→		大平垫圈	Big washer	D6*25			1	ea	B
+….4….	1401015026	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X16不锈钢 GB/T 70.1-2008			1	ea	B
+….4….	1401011005	→		弹垫	Spring washer	D6不锈钢 GB/T 94.1-2008			1	ea	B
+….4….	2523000642	→	PF4300-S-02A	护罩	Cover				1	ea	B
+….4….	1401015065	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X45不锈钢 GB/T 70.1-2008			4	ea	B
+….4….	1401011005	→		弹垫	Spring washer	D6不锈钢 GB/T 94.1-2008			4	ea	B
+….4….	1401010005	→		平垫	Washer	D6不锈钢 GB/T 95-2002			4	ea	B
+….4….	1902000011	→		标签（防夹手）					1	ea	B
+…3…..	1401015027	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X20不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	1401036007	→		弹簧垫圈		6不锈钢 GB/T 94.1-2008			4	ea	B
+…3…..	1401024013	→		大平垫		D6X18			4	ea	B
+…3…..	2523000406	→	PF4300-R-00	摆杆定位机构装配图	Swing limit assembly				2	ea	A
+….4….	2523000407	→	PF4300-R-03	定位轴	Buffer shaft				2	ea	B
+….4….	2523000163	→	SXJ（B）-R-02	套	Buffer				2	ea	B
+….4….	2523000162	→	SXJ（B）-R-01	挡垫	Washer				2	ea	B
+….4….	1401009006	→		内六角沉头螺钉	Hexagon socket countersunk head screw	M8X20			2	ea	B
+…3…..	1401015034	→		内六角圆柱头螺钉	Hexagon socket head screw	M8 X 20不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	2523000360	→	PF4300-G-00	气缸及安装组件装配	Cylinder assembly				1	ea	A
+….4….	1503010077	→		铝合金迷你气缸	Cylinder	MAL32*350-S-CA			1	ea	B
+….4….	1503013008	→		快速排气阀	Air release valve	ASV310F-01-06S			2	ea	B
+….4….	1702001250	→		螺栓防松标记漆		红色			0.01	ea	B
+….4….	2529000183	→	PF4300-G-07	气缸轴架	Cylinder joint bracket				2	ea	B
+….4….	1403001002	→		轴用挡圈	Shaft clamping ring	10			2	ea	B
+….4….	2523000093	→	SXJ(B)-G-08	下小轴	Lower pin shaft				1	ea	B
+….4….	2523000089	→	SXJ(B)-G-04	气缸上接头	Cylinder joint				1	ea	B
+…3…..	1401015023	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X12不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	1401036007	→		弹簧垫圈		6不锈钢 GB/T 94.1-2008			4	ea	B
+…3…..	1401055012	→		平垫圈		D6不锈钢 GB/T 95-2002			4	ea	B
+…3…..	1401019003	→		六角螺母		M6不锈钢 GB/T 41-2016			4	ea	B
+…3…..	2523000366	→	PF4300-I-00	随动摆轮组装配图	Swing roller assembly				1	ea	A
+….4….	2529000199	→	PF4350-I-20-00	摆动支撑架-组焊	Swing bracket				1	ea	B
+…..5…	2529005075	→	PF4350-I-20-01	摆动支撑架-件1	Swing bracket-1				1	ea	N
+…..5…	2529005076	→	PF4350-I-20-02	摆动支撑架-件2	Swing bracket-2				2	ea	N
+…..5…	2529005077	→	PF4350-I-20-03	摆动支撑架-件3	Swing bracket-3				2	ea	N
+…..5…	2529005078	→	PF4350-I-20-04	摆动支撑架-件4	Swing bracket-4				1	ea	N
+….4….	1401015026	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X16不锈钢 GB/T 70.1-2008			4	ea	B
+….4….	1401036007	→		弹垫	Spring washer	D6不锈钢 GB/T 94.1-2008			4	ea	B
+….4….	1401055012	→		平垫	Washer	D6不锈钢 GB/T 95-2002			6	ea	B
+….4….	2529000200	→	PF4350-I-21	摆动轴法兰	Swing shaft flange				1	ea	B
+….4….	1402002004	→		深沟球轴承	Bearing	6205-2RZ			2	ea	B
+….4….	2523000102	→	SXJ(B)-I-01	轮轴	Shaft				1	ea	B
+….4….	2529000185	→	PF4300-I-11A	摆动轴	Swing frame				1	ea	B
+….4….	1401015007	→		内六角圆柱头螺钉	Hexagon socket head screw	M4X10不锈钢 GB/T 70.1-2008			4	ea	B
+….4….	2529000198	→	PF4350-I-19	摆动臂轴	Swing frame shaft				1	ea	B
+….4….	1401015020	→		内六角圆柱头螺钉	Hexagon socket head screw	M5X8不锈钢 GB/T 70.1-2008			4	ea	B
+….4….	2529000252	→	PF4350-I-24	隔环	Bushing				1	ea	B
+….4….	2529000202	→	PF4350-I-23	摆动轴隔垫	Bushing				1	ea	B
+….4….	1402002004	→		深沟球轴承	Bearing	6205-2RZ			1	ea	B
+….4….	1401015008	→		内六角圆柱头螺钉	Hexagon socket head screw	M4X16不锈钢 GB/T 70.1-2008			4	ea	B
+….4….	1401010004	→		弹垫	Spring washer	D4不锈钢 GB/T 95-2002			4	ea	B
+….4….	2529000267	→	PF4350-I-25	摆动轴挡片	Swing shaft ring				1	ea	B
+….4….	2529000196	→	SXJ(B)-I-09A	支撑柱	Column				2	ea	B
+….4….	1401019003	→		六角螺母	Nut	M6不锈钢 GB/T 41-2016			2	ea	B
+….4….	1401055012	→		平垫	Washer	D6不锈钢 GB/T 95-2002			2	ea	B
+….4….	2529000195	→	SXJ(B)-I-07A	支撑柱	Column				2	ea	B
+….4….	1401019003	→		六角螺母	Nut	M6不锈钢 GB/T 41-2016			2	ea	B
+….4….	1401055012	→		平垫	Washer	D6不锈钢 GB/T 95-2002			2	ea	B
+….4….	1409038260	→		球型握柄	Handle	25-M6 			1	ea	B
+….4….	2529000184	→	PF4300-I-05A	护线柱	Wire contain column				1	ea	B
+….4….	2523000423	→	PF4300-U-07	护线柱端盖					1	ea	B
+….4….	1401008001	→		内六角平圆头螺钉		M4X12			1	ea	B
+….4….	2532000132	→	PF3200-03-07-01	PF3200护绳器	Wire contain block				1	ea	B
+….4….	1401044005	→		柱塞	Plug	M8X20			1	ea	B
+….4….	1401019005	→		六角螺母	Hexagon nut	M8不锈钢 GB/T 41-2016			1	ea	B
+….4….	2529100010	→	PF3200-03-08-05	35注塑轮外顶圈	Bushing				2	ea	B
+….4….	2529000031	→		35轮组件-注塑	280-35				1	ea	B
+….4….	2529100079	→		35轮轮体	280-35 Body 				1	ea	N
+….4….	2529100080	→		35轮端盖	280-35 End Cover				1	ea	N
+….4….	1402002003	→		深沟球轴承	6202 GB/T 276-1994				2	ea	N
+….4….	1401015027	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X20不锈钢 GB/T 70.1-2008			1	ea	B
+…3…..	1401015027	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X20不锈钢 GB/T 70.1-2008			8	ea	B
+…3…..	1401036007	→		弹垫	Spring washer	D6不锈钢 GB/T 94.1-2008			8	ea	B
+…3…..	1401024013	→		大平垫		D6X18			8	ea	B
+…3…..	1401039032	→		内六角平头螺钉	Hexagon flat head screw	M8X40			2	ea	B
+…3…..	2523000088	→	SXJ(B)-G-03	上销轴	Upper pin shaft				1	ea	B
+…3…..	2523000361	→	PF4300-G-01	上夹板	Upper plate				1	ea	B
+…3…..	2523000362	→	PF4300-G-02	下夹板	Lower plate				1	ea	B
+…3…..	1403001002	→		轴用挡圈	Shaft clamping ring	10			2	ea	B
+…3…..	2529005079	→	Assmebly in SOP	上转向机构组装					1	ea	A
+….4….	2529000187	→	PF4300-U-06A	护线柱					1	ea	B
+….4….	1409038260	→		球型握柄	Handle	25-M6 			1	ea	B
+….4….	2532000132	→	PF3200-03-07-01	PF3200护绳器	Wire contain block				1	ea	B
+….4….	2523000423	→	PF4300-U-07	护线柱端盖					1	ea	B
+….4….	1401008001	→		内六角平圆头螺钉	Hexagon socket head screw	M4X12不锈钢 GB/T 70.1-2008			1	ea	B
+….4….	1401044005	→		柱塞	Plug	M8*20			1	ea	B
+….4….	1401019005	→		六角螺母	Nut	M8不锈钢 GB/T 41-2016			1	ea	B
+….4….	1401015027	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X20不锈钢 GB/T 70.1-2008			1	ea	B
+….4….	2523000416	→	PF4300-U-01	轮轴					1	ea	B
+….4….	2523000723	→	PF4350-U-09	35注塑轮隔套					2	ea	B
+….4….	2529000031	→		35轮组件-注塑		280-35			1	ea	B
+…..5…	2529100079	→		35轮轮体		280-35 Body 			1	ea	N
+…..5…	2529100080	→		35轮端盖		280-35 End Cover			1	ea	N
+…..5…	1402002003	→		深沟球轴承		6202 GB/T 276-1994			2	ea	N
+….4….	2523000651	→	PF4300-U-04A	上转向轮组-基座					1	ea	B
+…..5…	2529005080	→	PF4300-U-04-01A	基座-件1					1	ea	N
+…..5…	2529005081	→	PF4300-U-04-02A	基座-件2					1	ea	N
+…..5…	2529005082	→	PF4300-U-04-03A	基座-件3					1	ea	N
+…..5…	2529005083	→	PF4300-U-04-04A	基座-件4					1	ea	N
+…..5…	2529005084	→	PF4300-U-04-05	基座-件5					1	ea	N
+…..5…	2529005085	→	PF4300-U-04-06	基座-件6					1	ea	N
+…..5…	2529005086	→	PF4300-U-04-07	基座-件7					1	ea	N
+….4….	1401015012	→		内六角圆柱头螺钉	Hexagon socket head screw	M4X8不锈钢 GB/T 70.1-2008			3	ea	B
+…3…..	1401015027	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X20不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	1401036007	→		弹垫	Spring washer	D6不锈钢 GB/T 94.1-2008			4	ea	B
+…3…..	1401024013	→		大平垫		D6X18			4	ea	B
+…3…..	1401015034	→		内六角圆柱头螺钉	Hexagon socket head screw	M8X20不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	1401011006	→		弹垫	Spring washer	D8不锈钢 GB/T 94.1-2008			4	ea	B
+…3…..	1401010006	→		平垫圈	Washer	D8不锈钢 GB/T 95-2002			4	ea	B
+…3…..	2902001029	→	见图纸	PCB板		角度传感器			1	ea	B
+….4….	1501056001	→		角度传感器		WDS36-5K-60⁰ 上海江晶翔			1	ea	P
+…3…..	2529000256	→	SXJ(B)-I-08A	传感器安装板	Sensor plate				1	ea	B
+…3…..	1401015057	→		内六角圆柱头螺钉		M3*6不锈钢 GB/T 70.1-2008			3	ea	B
+…3…..	1501056007	→		角度传感器联轴器		HRL6*6 D=15  L=20 上海江晶翔			1	ea	B
+…3…..	1401015014	→		内六角圆柱头螺钉		M5*12不锈钢 GB/T 70.1-2008			2	ea	B
+…3…..	1401010008	→		平垫圈		Ø5不锈钢 GB/T 95-2002			2	ea	B
+…3…..	1401011003	→		弹簧垫圈		Ø5不锈钢 GB/T 94.1-2008			2	ea	B
+…3…..	2902001031	→	见图纸	4X50摆杆PCB		75*30			1	ea	B
+…3…..	1401015057	→		内六角圆柱头螺钉		M3*6不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	2902001048	→	见图纸	角度传感器连接线		200mm			1	ea	B
+…3…..	2523000682	→	PF4300-Z-02A	摆杆接近开关安装板					1	ea	B
+…3…..	1501056038	→		接近传感器（M30）		E2E-X10D2-MIG-Z Omron			1	ea	B
+…3…..	1401015014	→		内六角圆柱头螺钉		M5*12不锈钢 GB/T 70.1-2008			2	ea	B
+…3…..	1401010008	→		平垫圈		Ø5不锈钢 GB/T 95-2002			2	ea	B
+…3…..	1401011003	→		弹簧垫圈		Ø5不锈钢 GB/T 94.1-2008			2	ea	B
+…3…..	2523000682	→	PF4300-Z-02A	摆杆接近开关安装板					1	ea	B
+…3…..	1501056035	→		接近传感器（M30）		E2E-X10D1-MIG-Z Omron			1	ea	B
+…3…..	1401015014	→		内六角圆柱头螺钉		M5*12不锈钢 GB/T 70.1-2008			2	ea	B
+…3…..	1401010008	→		平垫圈		Ø5不锈钢 GB/T 95-2002			2	ea	B
+…3…..	1401011003	→		弹簧垫圈		Ø5不锈钢 GB/T 94.1-2008			2	ea	B
+…3…..	2902001047	→	见图纸	摆臂上位线缆		带M12连接器			1	ea	B
+…3…..	1501004001	→	见图纸	防水护口		M16			1	ea	B
+…3…..	1406001009	→		方堵		40*40			1	ea	B
+…3…..	2902001055	→	见图纸	摆臂下位线缆		1420mm			1	ea	B
+…3…..	1501004001	→	见图纸	防水护口		M16			1	ea	B
+…3…..	2902001006	→	见图纸	 Wire harness 6#		15通VGA线缆700mm			1	ea	B
+…3…..	1503009003	→		气管		Ø6蓝色 亚德客			1350	mm	B
+…3…..	1503009016	→		气管		Ø6透明 亚德客			1550	mm	B
+…3…..	1501027012	→	见图纸	尼龙扎带		黑 4*200			10	ea	B
+…3…..	2529000194	→	SXJ(B)-I-06A	小电气盒	Small eletric box				1	ea	B
+…3…..	1401015014	→		内六角圆柱头螺钉		M5*12不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	1401010008	→		平垫圈		Ø5不锈钢 GB/T 95-2002			4	ea	B
+…3…..	1401011003	→		弹簧垫圈		Ø5不锈钢 GB/T 94.1-2008			4	ea	B
+..2……	2529005087	→	Assmebly in SOP	箱体分解							
+…3…..	1401008024	→		内六角平圆头螺钉		M5X10			8	ea	B
+…3…..	1401008030	→		内六角平圆头螺钉		M4X8			8	ea	B
+…3…..	1401014013	→		内六角平端紧定螺钉		M4X5			4	ea	B
+…3…..	1401009002	→		内六角沉头螺钉		M4X10			4	ea	B
+…3…..	2523000171	→	SXJ（B）-X-06	注油孔盖	Add oil cover				1	ea	B
+…3…..	1401009002	→		内六角沉头螺钉		M4X10			4	ea	B
+…3…..	1409001007	→		强磁					1	ea	B
+…3…..	2523000399	→	PF4300-M-00	前门装配关系图	Front door assembly				1	ea	B
+….4….	2529005088	→	PF4300-M-01	加强筋	Front door bar				2	ea	N
+….4….	2529005089	→	PF4300-M-02	门体	Front door				1	ea	N
+….4….	2529005090	→	PF4300-M-03	铰链加强筋	Front door hinge plate				2	ea	N
+….4….	2529005091	→	PF4300-M-附图	安装示意	Assembly drawing				1	ea	N
+…3…..	1401009005	→		内六角沉头螺钉		M6X10			8	ea	B
+…3…..	1409028003	→		抠手		LS-537-1			1	ea	B
+…3…..	1401009002	→		内六角沉头螺钉		M4X10			16	ea	B
+…3…..	2529000265	→	PF4300-X-11B	箱体左侧板	Cabinet left plate				1	ea	A
+….4….	2523000658	→	PF4300-X-11-01B	箱体左侧板-前板	Cabinet left plate-front				1	ea	B
+…..5…	2529005092	→	PF4300-X-01-01	盖板固定件	Cover fasten part				2	ea	N
+…..5…	2529005093	→	PF4300-X-01-03	角钢25X25X100	Angle-steel 25X25X100				1	ea	N
+…3…..	2523000659	→	PF4300-X-11-02B	箱体左侧板-后板	Cabinet left plate-rear				1	ea	B
+…3…..	2523000403	→	PF4300-N-01	后网板1	Rear cover-1				1	ea	B
+…3…..	2523000554	→	PF4300-N-02A	后网板2	Rear cover-2				1	ea	B
+…3…..	2529000264	→	PF4300-N-03B	后网板3	Rear cover-3				1	ea	B
+…3…..	2523000652	→	PF4300-X-01-00	箱体右侧板	Cabinet right plate				1	ea	B
+….4….	2529005094	→	PF4300-X-01B	箱体右侧板体	Cabinet right plate				1	ea	N
+….4….	2529005092	→	PF4300-X-01-01	盖板固定件	Cover fasten part				2	ea	N
+….4….	2529005093	→	PF4300-X-01-03	角钢25X25X100	Angle-steel 25X25X100				1	ea	N
+…3…..	1901001095	→		门锁					1	ea	B
+…3…..	2523000390	→	PF4300-L-08-05	电箱门-锁杆	Cabinet door-lock pin				2	ea	B
+…3…..	2523000386	→	PF4300-L-08-01	电箱门-锁杆套	Cabinet door-lock bush				2	ea	B
+…3…..	1401015012	→		内六角圆柱头螺钉	Hexagon socket head screw	M4*8不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	1902000008	→		标签（危险警示）					1	ea	B
+..2……	2529005096	→	Assmebly in SOP	机箱内部组件安装					1	ea	A
+…3…..	2523000619	→	PF4300-F-00	反转检测装配	Reverse detect assembly				1	ea	A
+….4….	2523000620	→	PF4300-F-01	反转检测拼焊架	Reverse detect bracket				1	ea	B
+…..5…	2529005097	→	PF4300-F-01-01	固定板	Base plate				1	ea	N
+…..5…	2529005098	→	PF4300-F-01-02	滑道板	Slide plate				2	ea	N
+…..5…	2529005099	→	PF4300-F-01-03	中间板	Mid plate				1	ea	N
+…..5…	2529005100	→	PF4300-F-01-04	导线柱安装板	Guild plate				1	ea	N
+….4….	2523000615	→	SXJ(B)-H-14A	辊轮	Roller				1	ea	B
+….4….	1401015016	→		内六角圆柱头螺钉		M5*16不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1401011003	→		弹簧垫圈		D5不锈钢 GB/T 94.1-2008			2	ea	B
+….4….	1401010008	→		平垫圈		D5不锈钢 GB/T 95-2002			2	ea	B
+….4….	2523000626	→	PF4300-F-03	转轴	Shaft				1	ea	B
+….4….	1401015014	→		内六角圆柱头螺钉	Hexagon socket head screw	M5X12不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1401011003	→		弹簧垫圈	Spring washer	D5不锈钢 GB/T 94.1-2008			2	ea	B
+….4….	1401024024	→		大平垫圈	Big washer	D5*14			2	ea	B
+….4….	2523000623	→	PF4300-F-02-01	挡柱	Limit shaft				2	ea	B
+….4….	1401015027	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X20不锈钢 GB/T 70.1-2008			4	ea	B
+….4….	1401011005	→		弹垫	Spring washer	D6不锈钢 GB/T 94.1-2008			4	ea	B
+….4….	1401010005	→		平垫	Washer	D6不锈钢 GB/T 95-2002			4	ea	B
+….4….	2523000624	→	PF4300-F-02-02	套	Bushing				2	ea	B
+….4….	2523000625	→	PF4300-F-02-03	横连板	Plate				1	ea	B
+….4….	1401015026	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X16不锈钢 GB/T 70.1-2008			4	ea	B
+….4….	1401011005	→		弹垫	Spring washer	D6不锈钢 GB/T 94.1-2008			4	ea	B
+….4….	1401010005	→		平垫	Washer	D6不锈钢 GB/T 95-2002			4	ea	B
+….4….	1501059032	→		接近开关		E2E-X7D2-MIG-Z Omron			1	ea	B
+…3…..	1401015027	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X20			4	ea	B
+…3…..	1401036007	→		弹垫	Spring washer	6不锈钢 GB/T 94.1-2008			4	ea	B
+…3…..	1401010007	→		大平垫		D6X18			4	ea	B
+…3…..	2523000542	→	PF4300-H-00A	引线装置装配图	Guilding device assembly				1	ea	A
+….4….	2523000195	→	SXJ(B)-H-07	镶套	Bushing				2	ea	B
+….4….	1402002004	→		深沟球轴承	Bearing	6205-2RZ			2	ea	B
+….4….	2523000630	→	PF4300-H-05A	转向轮	Guild roller				1	ea	B
+….4….	1401015016	→		内六角圆柱头螺钉		M5*16不锈钢 GB/T 70.1-2008			3	ea	B
+….4….	2523000673	→	PF4300-H-10A	轴	Shaft				1	ea	B
+….4….	1401015016	→		内六角圆柱头螺钉		M5*16不锈钢 GB/T 70.1-2008			3	ea	B
+….4….	2523000629	→	PF4300-H-04B	引线装置-架	Guilding device-bracket				1	ea	B
+…..5…	2529005101	→	PF4300-H-04-01A	架-件1	Bracket-1				1	ea	N
+…..5…	2529005102	→	PF4300-H-04-02B	架-件2	Bracket-2				2	ea	N
+…..5…	2529005103	→	PF4300-H-04-04A	架-件4	Bracket-4				4	ea	N
+…..5…	2529005104	→	PF4300-H-04-05A	架-件5	Bracket-5				1	ea	N
+….4….	2523000615	→	SXJ(B)-H-14A	辊轮	Roller				1	ea	B
+….4….	1401015016	→		内六角圆柱头螺钉		M5*16不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1401011003	→		弹簧垫圈		D5不锈钢 GB/T 94.1-2008			2	ea	B
+….4….	1401010008	→		平垫圈		D5不锈钢 GB/T 95-2002			2	ea	B
+….4….	2523000201	→	SXJ(B)-H-11	定位板	Positioning plate				2	ea	B
+….4….	1401015014	→		内六角圆柱头螺钉	Hexagon socket head screw	M5X12不锈钢 GB/T 70.1-2008			4	ea	B
+….4….	1401011003	→		弹簧垫圈		D5不锈钢 GB/T 94.1-2008			4	ea	B
+….4….	1401010008	→		平垫圈		D5不锈钢 GB/T 95-2002			4	ea	B
+….4….	2523000200	→	SXJ(B)-H-08	隔套	Bushing				2	ea	B
+….4….	1401015034	→		内六角圆柱头螺钉	Hexagon socket head screw	M8X20不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1401011006	→		弹垫	Spring washer	D8不锈钢 GB/T 94.1-2008			2	ea	B
+….4….	1401010006	→		平垫圈		D8不锈钢 GB/T 95-2002			2	ea	B
+…3…..	1401015027	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X20不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	1401036007	→		弹垫	Spring washer	6不锈钢 GB/T 94.1-2008			4	ea	B
+…3…..	1401055012	→		平垫	Washer	D6不锈钢 GB/T 95-2002			4	ea	B
+…3…..	2529005053	→	Assmebly in SOP	钢丝绳调节组件					1	ea	A
+…3…..	2523000071	→	SXJ(B)-E-06	销轴	Pin				1	ea	B
+…3…..	1401069004	→		开口销	Pin	￠2.5X25			1	ea	B
+…3…..	2523000057	→	SXJ(B)-D-03	定位柱	Positioning column				1	ea	B
+…3…..	1401036002	→		弹垫	Spring washer	D14不锈钢 GB/T 94.1-2008			1	ea	B
+…3…..	1401055004	→		平垫		D14			1	ea	B
+…3…..	1401050004	→		六角螺母	Hexagon nut	M14不锈钢 GB/T 41-2016			1	ea	B
+…3…..	2529005053	→	Assmebly in SOP	钢丝绳调节组件					1	ea	A
+…3…..	2523000057	→	SXJ(B)-D-03	定位柱	Positioning column				1	ea	B
+…3…..	2523000061	→	SXJ(B)-D-07	隔垫	Spacer bushing				1	ea	B
+…3…..	1401036002	→		弹垫	Spring washer	14不锈钢 GB/T 94.1-2008			1	ea	B
+…3…..	1401055004	→		平垫		D14			1	ea	B
+…3…..	1401050004	→		六角螺母	Hexagon nut	M14不锈钢 GB/T 41-2016			1	ea	B
+..2……	2529005107	→	Assmebly in SOP	提升轴安装					1	ea	A
+…3…..	2529005108	→	Assmebly in SOP	提升机构					1	ea	A
+….4….	2523000732	→	PF4350-D-01	提升轴	Lifting shaft				1	ea	B
+….4….	1103004074	→		标准平键	Standard key	A12*8*50			2	ea	B
+….4….	2523000066	→	SXJ(B)-E-02	提升轮	Lifting wheel				1	ea	B
+….4….	2523000076	→	SXJ(B)-E-11	隔套	Spacer bushing				1	ea	B
+….4….	2529005109	→	Assmebly in SOP	提升轴承座组装					1	ea	A
+…..5…	2523000065	→	SXJ(B)-E-01	轴承座	Bearing holder				1	ea	B
+…..5…	1402001218	→		关节轴承					1	ea	B
+…..5…	2523000077	→	SXJ(B)-E-12	隔环	Spacer ring				1	ea	B
+…..5…	1403003022	→		孔挡	Inner stop ring	D62			1	ea	B
+…..5…	1409016001	→		铜油嘴	Copper oil nipple	M10X1			1	ea	B
+….4….	1401015035	→		内六角圆柱头螺钉	Hexagon socket head screw	M8X25不锈钢 GB/T 70.1-2008			1	ea	B
+….4….	1401011006	→		弹垫	Spring washer	D8不锈钢 GB/T 94.1-2008			1	ea	B
+….4….	2523000079	→	SXJ(B)-E-14	挡板	Plate				1	ea	B
+….4….	2523000066	→	SXJ(B)-E-02	提升轮	Lifting wheel				1	ea	B
+….4….	2523000733	→	PF4350-D-05	隔套	Spacer bushing				1	ea	B
+….4….	1103004073	→		标准平键	Standard Key	A8*7*120			1	ea	B
+….4….	1501093201	→		Bonfiglioli 减速机	Bonfiglioli motor	W R 75 UF2 D30 180 P71 B5 B8 BN 71B 4 230/400-50 IP55 CLF B5 FD N 5 RM AA NB 400 SA CCC			1	ea	B
+….4….	1501004006	→	见图纸	防水护口		M25			2	ea	B
+….4….	1401015004	→		内六角圆柱头螺钉	Hexagon socket head screw	M10*30不锈钢 GB/T 70.1-2008			1	ea	B
+….4….	1401011007	→		弹垫	Spring washer	D10不锈钢 GB/T 94.1-2008			1	ea	B
+….4….	2523000463	→	SXJ(B)-D-08	端垫	Washer				1	ea	B
+….4….	1401015004	→		内六角圆柱头螺钉	Hexagon socket head screw	M10*30不锈钢 GB/T 70.1-2008			1	ea	B
+….4….	1401011007	→		弹垫	Spring washer	D10不锈钢 GB/T 94.1-2008			1	ea	B
+….4….	2523000463	→	SXJ(B)-D-08	端垫	Washer				1	ea	B
+…3…..	1401038009	→		内六角圆柱头螺钉	Hexagon socket head screw	M14X55不锈钢 GB/T 70.1-2008			2	ea	B
+…3…..	1401050004	→		六角螺母	Hexagon nut	M14不锈钢 GB/T 41-2016			2	ea	B
+…3…..	1401036002	→		弹垫	Spring washer	14不锈钢 GB/T 94.1-2008			2	ea	B
+…3…..	1401055004	→		平垫		D14			2	ea	B
+…3…..	1401051006	→		外六螺栓	Hexagon head screw	M10X40			4	ea	B
+…3…..	1401019004	→		六角螺母	Hexagon nut	M10不锈钢 GB/T 41-2016			4	ea	B
+…3…..	1401036010	→		弹垫	Spring washer	10不锈钢 GB/T 94.1-2008			4	ea	B
+…3…..	1401055002	→		平垫	Washer	D10不锈钢 GB/T 95-2002			8	ea	B
+..2……	2529005110	→	Assmebly in SOP	中心机构安装					1	ea	A
+…3…..	2529005111	→	Assmebly in SOP	中心机构组装					1	ea	A
+….4….	2529000189	→	PF4350-A-14	光杠	Shaft				1	ea	B
+….4….	1401038007	→		内六角圆柱头螺钉	Hexagon socket head screw	M12X25不锈钢 GB/T 70.1-2008			4	ea	B
+….4….	1401011008	→		弹簧垫圈		D12不锈钢 GB/T 94.1-2008			4	ea	B
+….4….	1401010002	→		平垫圈		D12不锈钢 GB/T 95-2002			4	ea	B
+….4….	2529000190	→	PF4350-A-14B	光杠（下）	Shaft(lower)				1	ea	B
+….4….	2523000032	→	SXJ(B)-A-29	定位套	Positioning bushing				1	ea	B
+….4….	1401015026	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X16不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	2529000180	→	SXJ(B)-C-09	定位套	Positioning bushing				2	ea	B
+….4….	1401011005	→		弹垫	Spring washer	D6不锈钢 GB/T 94.1-2008			6	ea	B
+….4….	1401015029	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X35不锈钢 GB/T 70.1-2008			6	ea	B
+….4….	1401019003	→		六角螺母	Hexagon nut	M6不锈钢 GB/T 41-2016			6	ea	B
+….4….	1401015026	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X16不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	2529005112	→	Assmebly in SOP	立架装配体					1	ea	A
+….4….	2523000027	→	SXJ（B)-A-24	挡板	Plate				1	ea	B
+….4….	1401011005	→		弹垫	Spring washer	6不锈钢 GB/T 94.1-2008			2	ea	B
+….4….	1401015042	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X25不锈钢 GB/T 70.1-2008			4	ea	B
+….4….	2523000354	→	PF4300-A-19	轴架	Shaft bracket				1	ea	B
+….4….	2523000028	→	SXJ（B)-A-25	垫	Washer				2	ea	B
+…3…..	1401051035	→		外六螺栓	Hexagon head screw	M20X70			2	ea	B
+…3…..	1401036003	→		弹垫	Spring washer	20不锈钢 GB/T 94.1-2008			2	ea	B
+…3…..	1401055014	→		平垫	Washer	D20不锈钢 GB/T 95-2002			4	ea	B
+…3…..	1401050007	→		六角螺母	Hexagon nut	M20不锈钢 GB/T 41-2016			2	ea	B
+…3…..	2529005113	→	Assmebly in SOP	立架组装体					1	ea	A
+….4….	2523000027	→	SXJ（B)-A-24	挡板	Plate				1	ea	B
+….4….	1401011005	→		弹垫	Spring washer	6不锈钢 GB/T 94.1-2008			2	ea	B
+….4….	1401015042	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X25不锈钢 GB/T 70.1-2008			4	ea	B
+….4….	2523000354	→	PF4300-A-19	轴架	Shaft bracket				1	ea	B
+….4….	2523000028	→	SXJ（B)-A-25	垫	Washer				2	ea	B
+…3…..	1401051035	→		外六螺栓		M20X70			2	ea	B
+…3…..	1401036003	→		弹垫	Spring washer	D20不锈钢 GB/T 94.1-2008			2	ea	B
+…3…..	1401055014	→		平垫	Washer	D20不锈钢 GB/T 95-2002			2	ea	B
+…3…..	1401050007	→		六角螺母	Hexagon nut	M20不锈钢 GB/T 41-2016			2	ea	B
+..2……	2529005114	→	Assmebly in SOP	钢丝绳安装							
+…3…..	2523000067	→	SXJ(B)-E-03（组件）	钢丝绳组件					1	ea	A
+….4….	2523000068	→	SXJ(B)-E-03	钢丝绳端头固定套					1	ea	B
+….4….	1409006009	→		防转钢丝绳		￠5			3.5	m	B
+…3…..	1401038054	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X110不锈钢 GB/T 70.1-2008			2	ea	B
+…3…..	1401019003	→		六角螺母	Hexagon nut	M6不锈钢 GB/T 41-2016			2	ea	B
+…3…..	1401036007	→		弹垫	Spring washer	6不锈钢 GB/T 94.1-2008			4	ea	B
+…3…..	1401055012	→		平垫	Washer	D6不锈钢 GB/T 95-2002			4	ea	B
+…3…..	1409007003	→		钢丝绳锁紧卡					1	ea	B
+…3…..	2523000067	→	SXJ(B)-E-03（组件）	钢丝绳组件					1	ea	A
+….4….	2523000068	→	SXJ(B)-E-03	钢丝绳端头固定套					1	ea	B
+….4….	1409006009	→		防转钢丝绳		￠5			3.5	m	B
+…3…..	1409007003	→		钢丝绳锁紧卡					1	ea	B
+…3…..	1409007003	→		钢丝绳锁紧卡					2	ea	B
+..2……	2529005115	→	Assmebly in SOP	内部总装							
+…3…..	2529005116	→	Assmebly in SOP	旋转轴承箱装配体					1	ea	A
+….4….	2523000671	→	PF4300-A-04A	套	Bushing				1	ea	B
+….4….	1402001185	→		角接触球轴承	Angular ball bearing	7210AC			2	ea	B
+….4….	2523000745	→	PF4300-A-01C	驱动轴	Driving shaft				1	ea	B
+….4….	1103004078	→		标准平键	Standard Key	C12*8*150			1	ea	B
+….4….	2523000009	→	SXJ（B)-A-06	隔套	Spacer bushing				1	ea	B
+….4….	2523000671	→	PF4300-A-04A	套	Bushing				1	ea	B
+….4….	1402001185	→		角接触球轴承	Angular ball bearing	7210AC			2	ea	B
+….4….	2523000684	→	PF4300-B-03A	夹紧轴	Clamping shaft				1	ea	B
+….4….	2523000009	→	SXJ（B)-A-06	隔套	Spacer bushing				1	ea	B
+….4….	2523000041	→	SXJ(B)-B-04	端盖	Cover				1	ea	B
+….4….	1401015003	→		内六角圆柱头螺钉	Hexagon socket head screw	M10X25不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1401011007	→		弹垫	Spring washer	D10不锈钢 GB/T 94.1-2008			1	ea	B
+…3…..	2523000617	→	PF4300-A-05A	夹紧环	Clamp ring				1	ea	B
+…3…..	1401038050	→		内六角圆柱头螺钉	Hexagon socket head screw	M12X130不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	2529005117	→	Assmebly in SOP	从动轴承箱装配体					1	ea	A
+….4….	2523000671	→	PF4300-A-04A	套	Bushing				1	ea	B
+….4….	1402001185	→		角接触球轴承	Angular ball bearing	7210AC			2	ea	B
+….4….	2523000684	→	PF4300-B-03A	夹紧轴	Clamping shaft				1	ea	B
+….4….	2523000009	→	SXJ（B)-A-06	隔套	Spacer bushing				1	ea	B
+….4….	2523000041	→	SXJ(B)-B-04	端盖	Cover				1	ea	B
+….4….	1401015003	→		内六角圆柱头螺钉	Hexagon socket head screw	M10X25不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1401011007	→		弹垫	Spring washer	D10不锈钢 GB/T 94.1-2008			2	ea	B
+…3…..	2523000617	→	PF4300-A-05A	夹紧环	Clamp ring				1	ea	B
+…3…..	1401038050	→		内六角圆柱头螺钉	Hexagon socket head screw	M12X130不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	2523000746	→	PF4300-A-02E	驱动夹紧盘	Driving clamper				1	ea	B
+…3…..	1401015002	→		内六角圆柱头螺钉	Hexagon socket head screw	M10X20不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	2523000343	→	PF4300-A-03	定位柱（标配）	Column(standard)				1	ea	B
+…3…..	1401014008	→		内六角平端紧定螺钉		M8X20			1	ea	B
+…3…..	1401009006	→		内六角沉头螺钉	Hexagon socket countersunk head screw	M8X20			1	ea	B
+…3…..	2523000342	→	PF4300-A-02D	从动夹紧盘	Driven clamper				1	ea	B
+…3…..	1401015002	→		内六角圆柱头螺钉	Hexagon socket head screw	M10X20不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	2523000343	→	PF4300-A-03	定位柱（标配）	Column(standard)				1	ea	B
+…3…..	1401014008	→		内六角平端紧定螺钉		M8X20			1	ea	B
+…3…..	1401009006	→		内六角沉头螺钉	Hexagon socket countersunk head screw	M8X20			1	ea	B
+…3…..	2523000018	→	SXJ（B)-A-15	夹紧丝杠	Screw shaft				1	ea	B
+…3…..	2523000019	→	SXJ（B)-A-16	丝杠定位套	Screw bushing				1	ea	B
+…3…..	1103004072	→		标准平键	Standard key	A8*7*100			1	ea	B
+…3…..	1401015017	→		内六角圆柱头螺钉	Hexagon socket head screw	M5X20不锈钢 GB/T 70.1-2008			2	ea	B
+…3…..	2523000019	→	SXJ（B)-A-16	丝杠定位套	Screw bushing				1	ea	B
+…3…..	1401015017	→		内六角圆柱头螺钉	Hexagon socket head screw	M5X20不锈钢 GB/T 70.1-2008			2	ea	B
+..2……	2529005118	→	Assmebly in SOP	减速机和内部护罩安装					1	ea	A
+…3…..	2529005119	→	Assmebly in SOP	驱动减速机扭力臂装配					1	ea	A
+….4….	2523000742	→	PF4350-A-26	旋转扭力臂	Driving torquer				1	ea	B
+…..5…	2523000743	→	PF4350-A-26-01	旋转扭力臂-件1	Driving torquer-1				1	ea	N
+…..5…	2523000744	→	PF4350-A-26-02	旋转扭力臂-件2	Driving torquer-2				1	ea	N
+…..5…	2529005122	→	SXJ（B)-A-26-03B	旋转扭力臂-件3	Driving torquer-3				1	ea	N
+…..5…	2529005123	→	SXJ（B)-A-26-04	旋转扭力臂-件4	Driving torquer-4				1	ea	N
+….4….	1501093199	→		Bonfiglioli 减速机	Bangfiglioli motor	 A 35 2 UH40 11.8 S3 B3 M 3LC 4 230/400-50 IP55 CLF W 30 FD 55 RM SB 400 SA			1	ea	B
+….4….	1501004006	→	见图纸	防水护口		M25			1	ea	B
+….4….	2523000502	→	PF4300-Z-09	电机接线盒接头					1	ea	B
+….4….	1401051016	→		六角头螺栓		M12X25			4	ea	B
+….4….	1401036001	→		弹垫	Spring washer	D12不锈钢 GB/T 94.1-2008			4	ea	B
+….4….	1401019005	→		六角螺母	Hexagon nut	M8不锈钢 GB/T 41-2016			6	ea	B
+….4….	1401027049	→		内六平端紧定螺钉	Fasten screw	M8X40 不锈钢			6	ea	B
+….4….	2523000352	→	PF4300-A-12	顶板	Block				3	ea	B
+…3…..	2523000737	→	PF4350-A-07	隔套	Spacer bushing				1	ea	B
+…3…..	2523000618	→	PF4300-A-09A	挡圈	Retainer ring				1	ea	B
+…3…..	1401016007	→		外六螺栓		M8X25			2	ea	B
+…3…..	1401011006	→		弹垫	Spring washer	8不锈钢 GB/T 94.1-2008			2	ea	B
+…3…..	2529000197	→	PF4350-A-35	扭力柱圈	Column(Torquer) 				1	ea	B
+…3…..	2529005124	→	Assmebly in SOP	夹持减速机扭力臂装配体					1	ea	A
+….4….	1501093200	→		Bonfiglioli 减速机	Bonfiglioli motor	A 05 2 UH25 12.3 S1 B3 M 1SD 4 230/400-50 IP55 CLF W A05 CCC 0.37Kw			1	ea	B
+….4….	1501004006	→	见图纸	防水护口		M25			1	ea	B
+….4….	2523000738	→	PF4350-A-27	夹紧扭力臂	Clamping torquer				1	ea	B
+…..5…	2523000739	→	PF4350-A-27-01	夹紧扭力臂-件1	Clamping torquer-1				1	ea	N
+…..5…	2529005126	→	SXJ（B)-A-27-02	夹紧扭力臂-件2	Clamping torquer-2				1	ea	N
+…..5…	2529005127	→	SXJ（B)-A-27-03	夹紧扭力臂-件3	Clamping torquer-3				1	ea	N
+….4….	1401015034	→		内六角圆柱头螺钉	Hexagon socket head screw	M8X20不锈钢 GB/T 70.1-2008			4	ea	B
+….4….	1401011006	→		弹垫	Spring washer	D8不锈钢 GB/T 95-2002			4	ea	B
+….4….	2523000033	→	SXJ（B)-A-30	顶柱	Column				2	ea	B
+….4….	1401014009	→		内六平端紧定螺钉	Fasten screw	M8X25			2	ea	B
+….4….	1401019005	→		六角螺母	Hexagon nut	M8不锈钢 GB/T 41-2016			2	ea	B
+…3…..	2523000740	→	PF4350-A-32	隔垫	Washer				1	ea	B
+…3…..	2523000191	→	SXJ(B)-A-31	端垫	Washer				1	ea	B
+…3…..	1401015035	→		内六角圆柱头螺钉	Hexagon socket head screw	M8X25不锈钢 GB/T 70.1-2008			1	ea	B
+…3…..	1401011006	→		弹垫	Spring washer	8不锈钢 GB/T 94.1-2008			1	ea	B
+…3…..	1401055013	→		平垫	Washer	D8不锈钢 GB/T 95-2002			1	ea	B
+…3…..	2523000741	→	PF4350-A-34	轴套	Bushing				1	ea	B
+…3…..	2523000016	→	SXJ（B)-A-13	挡圈	Retainer ring				1	ea	B
+…3…..	1401015033	→		内六角圆柱头螺钉	Hexagon socket head screw	M8X16不锈钢 GB/T 70.1-2008			1	ea	B
+…3…..	1401011006	→		弹垫	Spring washer	D8不锈钢 GB/T 94.1-2008			1	ea	B
+…3…..	1401055013	→		平垫	Washer	D8不锈钢 GB/T 95-2002			1	ea	B
+…3…..	2523000515	→	PF4300-A-33	右钢丝绳轮护罩	Wheel cover right				1	ea	B
+…3…..	1401015027	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X20不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	1401036007	→		弹垫	Spring washer	6不锈钢 GB/T 94.1-2008			4	ea	B
+…3…..	1401055012	→		平垫	Washer	D6不锈钢 GB/T 95-2002			4	ea	B
+…3…..	2523000506	→	SXJ(B)-D-09A	绳轮护罩（右）	Wheel cover(right)				1	ea	B
+…3…..	1401015026	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X16不锈钢 GB/T 70.1-2008			2	ea	B
+…3…..	1401036007	→		弹垫	Spring washer	6不锈钢 GB/T 94.1-2008			4	ea	B
+…3…..	1401055012	→		平垫	Washer	D6不锈钢 GB/T 95-2002			4	ea	B
+…3…..	2523000516	→	SXJ(B)-C-10	左钢丝绳轮护罩	Wheel cover left				1	ea	B
+…3…..	2523000517	→	SXJ(B)-C-11	左钢丝绳轮护罩支撑柱	Column				2	ea	B
+…3…..	1401015065	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X45不锈钢 GB/T 70.1-2008			2	ea	B
+…3…..	1401036007	→		弹垫	Spring washer	6不锈钢 GB/T 94.1-2008			2	ea	B
+…3…..	1401055012	→		平垫	Washer	D6不锈钢 GB/T 95-2002			2	ea	B
+…3…..	2523000505	→	SXJ(B)-E-15	弯板	Plate				1	ea	B
+…3…..	1401015026	→		内六角圆柱头螺钉	Hexagon socket head screw	M6X16不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	1401036007	→		弹垫	Spring washer	D6不锈钢 GB/T 94.1-2008			4	ea	B
+…3…..	1401055012	→		平垫	Washer	D6不锈钢 GB/T 95-2002			4	ea	B
+…3…..	2523000507	→	SXJ(B)-D-09B	绳轮护罩（左）	Wheel cover(left)				1	ea	B
+…3…..	1401015021	→		内六角圆柱头螺钉		M6*10不锈钢 GB/T 70.1-2008			2	ea	B
+…3…..	1401036007	→		弹垫	Spring washer	6不锈钢 GB/T 94.1-2008			2	ea	B
+…3…..	1401055012	→		平垫	Washer	D6不锈钢 GB/T 95-2002			2	ea	B
+..2……	2529005128	→	Assmebly in SOP	主机装配					1	ea	A
+…3…..	2529000263	→	PF4300-L-00B	箱体焊接	Base cabinet 				1	ea	B
+….4….	2529005129	→	PF4300-L-01-00	箱体架焊接	Base cabinet frame				1	ea	N
+…..5…	2529005130	→	PF4300-L-01-01-00	箱体架底架焊接	Base cabinet underframe				1	ea	N
+……6..	2529005131	→	PF4300-L-01-01-01	箱体底架焊接方管-1	Base cabinet underframe profile-1				1	ea	N
+……6..	2529005132	→	PF4300-L-01-01-02	箱体底架焊接方管-2	Base cabinet underframe profile-2				1	ea	N
+……6..	2529005133	→	PF4300-L-01-01-03	箱体底架焊接方管-3	Base cabinet underframe profile-3				1	ea	N
+……6..	2529005134	→	PF4300-L-01-01-04	箱体底架焊接方管-4	Base cabinet underframe profile-4				1	ea	N
+……6..	2529005135	→	PF4300-L-01-01-05	箱体底架焊接方管-5	Base cabinet underframe profile-5				1	ea	N
+……6..	2529005136	→	PF4300-L-01-01-07	箱体底架焊接角钢1	Base cabinet underframe angle-steel-1				2	ea	N
+……6..	2529005137	→	PF4300-L-01-01-08	箱体底架焊接角钢2	Base cabinet underframe angle-steel-2				2	ea	N
+……6..	2529005138	→	PF4300-L-09A	连接焊板	Connect plate				4	ea	N
+……6..	2529005139	→	PF4300-L-13	过线管	Cable tube				1	ea	N
+……6..	2529005140	→	SXJ（B）-X-05	箱体附件	Cabinet accessory				1	pair	N
+……6..	2529005141	→	PF4300-L-01A	拼焊件	Screw holder				12	ea	N
+……6..	2529005142	→	PF4300-Y-01	运输起重杠-焊座	Lifting bridge				1	ea	N
+…….7.	2529005143	→	PF4300-Y-01-01	焊座-件1	Lifting bridge-1				1	ea	N
+…….7.	2529005144	→	PF4300-Y-01-02	焊座-件2	Lifting bridge-2				1	ea	N
+…….7.	2529005145	→	PF4300-Y-01-03	焊座-件3	Lifting bridge-3				2	ea	N
+……6..	2529005146	→	PF4300-Y-05	焊板	Plate				1	ea	N
+…..5…	2529005147	→	PF4300-A-20	轴架安装板	Shaft holder				2	ea	N
+…..5…	2529005148	→	Assmebly in SOP	法兰螺母	M6				4	ea	N
+…..5…	2529005149	→	Assmebly in SOP	接地螺钉	M6X12				2	ea	N
+…..5…	2529005150	→	PF4300-L-01-02-00	箱体架后立架焊接	Base cabinet rearframe 				1	ea	N
+……6..	2529005151	→	PF4300-L-01-02-01	箱体架后立架焊接方管-1	Base cabinet rearframe profile-1				1	ea	N
+……6..	2529005152	→	PF4300-L-01-02-02	箱体架后立架焊接方管-2	Base cabinet rearframe profile-2				2	ea	N
+……6..	2529005153	→	PF4300-L-01-02-03	箱体架后立架焊接方管-3	Base cabinet rearframe profile-3				1	ea	N
+……6..	2529005154	→	PF4300-L-01-02-04	箱体架后立架焊接方管-4	Base cabinet rearframe profile-4				1	ea	N
+……6..	2529005155	→	PF4300-L-01-02-05	箱体架后立架焊接方管-5	Base cabinet rearframe profile-5				1	ea	N
+……6..	2529005156	→	PF4300-L-01-02-06	箱体架后立架焊接角钢	Base cabinet rearframe  angle-steel				2	ea	N
+……6..	2529005157	→	PF4300-L-01-02-07	角钢-25X25X160	Angle steel-25X25X160				1	ea	N
+……6..	2529005070	→	PF4300-L-02	拼焊件	Screw holder				4	ea	N
+……6..	2529005159	→	PF4300-L-03	自制槽钢	Profile steel				1	ea	N
+……6..	2529005160	→	PF4300-L-06&07B	电箱板组焊图	Cabinet panel welding				1	ea	N
+…….7.	2529005161	→	PF4300-L-06B	电箱板	Cabinet panel				1	ea	N
+…….7.	2529005162	→	PF4300-L-07B	电箱侧板	Cabinet side panel				1	ea	N
+…..5…	2529005163	→	PF4300-N-04B	后网板4	Back cover-4				1	ea	N
+…..5…	2529005164	→	PF4300-X-02-04	按钮板固定板	Button plate fixer				2	ea	N
+…..5…	2529005165	→	PF4300-L-01-03	立架焊接方管-前	Profile- front				2	ea	N
+…..5…	2529005166	→	PF4300-L-01-04	立架焊接方管-侧	Profile-side				1	ea	N
+…..5…	2529005167	→	PF4300-L-01-05	立架焊接方管-后	Profile- rear				1	ea	N
+…..5…	2529005168	→	PF4300-L-01-06A	箱体架顶框焊接方管-2	Top profile- 2				1	ea	N
+…..5…	2529005169	→	PF4300-L-01-07	焊接角钢	Angle steel				4	ea	N
+…..5…	2529005170	→	PF4300-L-01-08	箱体架顶框焊接方管-1	Top profile- 1				1	ea	N
+…..5…	2529005171	→	PF4300-L-01-09	箱体架顶框横梁	Top profile				3	ea	N
+…..5…	2529005172	→	PF4300-L-01-10	箱体架顶框支撑柱	Top profile				2	ea	N
+…..5…	2529005070	→	PF4300-L-02	拼焊件	Screw holder				8	ea	N
+…..5…	2529005174	→	PF4300-L-02A	拼焊件	Screw holder				8	ea	N
+…..5…	2529005175	→	PF4300-L-10A	前焊管	Front tube				1	ea	N
+…..5…	2529005176	→	SXJ(B)-D-06	驱动箱体	Driving trunk				1	ea	B
+……6..	2529005177	→	SXJ(B)-D-06-01	驱动箱体-件1	Driving trunk-1				1	ea	N
+……6..	2529005178	→	SXJ(B)-D-06-02	驱动箱体-件2	Driving trunk-2				1	ea	N
+……6..	2529005179	→	SXJ(B)-D-06-03	驱动箱体-件3	Driving trunk-3				1	ea	N
+……6..	2529005180	→	SXJ(B)-D-06-04	驱动箱体-件4	Driving trunk-4				1	ea	N
+…..5…	2529005181	→	SXJ(B)-E-13	支撑架	Support bracket				1	ea	N
+……6..	2529005182	→	SXJ(B)-E-13-01	支撑架-件1	Support bracket-1				1	ea	N
+……6..	2529005183	→	SXJ(B)-E-13-02	支撑架-件2	Support bracket-2				1	ea	N
+……6..	2529005184	→	SXJ(B)-E-13-03	支撑架-件3	Support bracket-3				2	ea	N
+……6..	2529005185	→	SXJ(B)-E-13-04	支撑架-件4	Support bracket-4				1	ea	N
+…..5…	2529005149	→	Assmebly in SOP	接地螺钉	M6X12				4	ea	N
+….4….	2529005187	→	PF4300-X-02-00	箱体左侧封板	Cabinet left coner plate				1	ea	N
+…..5…	2529005188	→	PF4300-X-02B	箱体左侧封板-板体	Cabinet left coner plate				1	ea	N
+…..5…	2529005189	→	PF4300-X-02-01	箱体左侧封板加强筋	Cabinet left coner cover holder				1	ea	N
+…..5…	2529005190	→	PF4300-X-02-02	合页安装角钢	Hinge assemble steel				2	ea	N
+…..5…	2529005164	→	PF4300-X-02-04	按钮板固定板	Button plate fixer				2	ea	N
+…..5…	2529005192	→	PF4300-X-19B	滤波器连接焊板	Filter fasten plate				1	ea	N
+…..5…	2529005193	→	PF4300-X-20	总开关连接焊板	Main-switch plate				1	ea	N
+…..5…	2529005194	→	PF4300-X-30	线束固定板	Cable fasten bracket				1	ea	N
+….4….	2529005195	→	PF4300-X-03-00	箱体右侧封板	Cabinet right coner plate				1	ea	N
+…..5…	2529005196	→	PF4300-X-03B	箱体右侧封板-板体	Cabinet right coner plate				1	ea	N
+…..5…	2529005197	→	PF4300-X-03-01	箱体右侧封板加强筋	Cabinet right coner plate bar				1	ea	N
+…..5…	2529005198	→	PF4300-X-03-02A	磁铁安装座	Magnet block				1	ea	N
+…..5…	2529005199	→	PF4300-X-03-03	门开关架	Switch bracket				1	ea	N
+…..5…	2529005164	→	PF4300-X-02-04	按钮板固定板	Button plate fixer				2	ea	N
+….4….	2529005201	→	PF4300-X-04-00	箱体上板焊接	Cabinet top plate				1	ea	N
+…..5…	2529005202	→	PF4300-X-04A	箱体上板-板体	Cabinet top plate				1	ea	N
+…..5…	2529005203	→	PF4300-X-04-01	箱体上板加强筋-1	Cabinet top bar-1				1	ea	N
+…..5…	2529005204	→	PF4300-X-04-02	箱体上板加强筋-2	Cabinet top bar-2				1	ea	N
+…..5…	2529005205	→	PF4300-X-04-03	箱体上板加强筋-3	Cabinet top bar-3				2	ea	N
+…..5…	2529005206	→	PF4300-X-04-04	箱体上板加强筋-4	Cabinet top bar-4				2	ea	N
+…..5…	2529005207	→	PF4300-X-04-05	箱体上板加强筋-5	Cabinet top bar-5				2	ea	N
+…..5…	2529005208	→	PF4300-X-04-06	箱体上板加强筋-6	Cabinet top bar-6				4	ea	N
+…..5…	2529005209	→	PF4300-X-04-07	上板折边	Cabinet top angle steel				1	ea	N
+…..5…	2529005210	→	SXJ（B）-X-07	注油焊板	Add oil welding plate				2	ea	N
+…..5…	2529005211	→	PF4300-L-20	引线护板1	Guild cover-1				1	ea	N
+…..5…	2529005212	→	PF4300-L-21	引线护板2	Guild cover-2				1	ea	N
+…..5…	2529005213	→	PF4300-L-22	引线护板3	Guild cover-3				1	ea	N
+…..5…	2529005214	→	PF4300-L-14	35角铁	35 angle-steel				2	ea	N
+…3…..	2529000259	→	PF4300-L-15	线槽盖板	Cable tube cover				1	ea	B
+…3…..	2523000385	→	PF4300-L-08	电箱门	Cabinet door				1	pair	B
+….4….	2523000386	→	PF4300-L-08-01	电箱门-锁杆套	Cabinet door-lock bush				2	ea	B
+….4….	2529005215	→	PF4300-L-08-02	电箱门-焊板	Cabinet door-plate				2	ea	N
+….4….	2523000388	→	PF4300-L-08-03	电箱门-左门	Cabinet door-left				1	ea	B
+….4….	2523000389	→	PF4300-L-08-04	电箱门-右门	Cabinet door-right				1	ea	B
+….4….	2523000390	→	PF4300-L-08-05	电箱门-锁杆	Cabinet door-lock pin				2	ea	B
+….4….	2523000391	→	PF4300-L-08-06	电箱门-门挡	Cabinet door-limit				2	ea	N
+…3…..	2529000188	→	PF4300-Y-02A	杠体组焊图					1	ea	B
+….4….	2523000440	→	PF4300-Y-02-01	连接焊板					1	ea	N
+….4….	2523000443	→	PF4300-Y-02-04	杠体					1	ea	N
+….4….	2523000489	→	PF4300-Y-02-05	连接焊板					1	ea	N
+…3…..	2523000444	→	PF4300-Y-03	连接角钢					2	ea	B
+…3…..	1401015027	→		内六角圆柱头螺钉		M6*20 不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	1401036007	→		弹垫		D6不锈钢 GB/T 94.1-2008			4	ea	B
+…3…..	1401055012	→		平垫圈		D6不锈钢 GB/T 95-2002			4	ea	B
+…3…..	1401024003	→		大平垫圈		D12*30			4	ea	B
+…3…..	1401036001	→		弹垫		D12不锈钢 GB/T 94.1-2008			2	ea	B
+…3…..	1401050003	→		六角螺母		M12			2	ea	B
+…3…..	1401054154	→		内六角圆柱头螺钉		M12*35 不锈钢 GB/T 70.1-2008			2	ea	B
+…3…..	2523000552	→	PF4300-Y-04A	运输过程机箱安装固定板					4	ea	B
+…3…..	1401021051	→		内六角沉头螺钉		M20X40			4	ea	B
+…3…..	2529005217	→	Assmebly in SOP	正面按钮板组装					1	ea	A
+….4….	2529000262	→	PF4300-X-23-00	按钮面板焊板	Button plate welding plate				1	ea	B
+…..5…	2529005218	→	PF4300-X-23	按钮面板	Button plate 				1	ea	N
+…..5…	2529005219	→	PF4300-X-23-01	按钮PCB固定板	Button plate PCB fasten				1	ea	N
+…..5…	2529005149	→	Assmebly in SOP	接地螺钉	M6X12				1	ea	N
+….4….	1501083005	→		标志牌架		A22-RBS-X EATON			7	ea	B
+….4….	1902000017	→	见图纸	按钮标牌		Control on			1	ea	B
+….4….	1902000018	→	见图纸	按钮标牌		Error			1	ea	B
+….4….	1902000019	→	见图纸	按钮标牌		Start			1	ea	B
+….4….	1902000020	→	见图纸	按钮标牌		Manual/Auto			1	ea	B
+….4….	1902000021	→	见图纸	按钮标牌		Stop			1	ea	B
+….4….	1902000022	→	见图纸	按钮标牌		Reset			1	ea	B
+….4….	1902000023	→	见图纸	按钮标牌		Up/Wire feeding			1	ea	B
+….4….	1501076030	→		急停按钮头		A22-RPV. Moeller			1	ea	B
+….4….	1501083034	→		急停开关标志牌		M22-XZK-GB99 EATON			1	ea	B
+….4….	1501111010	→		指示灯		A22-LCLED24-W白 EATON			1	ea	B
+….4….	1501111008	→		指示灯		A22-LCLED24-Y黄 EATON			1	ea	B
+….4….	1501071051	→		按钮		A22-RLT-GN/K10/LED EATON			1	ea	B
+….4….	1510230081	→		按钮头		A22-RD-01/K10黑色 EATON			1	ea	B
+….4….	1501068006	→		选择开关		A22-RWK1V/K11 EATON			1	ea	B
+….4….	1901001134	→		按钮		A22-RD-10/K10红色 EATON			1	ea	B
+….4….	1501071091	→		按钮(蓝)		A22-RD-06/K10 EATON			1	ea	B
+….4….	1501071104	→		固定支架（按钮）		A22-BE6 Moeller			1	ea	B
+….4….	1501071105	→		触点模块（2）		A22-EC02 Moeller			2	ea	B
+….4….	1501159005	→	见图纸	VGA PCB		15PIN 3排15孔			2	ea	B
+….4….	1401063003			内六角固定螺柱		M3*5+10			4	ea	B
+…3…..	1401008025	→		内六角平圆头螺钉		M5*8不锈钢 GB/T 70.2-2015			4	ea	B
+…3…..	2902001052	→	见图纸	4X50自动按钮线束急停		8线带VGA			1	ea	B
+….4….	1401063003			内六角固定螺柱		M3*5+10			2	ea	B
+…3…..	2902001051	→	见图纸	4X50自动按钮线束下侧		8线带16PIN插头			1	ea	B
+…3…..	2902001033	→	见图纸	4X50自动按钮板线束		PF4X50按钮板线束			1	ea	B
+…3…..	1501027012	→	见图纸	尼龙扎带		黑 4*200			15	ea	B
+…3…..	1401078018	→	PF4300-L-附图	万向地脚	Foot				1	ea	B
+…3…..	1401078023	→	PF4300-L-附图（A）	万向地脚	Foot				4	ea	B
+…3…..	2523000666	→	PF4300-X-24	按钮面板盖板	Button cover plate				1	ea	B
+…3…..	2523000666	→	PF4300-X-24	按钮面板盖板	Button cover plate				1	ea	B
+…3…..	2523000171	→	SXJ（B）-X-06	注油孔盖	Add oil cover				1	ea	B
+…3…..	1401008001	→		内六角平圆头螺钉		M4X12			12	ea	B
+…3…..	2529005221	→	Assmebly in SOP	插接件安装板/侧板组装					1	ea	A
+….4….	2529000257	→	PF4300-Z-04B	插接件安装板					1	ea	B
+….4….	1501159006	→	见图纸	D-sub PCB		15PIN 2排15孔			1	ea	B
+….4….	1501159005	→	见图纸	VGA PCB		15PIN 3排15孔			1	ea	B
+….4….	1401063003	→		内六角固定螺柱		M3*5+10			4	ea	B
+….4….	1501072015	→		外部急停模块		PCB blntEStopCircuit SAG			1	ea	B
+….4….	1401015057	→		内六角圆柱头螺钉		M3*6不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1401019009	→		六角螺母		M3不锈钢 GB/T 41-2016			4	ea	B
+….4….	1503003055	→		面板安装直通接管		KCE06-00 SMC			2	ea	B
+…3…..	1401015023	→		内六角圆柱头螺钉		M6*12不锈钢 GB/T 70.1-2008			2	ea	B
+…3…..	1401010005	→		平垫圈		Ø6不锈钢 GB/T 95-2002			2	ea	B
+…3…..	1401011005	→		弹簧垫圈		Ø6不锈钢 GB/T 94.1-2008			2	ea	B
+….4….	2529000258	→	PF4300-Z-04LA	插接件安装板（侧）					1	ea	B
+….4….	1501159005	→	见图纸	VGA PCB		15PIN 3排15孔			1	ea	B
+….4….	1401063003			内六角固定螺柱		M3*5+10			2	ea	B
+….4….	1503003055	→		面板安装直通接管		KCE06-00 SMC			2	ea	B
+…3…..	1401015014	→		内六角圆柱头螺钉		M5*12不锈钢 GB/T 70.1-2008			4	ea	B
+…3…..	1401010008	→		平垫圈		Ø5不锈钢 GB/T 95-2002			2	ea	B
+…3…..	1401011003	→		弹簧垫圈		Ø5不锈钢 GB/T 94.1-2008			2	ea	B
+…3…..	2523000683	→	PF4300-X-01-02	接插件盖板					2	ea	B
+…3…..	1401008001	→		内六角平圆头螺钉		M4X12			8	ea	B
+…3…..	2529005224	→	Assmebly in SOP	塑壳断路器组装					1	ea	A
+….4….	1501065004	→		塑壳断路器		LZMB1-A32 EATON			1	ea	B
+….4….	1501065006	→		旋转手柄组件		NZM1-XSR-R EATON			1	suit	B
+….4….	1501065009	→		指触防护罩		NZM1-XIPK EATON			2	suit	B
+….4….	1401045001	→		锯齿垫		Ø4不锈钢 GB/T 95-2002			12	ea	B
+…3…..	2529005225	→	Assmebly in SOP	电磁阀/压力开关/调压过滤器组装					1	ea	A
+….4….	2529100037	→		电磁阀		4V120-06B（主体）亚德客			1	ea	C
+….4….	1503024010	→		消音器		BLSM-01			2	ea	B
+….4….	1503004001	→		弯头		1/8-6 APL6-01			2	ea	B
+….4….	1503004005	→		弯头		1/8-8 APL8-01			1	ea	B
+….4….	1501158003	→		压力开关		DPSP1-10020			1	ea	B
+….4….	1501158005	→		压力开关安装座		F-DPSLB			1	ea	B
+….4….	1401015020	→		内六角圆柱头螺钉		M5*8不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	2529005226	→	Assmebly in SOP	压力开关自带线缆					1	ea	B
+….4….	1501026009	→		针形压接端子		E0308 GB/T 24975.7-2010 			3	ea	B
+….4….	1501006008	→		热缩管		Ø4			15	mm	B
+….4….	1503004015	→		弯头		M5-6 APL6-M5			1	ea	B
+….4….	1503017025	→		调压过滤器		GFR200-08			1	ea	B
+….4….	1503003020	→		金属快速接头		ECM2-02 亿日			1	ea	B
+….4….	1503003021	→		金属快速接头		EHN2-12*8亿日			1	ea	B
+….4….	1503004005	→		弯头		1/8-8 APL8-01			2	ea	B
+….4….	1702001140	→		生料带		10			5	mm	B
+…3…..	1401015077	→		内六角圆柱头螺钉		M3*25不锈钢 GB/T 70.1-2008			2	ea	B
+…3…..	1401010003	→		平垫圈		Ø3不锈钢 GB/T 95-2002			2	ea	B
+…3…..	1401011004	→		弹簧垫圈		Ø3不锈钢 GB/T 94.1-2008			2	ea	B
+…3…..	2529005227	→	Assmebly in SOP	主机箱装配					1	ea	A
+….4….	1501083005	→		标志牌架		A22-RBS-X EATON			3	ea	B
+….4….	1902000014	→	见图纸	按钮标牌		Load/Unload			1	ea	B
+….4….	1902000015	→	见图纸	按钮标牌		Up/Down			1	ea	B
+….4….	1902000016	→	见图纸	按钮标牌		Feeding/Coiling			1	ea	B
+….4….	1501076030	→		急停按钮头		A22-RPV. Moeller			1	ea	B
+….4….	1501083004	→		急停开关标签牌		A22-1AK-299 EATON			1	ea	B
+….4….	1501068008	→		三位自复位旋钮		A22-RWK3/K20 EATON			3	ea	B
+….4….	1501088012	→		电位器		M22-R4K7 EATON			1	ea	B
+….4….	1902000026	→		标签		电位器			1	ea	B
+….4….	1501071104	→		固定支架（按钮）		A22-BE6 Moeller			1	ea	B
+….4….	1501071105	→		触点模块（2）		A22-EC02 Moeller			2	ea	B
+….4….	1902000025	→	见图纸	标签		L=10mm 圆形 使能开关			1	ea	B
+….4….	1501048024	→		使能开关		ZSG1-2 安士能			1	ea	B
+….4….	1501120010	→		铝基板硬灯条		5050 DC24V 0.6m 亮度18-20LM			1	ea	B
+….4….	1501021013	→		灰线槽		25*80			430	mm	B
+….4….	1401007020	→		十字槽盘头螺钉		M4*8不锈钢			2	ea	B
+….4….	1401010004	→		平垫圈		Ø4不锈钢 GB/T 95-2002			2	ea	B
+….4….	1501005008	→	见图纸	胶圈护口		Φ3			1	ea	B
+….4….	1401015057	→		内六角圆柱头螺钉		M3*6不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1401011004	→		弹簧垫圈		Ø3不锈钢 GB/T 94.1-2008			2	ea	B
+….4….	2523000715	→	PF4300-Z-18	灯带安装架					1	ea	B
+….4….	1501011059	→		接线端子排		20位 GB/T 1048.7			0.1	ea	B
+….4….	1401015061	→		内六角圆柱头螺钉		M3*12不锈钢 GB/T 70.1-2008			1	ea	B
+….4….	2523000449	→	PF4300-Z-05	升降下限位开关安装板					1	ea	B
+….4….	1501059018	→		接近开关		E2E-X7D1-MIG-Z Omron			1	ea	B
+….4….	1401015016	→		内六角圆柱头螺钉		M5*16不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1401011003	→		弹簧垫圈		Ø5不锈钢 GB/T 94.1-2008			2	ea	B
+….4….	1401010008	→		平垫圈		Ø5不锈钢 GB/T 95-2002			2	ea	B
+….4….	2523000509	→	PF4300-Z-11	升降上限位开关安装板A					1	ea	B
+….4….	1501056038	→		接近传感器（M30）		E2E-X10D2-MIG-Z Omron			1	ea	B
+….4….	1401015021	→		内六角圆柱头螺钉		M6*10不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1401010005	→		平垫圈		Ø6不锈钢 GB/T 95-2002			2	ea	B
+….4….	1401011005	→		弹簧垫圈		Ø6不锈钢 GB/T 94.1-2008			2	ea	B
+….4….	2523000446	→	PF4300-Z-01	夹紧放松行程开关安装板					1	ea	B
+….4….	1510230080	→		限位开关		LS-11/RLA+M12A EATON			1	ea	B
+….4….	1401015010	→		内六角圆柱头螺钉		M4*30不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1401015023	→		内六角圆柱头螺钉		M6*12不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1401010005	→		平垫圈		Ø6不锈钢 GB/T 95-2002			2	ea	B
+….4….	1401011005	→		弹簧垫圈		Ø6不锈钢 GB/T 94.1-2008			2	ea	B
+….4….	2522000295	→	ZXJ(B)-Z-13-A	夹持限位开关安装板					1	ea	B
+….4….	1510230080	→		限位开关		LS-11/RLA+M12A EATON			1	ea	B
+….4….	1401015010	→		内六角圆柱头螺钉		M4*30不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1401015023	→		内六角圆柱头螺钉		M6*12不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1401010005	→		平垫圈		Ø6不锈钢 GB/T 95-2002			2	ea	B
+….4….	1401011005	→		弹簧垫圈		Ø6不锈钢 GB/T 94.1-2008			2	ea	B
+….4….	1510230079	→		安全限位开关		LS-S02-ZB+M12A EATON			1	ea	B
+….4….	1401015010	→		内六角圆柱头螺钉		M4*30不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1510150024	→		制动电阻		BRR-0022-LD-5 240W			1	ea	B
+….4….	1501011059	→		接线端子排		20位 GB/T 1048.7			0.1	ea	B
+….4….	1401015014	→		内六角圆柱头螺钉		M5*12不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1401010008	→		平垫圈		Ø5不锈钢 GB/T 95-2002			2	ea	B
+….4….	1401011003	→		弹簧垫圈		Ø5不锈钢 GB/T 94.1-2008			2	ea	B
+….4….	2523000664	→	PF4300-X-22	电阻护罩安装架	Risitance cover bracket				1	ea	B
+….4….	1501004003	→	见图纸	防水护口		M20  			1	ea	B
+….4….	1401015021	→		内六角圆柱头螺钉		M6*10不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1401010005	→		平垫圈		Ø6不锈钢 GB/T 95-2002			2	ea	B
+….4….	1401011005	→		弹簧垫圈		Ø6不锈钢 GB/T 94.1-2008			2	ea	B
+….4….	2523000663	→	PF4300-X-21	电阻器护罩	Risitance cover				1	ea	B
+….4….	1401015021	→		内六角圆柱头螺钉		M6*10不锈钢 GB/T 70.1-2008			4	ea	B
+….4….	1401010005	→		平垫圈		Ø6不锈钢 GB/T 95-2002			4	ea	B
+….4….	1401011005	→		弹簧垫圈		Ø6不锈钢 GB/T 94.1-2008			4	ea	B
+….4….	1501096017	→		滤波器		FN3258-7-44 Schaffner			1	ea	B
+….4….	1401015012	→		内六角圆柱头螺钉		M4*8不锈钢 GB/T 70.1-2008			4	ea	B
+….4….	1401010004	→		平垫圈		Ø4不锈钢 GB/T 95-2002			4	ea	B
+….4….	1401011002	→		弹簧垫圈		Ø4不锈钢 GB/T 94.1-2008			4	ea	B
+….4….	2523000661	→	PF4300-X-15A	滤波器护罩安装架	Filter bracket				1	ea	B
+….4….	1501004003	→	见图纸	防水护口		M20  			1	ea	B
+….4….	1401015021	→		内六角圆柱头螺钉		M6*10不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1401010005	→		平垫圈		Ø6不锈钢 GB/T 95-2002			2	ea	B
+….4….	1401011005	→		弹簧垫圈		Ø6不锈钢 GB/T 94.1-2008			2	ea	B
+….4….	2529000266	→	PF4300-X-13B	滤波器护罩	Filter cover				1	ea	B
+….4….	1401015021	→		内六角圆柱头螺钉		M6*10不锈钢 GB/T 70.1-2008			4	ea	B
+….4….	1401010005	→		平垫圈		Ø6不锈钢 GB/T 95-2002			4	ea	B
+….4….	1401011005	→		弹簧垫圈		Ø6不锈钢 GB/T 94.1-2008			4	ea	B
+….4….	1501038030	→		明装（连接器）插座		635 400V 16A 5芯 威浦电气			1	ea	B
+….4….	1401015017	→		内六角圆柱头螺钉		M5*20不锈钢 GB/T 70.1-2008			4	ea	B
+….4….	1401010008	→		平垫圈		Ø5不锈钢 GB/T 95-2002			4	ea	B
+….4….	1401011003	→		弹簧垫圈		Ø5不锈钢 GB/T 94.1-2008			4	ea	B
+….4….	1401019008	→		六角螺母		M5不锈钢 GB/T 41-2016			4	ea	B
+….4….	1901001129	→		海绵条（单面背胶）		20mm*20mm			480	mm	B
+…..5…	1702001540	→		3M背胶（双面）		宽15mm,厚1.0mm,黑色			480	mm	B
+….4….	2529000246	→	见图纸	电气控制盘		PF4X50-V0200			1	ea	B
+…..5…	1501051033	→		安全继电器		LG5925.48 Dold			2	ea	N
+…..5…	1501082060	→		变频器		MMX34AA012F0-0 EATON			1	ea	N
+…..5…	1501085037	→		电机保护器		PKZMC-20 (9-20) EATON			1	ea	N
+…..5…	1501085012	→		电机保护器		PKZMC-1.6 EATON			2	ea	N
+…..5…	1501051049	→		相序继电器		EMR4-F500-2 EATON			1	ea	N
+…..5…	1501043002	→		触点		NHI-E-11-PKZ0 EATON			3	ea	N
+…..5…	1501047158	→		断路器		PL9-D2/2 EATON			1	ea	N
+…..5…	1501055004	→		接触器		DILM9-10 EATON			7	ea	N
+…..5…	1501043005	→		触点		DILM32C-XH122 EATON			7	ea	N
+…..5…	1409038110	→		机械连锁		DILM12-XMV EATON			2	ea	N
+…..5…	1501055024	→		可逆启动接线元件		MVS-WB-EM EATON			2	ea	N
+…..5…	1501051035	→		热继电器		ZB32-10 EATON			1	ea	N
+…..5…	1501053012	→		热继电器安装座		ZB32-XEZ EATON			1	ea	N
+…..5…	1501051011	→		继电器		G2R-2-SN-DC24V Omron			1	ea	N
+…..5…	1501053007	→		继电器座		P2RF-08 Omron			1	ea	N
+…..5…	1501156003	→		可编程控制器		DVP20SX211R DELTA			1	ea	N
+…..5…	1501156024	→		可编程控制器		DVP16SP11R DELTA			2	ea	N
+…..5…	1501045036	→		开关电源		DRH-120-24 明伟			1	ea	N
+…..5…	1501009002	→		铁卡轨(35*7.5)		wago210-112 万可			2	m	N
+…..5…	1501011045	→		端子排（接地）		wago281-907 万可			3	ea	N
+…..5…	1501011043	→		端子排		wago281-901 万可			19	ea	N
+…..5…	1501011046	→		端子排端板		wago281-329 万可			1	ea	N
+…..5…	1501011047	→		终端挡块		wago249-116 万可			3	ea	N
+…..5…	1501011048	→		端子排		wago280-681 万可			6	ea	N
+…..5…	1501011049	→		端子排（兰）		wago280-684 万可			1	ea	N
+…..5…	1501011051	→		端子排端板		wago280-326 万可			1	ea	N
+…..5…	1501021013	→		灰线槽		80*25 GB/T 19215			5	m	F
+…..5…	1502002003	→		塑铜软线		BVR-0.5-蓝-500V GB/T 9330-2008			50	m	F
+…..5…	1502006001	→		塑铜软线		BVR-2.5-黑 GB/T 9330-2008			20	m	F
+…..5…	1502006006	→		塑铜软线		BVR-2.5-黄绿双色 GB/T 9330-2008			15	m	F
+…..5…	2902001058	→		凤凰端子		3.5mm 10PIN 非螺装 线端 GB/T 14048.22			6	ea	F
+…..5…	2523000637	→	见图纸	电箱电器安装板		PF4300-L-11A			1	ea	F
+….4….	1401015028	→		内六角圆柱头螺钉		M6*30不锈钢 GB/T 70.1-2008			5	ea	B
+….4….	1401010005	→		平垫圈		Ø6不锈钢 GB/T 95-2002			5	ea	B
+….4….	1401011005	→		弹簧垫圈		Ø6不锈钢 GB/T 94.1-2008			5	ea	B
+….4….	1901001132	→	见图纸	4X50控制板PCB		SIP20PIN-DIP24PIN			1	ea	B
+….4….	1401015057	→		内六角圆柱头螺钉		M3*6不锈钢 GB/T 70.1-2008			6	ea	B
+….4….	2902001049	→	见图纸	线路整理固定扎带		Ø6带倒刺			38	ea	B
+…3…..	2529005228	→	Assmebly in SOP	电器板接线					1	ea	A
+….4….	2902001032	→	见图纸	4X50控制线束		PF4X50主线束 			1	ea	B
+….4….	1803022020	→		电磁阀		4V120-06B DC24V 亚德客			1	ea	P
+…..5…	2902001032	→	见图纸	4X50控制线束		PF4X50主线束			0	ea	V
+…3…..	2529005229	→	Assmebly in SOP	控制线缆整机布线/接线					1	ea	A
+….4….	1501027012	→	见图纸	尼龙扎带		黑 4*200			47	ea	B
+….4….	2902001046	→	见图纸	急停封堵		VGA3排			1	ea	B
+….4….	1501028008	→		可调式电线固定座		ACT-17			1	ea	B
+…3…..	2529005230	→	Assmebly in SOP	强电线缆整机布线/接线					1	ea	A
+….4….	2902001040	→	见图纸	滤波器输出线缆		4G2.5屏蔽*3390mm			1	ea	B
+….4….	2902001039	→	见图纸	电阻线缆		4G2.5*900mm			1	ea	B
+….4….	2902001038	→	见图纸	主电机抱闸线缆		4*1*4740mm			1	ea	B
+….4….	2902001037	→	见图纸	提升电机抱闸线缆		4*1*5140mm			1	ea	B
+….4….	2902001036	→	见图纸	夹紧电机线缆		4G2.5*4740mm			1	ea	B
+….4….	2902001035	→	见图纸	主电机线缆		4G2.5屏蔽*4740mm			1	ea	B
+….4….	2902001034	→	见图纸	提升电机线缆		4G2.5*5140mm			1	ea	B
+….4….	1501028008	→	见图纸	可调式电线固定座		ACT-17			1	ea	B
+….4….	1401009017	→		内六角沉头螺钉		M4*8不锈钢			1	ea	B
+….4….	1501027012	→	见图纸	尼龙扎带 		黑 4*200			30	ea	B
+….4….	2902001042	→	见图纸	电源线		4G2.5*950mm 			1	ea	B
+….4….	1401019003	→		六角螺母		M6不锈钢 GB/T 41-2016			1	ea	B
+….4….	1401045003	→		锯齿垫		Ø6不锈钢 GB/T 862.2-1987			1	ea	B
+….4….	2902001041	→	见图纸	滤波器输入线缆		4G2.5*700mm			1	ea	B
+….4….	1501028012	→		单孔压线卡		10mm			1	ea	B
+….4….	1401019003	→		六角螺母		M6不锈钢 GB/T 41-2016			1	ea	B
+….4….	1401045003	→		锯齿垫		Ø6不锈钢 GB/T 862.2-1987			1	ea	B
+….4….	2523000712	→	PF4300-Z-14	60X40过线管护套					2	ea	B
+….4….	2523000502	→	PF4300-Z-09	电机接线盒接头					1	ea	B
+….4….	1401015012	→		内六角圆柱头螺钉		M4*8不锈钢 GB/T 70.1-2008			6	ea	B
+…3…..	2529005231	→	Assmebly in SOP	气路连接					1	ea	A
+….4….	1503009005	→		气管		Ø8蓝色 亚德客			1900	mm	F
+….4….	1501027012	→	见图纸	尼龙扎带		黑 4*200			62	ea	B
+….4….	1503009003	→		气管		Ø6蓝色 亚德客			800	mm	B
+….4….	1503009003	→		气管		Ø6蓝色 亚德客			720	mm	B
+….4….	1503001013	→		T型减径三通		8-8-6 APEG8-6			1	ea	B
+….4….	1503009005	→		气管		Ø8蓝色 亚德客			240	mm	F
+….4….	1503009003	→		气管		Ø6蓝色 亚德客			620	mm	B
+….4….	1503002002	→		Y型三通		6-6-6 APY6			2	ea	B
+….4….	1503009003	→		气管		Ø6蓝色 亚德客			140	mm	B
+….4….	1503009003	→		气管		Ø6蓝色 亚德客			1900	mm	B
+….4….	2529000260	→	PF4300-L-18	线缆入口盖板	Cable cover				2	ea	B
+….4….	2529000261	→	PF4300-L-19	盖板固定压板	Cable cover holder				4	ea	B
+….4….	1401019003	→		六角螺母		M6不锈钢 GB/T 41-2016			4	ea	B
+….4….	1401010005	→		平垫圈		Ø6不锈钢 GB/T 95-2002			4	ea	B
+….4….	1401011005	→		弹簧垫圈		Ø6不锈钢 GB/T 94.1-2008			4	ea	B
+…3…..	2529005232	→	Assmebly in SOP	地线连接及标签粘贴					1	ea	A
+….4….	1401019003	→		六角螺母		M6不锈钢 GB/T 41-2016			2	ea	B
+….4….	1401045003	→		锯齿垫		Ø6不锈钢 GB/T 862.2-1987			2	ea	B
+….4….	1902000009	→	见图纸	标签		11*11 Ground			2	ea	B
+….4….	2902001018	→	见图纸	Wire harness18#		Ground wire(3)200单O单簧型			1	ea	B
+….4….	1401019003	→		六角螺母		M6不锈钢 GB/T 41-2016			1	ea	B
+….4….	1401045003	→		锯齿垫		Ø6不锈钢 GB/T 862.2-1987			1	ea	B
+….4….	1902000009	→	见图纸	标签		11*11 Ground			2	ea	B
+….4….	2902001018	→	见图纸	Wire harness18#		Ground wire(3)200单O单簧型			1	ea	B
+….4….	1401019003	→		六角螺母		M6不锈钢 GB/T 41-2016			1	ea	B
+….4….	1401045003	→		锯齿垫		Ø6不锈钢 GB/T 862.2-1987			1	ea	B
+….4….	1902000009	→	见图纸	标签		11*11 Ground			2	ea	B
+….4….	2902001018	→	见图纸	Wire harness18#		Ground wire(3)200单O单簧型			1	ea	B
+….4….	1401019003	→		六角螺母		M6不锈钢 GB/T 41-2016			1	ea	B
+….4….	1401045003	→		锯齿垫		Ø6不锈钢 GB/T 862.2-1987			1	ea	B
+….4….	1902000009	→	见图纸	标签		11*11 Ground			2	ea	B
+….4….	2902001017	→	见图纸	Wire harness17#		Ground wire(2)200双O型			1	ea	B
+….4….	1401019003	→		六角螺母		M6不锈钢 GB/T 41-2016			1	ea	B
+….4….	1401045003	→		锯齿垫		Ø6不锈钢 GB/T 862.2-1987			1	ea	B
+….4….	1902000009	→	见图纸	标签		11*11 Ground			2	ea	B
+….4….	2902001017	→	见图纸	Wire harness17#		Ground wire(2)200双O型			1	ea	B
+….4….	1401019003	→		六角螺母		M6不锈钢 GB/T 41-2016			2	ea	B
+….4….	1401045003	→		锯齿垫		Ø6不锈钢 GB/T 862.2-1987			2	ea	B
+….4….	1902000009	→	见图纸	标签		11*11 Ground			2	ea	B
+….4….	2902001017	→	见图纸	Wire harness17#		Ground wire(2)200双O型			2	ea	B
+….4….	1401019003	→		六角螺母		M6不锈钢 GB/T 41-2016			4	ea	B
+….4….	1401045003	→		锯齿垫		Ø6不锈钢 GB/T 862.2-1987			4	ea	B
+….4….	1902000009	→	见图纸	标签		11*11 Ground			4	ea	B
+….4….	2902001017	→	见图纸	Wire harness17#		Ground wire(2)200双O型			1	ea	B
+….4….	1401019003	→		六角螺母		M6不锈钢 GB/T 41-2016			1	ea	B
+….4….	1401045003	→		锯齿垫		Ø6不锈钢 GB/T 862.2-1987			1	ea	B
+….4….	1902000009	→	见图纸	标签		11*11 Ground			1	ea	B
+….4….	2902001017	→	见图纸	Wire harness17#		Ground wire(2)200双O型			1	ea	B
+….4….	1401019003	→		六角螺母		M6不锈钢 GB/T 41-2016			1	ea	B
+….4….	1401045003	→		锯齿垫		Ø6不锈钢 GB/T 862.2-1987			1	ea	B
+….4….	1902000009	→	见图纸	标签		11*11 Ground			1	ea	B
+….4….	2902001017	→	见图纸	Wire harness17#		Ground wire(2)200双O型			1	ea	B
+….4….	1401019003	→		六角螺母		M6不锈钢 GB/T 41-2016			1	ea	B
+….4….	1401045003	→		锯齿垫		Ø6不锈钢 GB/T 862.2-1987			1	ea	B
+….4….	1902000009	→	见图纸	标签		11*11 Ground			2	ea	B
+….4….	2902001017	→	见图纸	Wire harness17#		Ground wire(2)200双O型			1	ea	B
+….4….	1401019003	→		六角螺母		M6不锈钢 GB/T 41-2016			1	ea	B
+….4….	1401045003	→		锯齿垫		Ø6不锈钢 GB/T 862.2-1987			1	ea	B
+….4….	1902000009	→	见图纸	标签		11*11 Ground			1	ea	B
+….4….	2902001017	→	见图纸	Wire harness17#		Ground wire(2)200双O型			1	ea	B
+….4….	1401019003	→		六角螺母		M6不锈钢 GB/T 41-2016			1	ea	B
+….4….	1401045003	→		锯齿垫		Ø6不锈钢 GB/T 862.2-1987			1	ea	B
+….4….	1902000009	→	见图纸	标签		11*11 Ground			1	ea	B
+….4….	2902001017	→	见图纸	Wire harness17#		Ground wire(2)200双O型			2	ea	B
+….4….	1501157001	→		直角穿板		APLM 8-M16X1			1	ea	B
+….4….	1401015014	→		内六角圆柱头螺钉		M5*12不锈钢 GB/T 70.1-2008			2	ea	B
+….4….	1401010008	→		平垫圈		Ø5不锈钢 GB/T 95-2002			2	ea	B
+….4….	1401011003	→		弹簧垫圈		Ø5不锈钢 GB/T 94.1-2008			2	ea	B
+….4….	1401017001	→		内六角平头螺钉		M6*10不锈钢			10	ea	B
+….4….	1503009005	→		气管		Ø8蓝色 亚德客			150	mm	F
+….4….	1401019003	→		六角螺母		M6不锈钢 GB/T 41-2016			1	ea	B
+….4….	1401045003	→		锯齿垫		Ø6不锈钢 GB/T 862.2-1987			1	ea	B
+….4….	1902000009	→	见图纸	标签		11*11 Ground			1	ea	B
+….4….	1902000008	→	见图纸	标签		60*30 Warning HV			1	ea	B
+….4….	1902000008	→	见图纸	标签		60*30 Warning HV			1	ea	B
+….4….	1902000008	→	见图纸	标签		60*30 Warning HV			1	ea	B
+….4….	1902000001	→	见图纸	标签		60x40, Pressure 4~5bar			1	ea	M
+….4….	1401015021	→		内六角圆柱头螺钉		M6*10不锈钢 GB/T 70.1-2008			1	ea	B
+….4….	1401045003	→		锯齿垫		Ø6不锈钢 GB/T 862.2-1987			1	ea	B
+….4….	1902000009	→	见图纸	标签		11*11 Ground			1	ea	B
+….4….	1401015021	→		内六角圆柱头螺钉		M6*10不锈钢 GB/T 70.1-2008			1	ea	B
+….4….	1401045003	→		锯齿垫		Ø6不锈钢 GB/T 862.2-1987			1	ea	B
+….4….	1902000009	→	见图纸	标签		11*11 Ground			1	ea	B
+….4….	1401015021	→		内六角圆柱头螺钉		M6*10不锈钢 GB/T 70.1-2008			1	ea	B
+….4….	1401045003	→		锯齿垫		Ø6不锈钢 GB/T 862.2-1987			1	ea	B
+.1…….	1501117012	→		插头（连接器）		2623 400V 16A 5孔 威浦电气			1	ea	B
+.1…….	2529100025	→	见图纸	附件包-整机连接件		通讯线+气管+封堵+PE			1	suit	B
+..2……	1502016020	→	见图纸	ESC封端		ESC 25针			1	ea	F
+..2……	1501125026	→	见图纸	DB15通讯线		DB15M-DB15M（6米）			1	ea	F
+..2……	2902001021	→	见图纸	Wire harness21#		Ground wire(6)6000单O型			1	ea	F
+..2……	1503009005	→		气管		Ø8蓝色 亚德客			6000	mm	P
+..2……	1902000013	→	见图纸	标签		55*85 Folk lift			2	ea	M
+..2……	1501027006	→		尼龙扎带		红 CV-150			3	ea	B
