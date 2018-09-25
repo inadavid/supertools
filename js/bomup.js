@@ -15,8 +15,11 @@ $("button[type=submit][step=1]").on("click",()=>{
     for(var i in header){
         options.push(new Option(header[i], i));
     }
-
-    $("select[meta='bomexcel.level']").append(options);
+    console.log(options)
+    var o1=JSON.parse(JSON.stringify(options));
+    $("select[meta='bomexcel.level']").append(JSON.stringify(options));
+    var o2=JSON.parse(JSON.stringify(options));
+    $("select[meta='bomexcel.code']").append(JSON.stringify(options));
 
     $('div[meta="bomup"][step="2"]').css("display","block");
 });

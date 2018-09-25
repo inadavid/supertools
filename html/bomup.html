@@ -3,14 +3,21 @@
     <textarea class="form-control" rows="3" meta="bomexcel"></textarea>
 </div>
 <div class="form-actions">
-    <button type="submit" class="btn btn-form btn-primary" meta="next" step="1">下一步</button>
+    <button type="submit" class="btn btn-form btn-primary btn-sm" meta="next" step="1">下一步</button>
 </div>
 
 <div meta="bomup" step="2">
-    <div class="form-group">
-        <label>选择代表层级的列</label>
-        <select class="form-control" meta="bomexcel.level"></select>
-      </div>
+    <label>选择对应信息所在的列：</label>
+    <div class="form-inline">
+        <div class="form-group">
+          <label>代表层级的列</label>
+          <select class="form-control form-control-sm" meta="bomexcel.level"></select>
+        </div><br>
+        <div class="form-group">
+          <label>代表物料号（ERP号）的列</label>
+          <select class="form-control form-control-sm" meta="bomexcel.code"></select>
+        </div>
+    </div>
 </div>
 
 <script src="../js/lib/SheetClip.min.js"></script>

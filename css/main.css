@@ -18,3 +18,7 @@ div[step] {
     display: none;
     margin-top: 10px;
 }
+
+div.form-group label {
+    margin-right: 10px;
+}
