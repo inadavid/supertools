@@ -1,11 +1,11 @@
-const {app, Menu, BrowserWindow} = require('electron')
+const { app, Menu, BrowserWindow } = require('electron')
 
 let win;
 
-function createWindow () {
+function createWindow() {
 
-  win = new BrowserWindow({width: 800, height: 600, show: false, fullscreen: false, fullscreenable: false, resizable: false, maximizable: true,});//
-  
+  win = new BrowserWindow({ width: 800, height: 600, show: false, fullscreen: false, fullscreenable: false, resizable: false, maximizable: true, });//
+
   win.loadFile('html/index.html')
 
   // 打开开发者工具

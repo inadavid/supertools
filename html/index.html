@@ -1,51 +1,53 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>SuperTools - SQL Generater</title>
-    <!-- Insert this line above script imports  -->
-    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
-    <!-- normal script imports etc  -->
-    <script src="../js/lib/jquery-3.3.1.min.js"></script> 
-    <!-- Insert this line after script imports -->
-    <script>if (window.module) module = window.module;</script>
 
-    <link rel="stylesheet" href="../css/photon.min.css">
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/main.css">
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8">
+  <title>SuperTools - SQL Generater</title>
+  <!-- Insert this line above script imports  -->
+  <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+  <!-- normal script imports etc  -->
+  <script src="../js/lib/jquery-3.3.1.min.js"></script>
+  <!-- Insert this line after script imports -->
+  <script>if (window.module) module = window.module;</script>
+
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/main.css">
+</head>
+
+<body>
   <div class="window">
     <div class="window-content">
       <div class="pane-group">
-          <div class="pane-sm sidebar">
-            <nav class="nav-group">
-              <h5 class="nav-group-title">功能选择</h5>
-              <span class="nav-group-item active" action="bomup"">
-                <span class="icon icon-doc-text"></span>
-                BOM导入
-              </span>
-              <span class="nav-group-item" action="bommass">
-                <span class="icon icon-doc-text-inv"></span>
-                批量更新BOM
-              </span>
-              <span class="nav-group-item" action="mdmass">
-                <span class="icon icon-vcard"></span>
-                批量更新MasterData
-              </span>
-              <h5 class="nav-group-title">其他功能-测试</h5>
-              <span class="nav-group-item" action="debug">
-                <span class="icon icon-doc-text-inv"></span>
-                打开调试终端
-              </span>
-            </nav>
-          </div>
-          <div class="pane" bid="main">
-          </div>
+        <div class="pane-sm sidebar">
+          <nav class="nav-group">
+            <h5 class="nav-group-title">功能选择</h5>
+            <span class="nav-group-item active" action="bomup"">
+                <span class=" icon icon-doc-text"></span>
+            BOM导入
+            </span>
+            <span class="nav-group-item" action="bommass">
+              <span class="icon icon-doc-text-inv"></span>
+              批量更新BOM
+            </span>
+            <span class="nav-group-item" action="mdmass">
+              <span class="icon icon-vcard"></span>
+              批量更新MasterData
+            </span>
+            <h5 class="nav-group-title">其他功能-测试</h5>
+            <span class="nav-group-item" action="debug">
+              <span class="icon icon-doc-text-inv"></span>
+              打开调试终端
+            </span>
+          </nav>
+        </div>
+        <div class="pane" bid="main">
+        </div>
       </div>
     </div>
   </div>
-    
+
   <script src="../js/index.js"></script>
-  </body>
+</body>
+
 </html>
