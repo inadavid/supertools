@@ -6,14 +6,12 @@
     <button type="submit" class="btn btn-form btn-primary" meta="next" step="1">下一步</button>
 </div>
 
-<script>
-var bomexcel_arr=[];
-$("button[type=submit][step=1]").on("click",()=>{
-    var bomexcel=$("textarea[meta=bomexcel]").val();
-    if(bomexcel.length<100) {
-        alert("粘贴的数据过少，请检查后再试。");
-        return;
-    }
-    bomexcel_arr = SheetClip.parse(bomexcel);
-});
-</script>
+<div meta="bomup" step="2">
+    <div class="form-group">
+        <label>选择代表层级的列</label>
+        <select class="form-control" meta="bomexcel.level"></select>
+      </div>
+</div>
+
+<script src="../js/lib/SheetClip.min.js"></script>
+<script src="../js/bomup.js"></script>

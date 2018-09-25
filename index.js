@@ -4,19 +4,20 @@ let win;
 
 function createWindow () {
 
-  win = new BrowserWindow({width: 800, height: 600, show: false, fullscreenable: false, resizable: false, maximizable: false, })
+  win = new BrowserWindow({width: 800, height: 600, show: false, fullscreen: false, fullscreenable: false, resizable: false, maximizable: true,});//
   
   win.loadFile('html/index.html')
 
   // 打开开发者工具
-  //win.webContents.openDevTools()
+  win.webContents.openDevTools()
 
   win.on('closed', () => {
     win = null
   })
   win.setMenu(null);
   win.once('ready-to-show', () => {
-    win.show()
+    win.show();
+    win.maximize()
   })
 }
 

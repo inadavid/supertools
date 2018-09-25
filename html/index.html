@@ -6,11 +6,12 @@
     <!-- Insert this line above script imports  -->
     <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
     <!-- normal script imports etc  -->
-    <script src="../jslib/jquery-3.3.1.min.js"></script> 
+    <script src="../js/lib/jquery-3.3.1.min.js"></script> 
     <!-- Insert this line after script imports -->
     <script>if (window.module) module = window.module;</script>
 
     <link rel="stylesheet" href="../css/photon.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/main.css">
   </head>
   <body>
@@ -32,33 +33,19 @@
                 <span class="icon icon-vcard"></span>
                 批量更新MasterData
               </span>
+              <h5 class="nav-group-title">其他功能-测试</h5>
+              <span class="nav-group-item" action="debug">
+                <span class="icon icon-doc-text-inv"></span>
+                打开调试终端
+              </span>
             </nav>
           </div>
           <div class="pane" bid="main">
           </div>
       </div>
     </div>
-    </div>
+  </div>
     
-    <script>
-      !function(n){"use strict";function f(n){return n.split('"').length-1}window.SheetClip={parse:function(n){var t,e,r,l,g,i,p,s=[],u=0;for(1<(r=n.split("\n")).length&&""===r[r.length-1]&&r.pop(),t=0,e=r.length;t<e;t+=1){for(r[t]=r[t].split("\t"),l=0,g=r[t].length;l<g;l+=1)s[u]||(s[u]=[]),i&&0===l?(p=s[u].length-1,s[u][p]=s[u][p]+"\n"+r[t][0],i&&1&f(r[t][0])&&(i=!1,s[u][p]=s[u][p].substring(0,s[u][p].length-1).replace(/""/g,'"'))):l===g-1&&0===r[t][l].indexOf('"')&&1&f(r[t][l])?(s[u].push(r[t][l].substring(1).replace(/""/g,'"')),i=!0):(s[u].push(r[t][l].replace(/""/g,'"')),i=!1);i||(u+=1)}return s},stringify:function(n){var t,e,r,l,g,i="";for(t=0,e=n.length;t<e;t+=1){for(r=0,l=n[t].length;r<l;r+=1)0<r&&(i+="\t"),"string"==typeof(g=n[t][r])?-1<g.indexOf("\n")?i+='"'+g.replace(/"/g,'""')+'"':i+=g:i+=null==g?"":g;i+="\n"}return i}}}();
-      
-      var action="bomup";
-      $(()=>{
-        loadPanel(action);
-      });
-      $("nav.nav-group span.nav-group-item").on("click",(p)=>{
-        var ts=$(p.currentTarget)
-        $("nav.nav-group span.nav-group-item").removeClass("active");
-        ts.addClass("active");
-        action=ts.attr("action");
-        loadPanel(action);
-      });
-
-      function loadPanel(pname){
-        $("div[bid=main]").load(pname+".html");
-      }
-
-    </script>
+  <script src="../js/index.js"></script>
   </body>
 </html>
