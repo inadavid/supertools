@@ -56,7 +56,7 @@ Electron练笔项目，为SuperData 5000生成批量SQL语句。
 | Library    | License      | npm page  |
 |------------|--------------|-----------|
 | electron   | MIT          | [Link](https://www.npmjs.com/package/electron) |
-| js-base64" | BSD-3-Clause | [Link](https://www.npmjs.com/package/js-base64) |
+| js-base64  | BSD-3-Clause | [Link](https://www.npmjs.com/package/js-base64) |
 | mssql      | MIT          | [Link](https://www.npmjs.com/package/mssql) |
 | ping       | MIT          | [Link](https://www.npmjs.com/package/ping) |
 | modbus-tcp | MIT          | [Link](https://www.npmjs.com/package/modbus-tcp) |
