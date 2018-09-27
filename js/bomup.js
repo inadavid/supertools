@@ -1,5 +1,5 @@
 var bomexcel_arr = [];
-const Base64 = require('js-base64').Base64;
+if (Base64 == null) var Base64 = require('js-base64').Base64;
 $("button[type=submit][step=1]").on("click", () => {
     var bomexcel = $("textarea[meta=bomexcel]").val();
 
@@ -15,9 +15,19 @@ $("button[type=submit][step=1]").on("click", () => {
     for (var i in header) {
         options += "<option value='" + i + "'>" + header[i] + "</option>";
     }
+    options = "<option value='0'> 无 </option>" + options;
     console.log(options)
     $("select[meta='bomexcel.level']").append(options);
     $("select[meta='bomexcel.code']").append(options);
+    $("select[meta='bomexcel.quantity']").append(options);
+    $("select[meta='bomexcel.procumenttype']").append(options);
+    $("select[meta='bomexcel.pfep']").append(options);
+
+    selectKey($("select[meta='bomexcel.level']"), "level");
+    selectKey($("select[meta='bomexcel.code']"), "material");
+    selectKey($("select[meta='bomexcel.quantity']"), "qty");
+    selectKey($("select[meta='bomexcel.procumenttype']"), "Purchasing Type ID");
+    selectKey($("select[meta='bomexcel.pfep']"), "pfep");
 
     $('div[meta="bomup"][step="2"]').css("display", "block");
 });
