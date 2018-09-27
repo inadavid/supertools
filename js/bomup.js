@@ -31,3 +31,8 @@ $("button[type=submit][step=1]").on("click", () => {
 
     $('div[meta="bomup"][step="2"]').css("display", "block");
 });
+
+
+$("button[type=submit][step=2]").on("click", () => {
+
+});
