@@ -1,8 +1,7 @@
 var action = "bomup";
 var fSQLserver = 0;
 var SQLserver = "";
-var SQLservers = ['10.11.50.50', '192.168.18.3'];
-
+var SQLservers = ['192.168.18.3', '10.11.50.50'];
 var SQLconfig = {
   user: 'SuperTools',
   password: 'be5ad9d0b797040743f4bd5fe0b9f26a',
@@ -102,7 +101,10 @@ function updateSQLserver() {
 
 function connectSQLserver() {
   sql.connect(SQLconfig, err => {
-    if (err) fSQLserver = 3;
+    if (err) {
+      fSQLserver = 3;
+      console.log(err)
+    }
     else fSQLserver = 2;
     updateSQLserver();
     // console.log(err)

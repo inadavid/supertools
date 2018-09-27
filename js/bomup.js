@@ -34,5 +34,49 @@ $("button[type=submit][step=1]").on("click", () => {
 
 
 $("button[type=submit][step=2]").on("click", () => {
+    if (fSQLserver != 2) {
+        alert("数据库未准备好");
+        return;
+    }
 
+    $('div[meta="bomup"][step="3"]').css("display", "block");
+
+    var pos = {};
+    var count_code = 0;
+    var length_code = 0;
+    pos.code = parseInt($("select[meta='bomexcel.code']").val());
+    for (var i = 1; i < bomexcel_arr.length; i++) {
+        if (codes[bomexcel_arr[i][pos.code]] == undefined) {
+            codes[bomexcel_arr[i][pos.code]] = 0;
+            length_code++;
+        }
+    }
+    console.log(length_code)
+    var sqltxt = "select code,goodsid from dbo.l_goods where code='0' ";
+    for (var m in codes) {
+        sqltxt += " or code = '" + m + "' ";
+
+    }
+    sqltxt += ";";
+    console.log(sqltxt);
+    new sql.Request().query(sqltxt, (err, result) => {
+        if (err == null) {
+            console.log(result);
+        }
+        else console.log(err);
+    })
+    var ti = setInterval(() => {
+        var p = $('div[bid="progress.level"]');
+        var val = (count_code / length_code * 100).toFixed(1);
+        if (val >= 100) {
+            clearInterval(ti);
+        }
+        else {
+            p.attr("aria-valuenow", val);
+            p.css("width", val + "%");
+            p.text(val + "%");
+        }
+    }, 10)
 });
+
+var codes = {};
