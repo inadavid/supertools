@@ -7,11 +7,10 @@
     "start": "electron ."
   },
   "author": "David.Wei@schleuniger.com",
-  "license": "MIT",
+  "license": "Schleuniger Software License",
   "dependencies": {
-    "electron": "^3.0.0",
-    "js-base64": "^2.4.9",
-    "mssql": "^4.2.1",
-    "xel": "0.0.155"
+    "electron": "^3.0.0", //MIT, https://www.npmjs.com/package/electron
+    "js-base64": "^2.4.9", //BSD-3-Clause, https://www.npmjs.com/package/js-base64
+    "mssql": "^4.2.1" //MIT, https://www.npmjs.com/package/mssql
   }
 }
