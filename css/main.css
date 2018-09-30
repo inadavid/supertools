@@ -63,3 +63,7 @@ div[step] {
 div[bid=sidebar]{
     margin-top:10px;
 }
+
+.form-control {
+    margin: 5px;
+}

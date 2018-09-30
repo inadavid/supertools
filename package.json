@@ -12,6 +12,8 @@
     "electron": "^3.0.0",
     "js-base64": "^2.4.9",
     "mssql": "^4.2.1",
-    "ping": "^0.2.2"
+    "ping": "^0.2.2",
+    "sqlite-sync": "^0.3.8",
+    "underscore": "^1.9.1"
   }
 }

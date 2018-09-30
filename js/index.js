@@ -1,23 +1,20 @@
-var action = "bomup";
-var fSQLserver = 0;
-var SQLserver = "";
-var SQLservers = ['192.168.18.3', '10.11.50.50'];
-var SQLconfig = {
-  user: 'SuperTools',
-  password: 'be5ad9d0b797040743f4bd5fe0b9f26a',
-  server: '10.11.50.50',
-  database: 'SD30602_STJ',
+const sqlite = require('sqlite-sync');
 
-  options: {
-    encrypt: false // Set to true if you're on Windows Azure
-  }
-}
+var action = "bomup";
+var _ = require("underscore");
+sqlite.connect('./db/db.sqlite');
+var config = {};
 
 const sql = require('mssql');
 
 $(() => {
+  var sdata = sqlite.run("select * from system where key='serverlist' or key='serverconfig';");
+  for (var i in sdata) config[sdata[i].key] = JSON.parse(sdata[i].value);
+  config.fSQLserver = 0;
+  console.log(config); 
   loadPanel(action);
   tryHost(0);
+
 });
 
 $("div[bid=sidebar] a").on("click", (e) => {
@@ -51,18 +48,18 @@ function selectKey(sel, key) {
 
 function tryHost(c) {
   var ping = require('ping');
-  if (c >= SQLservers.length) {
-    fSQLserver = -1;
+  if (c >= config.serverlist.length) {
+    config.fSQLserver = -1;
     updateSQLserver();
   }
   else {
-    SQLserver = SQLservers[c];
+    config.SQLserver = config.serverlist[c];
     updateSQLserver();
-    ping.promise.probe(SQLserver).then(function (res) {
+    ping.promise.probe(config.SQLserver).then(function (res) {
       if (res.alive) {
-        fSQLserver = 1;
+        config.fSQLserver = 1;
         updateSQLserver();
-        SQLconfig.server = SQLserver;
+        config.serverconfig.server = config.SQLserver;
         connectSQLserver();
       }
       else {
@@ -74,8 +71,8 @@ function tryHost(c) {
 
 function updateSQLserver() {
   var a = $("a[bid=SQLServerStatus]");
-  var text = SQLserver + " ";
-  switch (fSQLserver) {
+  var text = config.SQLserver + " ";
+  switch (config.fSQLserver) {
     case -1:
       text = "所有服务器连接失败！";
       break;
@@ -95,17 +92,17 @@ function updateSQLserver() {
       text = "连接初始化";
   }
   a.text(text);
-  if (fSQLserver == -1 || fSQLserver == 3) a.addClass("list-group-item-danger");
-  if (fSQLserver == 2) a.addClass("list-group-item-success");
+  if (config.fSQLserver == -1 || config.fSQLserver == 3) a.addClass("list-group-item-danger");
+  if (config.fSQLserver == 2) a.addClass("list-group-item-success");
 }
 
 function connectSQLserver() {
-  sql.connect(SQLconfig, err => {
+  sql.connect(config.serverconfig, err => {
     if (err) {
-      fSQLserver = 3;
+      config.fSQLserver = 3;
       console.log(err)
     }
-    else fSQLserver = 2;
+    else config.fSQLserver = 2;
     updateSQLserver();
     // console.log(err)
     // new sql.Request().query("select goodsid from dbo.l_goods where code = '1101001010';", (err, result) => {

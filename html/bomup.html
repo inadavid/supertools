@@ -3,6 +3,7 @@
         <div class="form-group">
             <h5>Copy目前的Excel BOM表格内容（包含表头）</h5>
             <textarea class="form-control" rows="3" meta="bomexcel"></textarea>
+            <input class="form-control" meta="bomtop" placeholder="Finish Goods number" value="">
         </div>
         <div class="form-actions">
             <button type="submit" class="btn btn-form btn-primary btn-sm" meta="next" step="1">下一步</button>
@@ -11,7 +12,7 @@
 </div>
 <div class="card" meta="bomup" step="2">
     <div class="card-body">
-        <h5>选择对应信息所在的列：</h5>
+        <h5>选择对应信息所在的列</h5>
 
         <table class="table table-sm table-hover">
             <tbody>
@@ -65,23 +66,8 @@
 </div>
 <div class="card" meta="bomup" step="3">
     <div class="card-body">
-        <h5>选择对应信息所在的列：</h5>
-
-        <table class="table table-sm table-hover">
-            <tbody>
-                <tr class="category-row">
-                    <td style="width: 200px;">
-                        整理层级对应关系
-                    </td>
-                    <td>
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
-                                aria-valuemax="100" bid="progress.level"></div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <h5>整理BOM信息</h5>
+        <div bid="bomdatainfo"></div>
     </div>
 </div>
 
