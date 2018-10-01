@@ -168,6 +168,6 @@ function generateSQL(bom) {
     }
     sql_insert += ";";
     sql_delete += ";";
-    var id = sqlite.insert('bom', { NAME: "My Company" });
+    var id = sqlite.insert('bom', { time: "My Company" });
     addResultText("<div class='alert alert-success' role='alert'>" + sql_insert + "</div>");
 }
