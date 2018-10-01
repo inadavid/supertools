@@ -61,6 +61,5 @@ Electron练笔项目，为SuperData 5000生成批量SQL语句。
 | ping       | MIT          | [Link](https://www.npmjs.com/package/ping) |
 | sqlite-sync| MIT          | [Link](https://www.npmjs.com/package/sqlite-sync) |
 | underscore | MIT          | [Link](https://www.npmjs.com/package/underscore) |
-|------------|--------------|-----------|
 | modbus-tcp | MIT          | [Link](https://www.npmjs.com/package/modbus-tcp) |
 | node-opcua | MIT          | [Link](https://www.npmjs.com/package/node-opcua) |
