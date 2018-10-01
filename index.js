@@ -1,6 +1,7 @@
 const { app, Menu, BrowserWindow } = require('electron')
 
 let win;
+global.version = "V0101";
 
 function createWindow() {
 
@@ -16,9 +17,10 @@ function createWindow() {
   })
   win.setMenu(null);
   win.once('ready-to-show', () => {
-    win.show();
-    win.maximize()
+    // win.show();
+    // win.maximize()
   })
+
 }
 
 app.commandLine.appendSwitch('remote-debugging-port', '8315')

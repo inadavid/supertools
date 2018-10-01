@@ -1,17 +1,25 @@
 const sqlite = require('sqlite-sync');
-
-var action = "bomup";
 var _ = require("underscore");
 sqlite.connect('./db/db.sqlite');
-var config = {};
-
 const sql = require('mssql');
+var { BrowserWindow } = require("electron").remote;
+
+var action = "bomup";
+var config = {};
+var flash = new BrowserWindow({ width: 525, height: 370, show: false, frame: false });
+flash.loadFile("html/flash.html");
+flash.show();
 
 $(() => {
   var sdata = sqlite.run("select * from system where key='serverlist' or key='serverconfig';");
   for (var i in sdata) config[sdata[i].key] = JSON.parse(sdata[i].value);
   config.fSQLserver = 0;
-  console.log(config); 
+  console.log(config);
+  var win = require("electron").remote.getCurrentWindow();
+  win.show();
+  win.maximize();
+  flash.close();
+  document.title += " - " + require("electron").remote.getGlobal("version");
   loadPanel(action);
   tryHost(0);
 
