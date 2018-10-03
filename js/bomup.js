@@ -195,6 +195,6 @@ function savegoback(id) {
             return;
         }
         sqlite.update("bom", { remark: name }, { sn: id });
-
+        loadPanel("dashboard");
     });
 }
