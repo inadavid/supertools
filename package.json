@@ -11,6 +11,7 @@
   "dependencies": {
     "electron": "^3.0.0",
     "js-base64": "^2.4.9",
+    "moment": "^2.22.2",
     "mssql": "^4.2.1",
     "ping": "^0.2.2",
     "sqlite-sync": "^0.3.8",

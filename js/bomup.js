@@ -87,7 +87,9 @@ $("button[type=submit][step=2]").on("click", (e) => {
                 return;
             }
             formatBOM(bom_top, 1);
-            generateSQL(bom);
+            var id = generateSQL(bom);
+            if (!id) alert("本地数据库保存失败");
+            else savegoback(id);
         }
         else alert(err);
     });
@@ -168,6 +170,31 @@ function generateSQL(bom) {
     }
     sql_insert += ";";
     sql_delete += ";";
-    var id = sqlite.insert('bom', { time: "My Company" });
-    addResultText("<div class='alert alert-success' role='alert'>" + sql_insert + "</div>");
+    addResultText("<div class='alert alert-success' role='alert'>数据库语句已经生成。</div>");
+    var moment = require('moment');
+    var id = sqlite.insert('bom', {
+        time: moment().format("YYYY-MM-DD HH:mm:ss"),
+        sql_insert: sql_insert,
+        sql_delete: sql_delete,
+        stat: 0,
+        remark: "new bom @" + moment().format("YYMMDD_HHmmss"),
+        json_bom: JSON.stringify(bom),
+        json_excel: JSON.stringify(bomexcel_arr)
+    });
+    addResultText("<div class='alert alert-success' role='alert'>数据库语句已经存储。</div>");
+    return id;
+}
+
+function savegoback(id) {
+    addResultText('<input class="form-control" meta="bom_name" placeholder="命名本次导入内容" value="">');
+    addResultText('<button type="submit" class="btn btn-form btn-primary btn-sm" meta="next" step="3">更名并返回控制台</button>');
+    $("button[meta=next][step=3]").on("click", () => {
+        var name = $("input[meta=bom_name]").val().trim();
+        if (name.length == 0) {
+            alert("命名错误，请检查后重试");
+            return;
+        }
+        sqlite.update("bom", { remark: name }, { sn: id });
+
+    });
 }

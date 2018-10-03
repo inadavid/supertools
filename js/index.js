@@ -4,7 +4,7 @@ sqlite.connect('./db/db.sqlite');
 const sql = require('mssql');
 var { BrowserWindow } = require("electron").remote;
 
-var action = "bomup";
+var action = "dashboard";
 var config = {};
 var flash = new BrowserWindow({ width: 525, height: 370, show: false, frame: false });
 flash.loadFile("html/flash.html");
