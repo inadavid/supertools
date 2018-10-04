@@ -17,6 +17,10 @@ $(() => {
     $("table[bid=dtable] tbody").append(tbody);
 
     $("button[bid]").on("click", (e) => {
+        if (config.fSQLserver != 2) {
+            alert("数据库未准备好");
+            return;
+        }
         var sn = $(e.currentTarget).attr("sn");
         var action = $(e.currentTarget).attr("bid");
         var data = sqlite.run("select * from bom where sn =" + sn + " limit 1;")[0];

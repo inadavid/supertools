@@ -1,13 +1,14 @@
 const sqlite = require('sqlite-sync');
 var _ = require("underscore");
-sqlite.connect('./db/db.sqlite');
+var appPath = require("electron").remote.getGlobal("appPath");
+sqlite.connect(appPath + '/db/db.sqlite');
 const sql = require('mssql');
 var { BrowserWindow } = require("electron").remote;
 
 var action = "dashboard";
 var config = {};
 var flash = new BrowserWindow({ width: 525, height: 370, show: false, frame: false });
-flash.loadFile("html/flash.html");
+flash.loadFile(appPath + "/html/flash.html");
 flash.show();
 
 $(() => {

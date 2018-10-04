@@ -2,6 +2,7 @@ const { app, Menu, BrowserWindow } = require('electron')
 
 let win;
 global.version = "V0101";
+global.appPath = app.getAppPath();
 
 function createWindow() {
 
@@ -27,11 +28,11 @@ app.commandLine.appendSwitch('remote-debugging-port', '8315')
 app.commandLine.appendSwitch('host-rules', 'MAP * 127.0.0.1')
 app.on('ready', createWindow);
 
-// app.on('window-all-closed', () => {
-//   if (process.platform !== 'darwin') {
-//     app.quit()
-//   }
-// })
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
+})
 
 // app.on('activate', () => {
 //   // 在macOS上，当单击dock图标并且没有其他窗口打开时，

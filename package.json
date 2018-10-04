@@ -4,12 +4,13 @@
   "description": "SuperData SQL generation tools",
   "main": "index.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "package": "electron-packager ./ SuperTools --platform=win32 --arch=x64 --asar --overwrite --prune=true --out=release-builds --icon=icon/icon.ico"
   },
   "author": "David.Wei@schleuniger.com",
   "license": "Schleuniger Software License",
   "dependencies": {
-    "electron": "^3.0.0",
+    "electron": "^3.0.2",
     "js-base64": "^2.4.9",
     "moment": "^2.22.2",
     "mssql": "^4.2.1",
