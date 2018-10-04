@@ -179,7 +179,8 @@ function generateSQL(bom) {
         stat: 0,
         remark: "new bom @" + moment().format("YYMMDD_HHmmss"),
         json_bom: JSON.stringify(bom),
-        json_excel: JSON.stringify(bomexcel_arr)
+        json_excel: JSON.stringify(bomexcel_arr),
+        rows: bom.length
     });
     addResultText("<div class='alert alert-success' role='alert'>数据库语句已经存储。</div>");
     return id;

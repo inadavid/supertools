@@ -67,3 +67,6 @@ div[bid=sidebar]{
 .form-control {
     margin: 5px;
 }
+.btn-group-xs>.btn.custom, .btn-xs.custom {
+font-size: 10px;
+padding: 1px 10px}
