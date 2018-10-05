@@ -1,4 +1,6 @@
 var codes = {};
+bomexcel_arr = [];
+bom = [];
 
 if (Base64 == null) var Base64 = require('js-base64').Base64;
 $("button[type=submit][step=1]").on("click", (e) => {

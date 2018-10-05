@@ -41,7 +41,10 @@ $("div[bid=sidebar] a").on("click", (e) => {
 });
 
 function loadPanel(pname) {
+  action = pname;
   $("div[bid=main]").load(pname + ".html");
+  $("div[bid=sidebar] a").removeClass("active");
+  $("div[bid=sidebar] a[href=" + pname + "]").addClass("active");
 }
 
 function selectKey(sel, key) {
