@@ -1,6 +1,7 @@
 const { app, Menu, BrowserWindow } = require('electron')
 
 let win;
+let flash;
 global.version = "V0101";
 global.appPath = app.getAppPath();
 
@@ -22,6 +23,13 @@ function createWindow() {
     // win.maximize()
   })
 
+  flash = new BrowserWindow({ width: 525, height: 370, show: false, frame: false });
+  flash.loadFile("html/flash.html");
+  global.flash = flash;
+  flash.once('ready-to-show', () => {
+    flash.show();
+    global.flash = flash;
+  })
 }
 
 // app.commandLine.appendSwitch('remote-debugging-port', '8315')

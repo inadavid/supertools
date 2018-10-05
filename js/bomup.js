@@ -1,6 +1,3 @@
-var bomexcel_arr = [];
-var bom = [];
-var bom_top;
 var codes = {};
 
 if (Base64 == null) var Base64 = require('js-base64').Base64;
@@ -59,41 +56,25 @@ $("button[type=submit][step=2]").on("click", (e) => {
             length_code++;
         }
     }
-    var sqltxt = "select code,goodsid from dbo.l_goods where code='0' ";
-    for (var m in codes) {
-        sqltxt += " or code = '" + m + "' ";
-
-    }
-    sqltxt += ";";
-
-    new sql.Request().query(sqltxt, (err, result) => {
-        if (err == null) {
-            for (var n in result.recordset) {
-                codes[result.recordset[n].code] = result.recordset[n].goodsid;
-            }
-
-            var filter = [];
-            for (var i in codes) {
-                if (codes[i] == 0) filter.push(i);
-            }
-            if (filter.length != 0) {
-                var text = "<h5 color='red'><strong>发生错误：以下物料号在系统中不存在！请检查 </strong></h5> <textarea class='alert alert-danger' role='alert' style='width:100%;height:100px'>";
-                for (var i in filter) text += filter[i] + "\n";
-                text += "</textarea>";
-                addResultText(text);
-                $("textarea.alert").on("focus", (e) => {
-                    $(e.currentTarget).select();
-                })
-                return;
-            }
-            formatBOM(bom_top, 1);
+    getCodesInfo(codes, (rtn) => {
+        console.log(rtn)
+        if (!rtn.err) {
+            codes = rtn.codes;
+            formatBOM(bom_top);
             var id = generateSQL(bom);
             if (!id) popup("本地数据保存失败", "danger");
             else savegoback(id);
         }
-        else popup(err, "danger");
+        else if (rtn.err == 1) {
+            var text = "<h5 color='red'><strong>发生错误：以下物料号在系统中不存在！请检查 </strong></h5> <textarea class='alert alert-danger' role='alert' style='width:100%;height:100px'>";
+            for (var i in rtn.data) text += rtn.data[i] + "\n";
+            text += "</textarea>";
+            addResultText(text);
+            $("textarea.alert").on("focus", (e) => {
+                $(e.currentTarget).select();
+            })
+        }
     });
-
 
 });
 
@@ -103,57 +84,16 @@ function addResultText(text) {
 }
 
 function formatBOM(bom_top, level = 1) {
-    var level = parseInt($("select[meta='bomexcel.level']").val());
-    var code = parseInt($("select[meta='bomexcel.code']").val());
-    var qty = parseInt($("select[meta='bomexcel.quantity']").val());
-    var pt = parseInt($("select[meta='bomexcel.procumenttype']").val());
-    var pfep = parseInt($("select[meta='bomexcel.pfep']").val());
+    var setup = {};
+    setup.level = parseInt($("select[meta='bomexcel.level']").val());
+    setup.code = parseInt($("select[meta='bomexcel.code']").val());
+    setup.qty = parseInt($("select[meta='bomexcel.quantity']").val());
+    setup.pt = parseInt($("select[meta='bomexcel.procumenttype']").val());
+    setup.pfep = parseInt($("select[meta='bomexcel.pfep']").val());
 
     addResultText("<div class='alert alert-primary' role='alert'>取得相关列信息</div>");
 
-    var lq = 1;
-    var sq = [bom_top]; //parent queue; will be push and pop.
-    var sn = [1]; //order number queue; will be push and pop.
-    var aq = [bom_top]; //assembly queue; will only be push. to skip the already existed assembly
-
-    for (var i = 1; i < bomexcel_arr.length; i++) {
-        bomexcel_arr[i][level] = bomexcel_arr[i][level].trim().split('…').join("");
-        bomexcel_arr[i][level] = parseInt(bomexcel_arr[i][level].trim().split('.').join(""));
-    }
-
-    for (var i = 1; i < bomexcel_arr.length; i++) {
-        if (bomexcel_arr[i][level] > lq) {
-            //check if this level existed already.
-            if (aq.indexOf(bomexcel_arr[i - 1][code]) == -1) { //add this new level when it's not existed.
-                aq.push(bomexcel_arr[i - 1][code]);
-
-                lq++;
-                sq.push(bomexcel_arr[i - 1][code]);
-                sn.push(1);
-            }
-            else {// skip this level and all below when already existed.
-                while (bomexcel_arr[i][level] > lq) i++;
-            }
-        }
-        if (bomexcel_arr[i][level] < lq) {
-            lq--;
-            sq.pop();
-            sn.pop();
-        }
-        if (bomexcel_arr[i][level] == lq) {
-            bomexcel_arr[i][100] = sq[sq.length - 1];
-            bomexcel_arr[i][101] = sn[sn.length - 1]++;
-            bom.push({
-                "code": codes[bomexcel_arr[i][code]],
-                "parent": codes[bomexcel_arr[i][100]],
-                "qty": bomexcel_arr[i][qty],
-                "item": bomexcel_arr[i][101],
-                "order": bomexcel_arr[i][101] < 10 ? "0" + (bomexcel_arr[i][101] * 10) : "" + (bomexcel_arr[i][101] * 10),
-                "procumenttype": pt == -1 ? "" : bomexcel_arr[i][pt],
-                "pfep": pfep == -1 ? "" : bomexcel_arr[i][pfep]
-            });
-        }
-    }
+    gFormatBOM(bom_top, setup, level);
     addResultText("<div class='alert alert-primary' role='alert'>整理BOM上级件</div>");
 }
 
@@ -174,6 +114,7 @@ function generateSQL(bom) {
     var moment = require('moment');
     var id = sqlite.insert('bom', {
         time: moment().format("YYYY-MM-DD HH:mm:ss"),
+        bom_top: bom_top,
         sql_insert: sql_insert,
         sql_delete: sql_delete,
         stat: 0,
