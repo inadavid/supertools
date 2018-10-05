@@ -17,19 +17,29 @@ $(() => {
     $("table[bid=dtable] tbody").append(tbody);
 
     $("button[bid]").on("click", (e) => {
+        popup("hello")
         if (config.fSQLserver != 2) {
-            alert("数据库未准备好");
+            popup("数据库未准备好", "danger");
             return;
         }
         var sn = $(e.currentTarget).attr("sn");
         var action = $(e.currentTarget).attr("bid");
         var data = sqlite.run("select * from bom where sn =" + sn + " limit 1;")[0];
         if (data == undefined) {
-            alert("数据读取出错！");
+            popup("数据读取出错！", "danger");
             return;
         }
         if (action == "exe") {
             if (!confirm("确定要执行导入操作么？本操作会导入" + data.rows + "条新的BOM数据。")) return;
+            (async () => {
+                try {
+                    await sql.query(data.sql_delete);
+
+                } catch (err) {
+                    // ... error checks
+                    popup(err + "\n请重新加载后再试。", "danger");
+                }
+            })()
         }
     })
 })

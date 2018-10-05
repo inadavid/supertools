@@ -120,3 +120,21 @@ function connectSQLserver() {
     // })
   });
 }
+
+function popup(html, cl = "primary", timeout = 3000) {
+  var dlg = $("div[bid=popUp]");
+  dlg.html(html);
+  dlg.removeClass().addClass("alert alert-" + cl);
+  dlg.css("position", "absolute");
+  var top = Math.max(0, (($(window).height() - dlg.outerHeight()) / 2) +
+    $(window).scrollTop()) + "px";
+  var left = Math.max(0, (($(window).width() - dlg.outerWidth()) / 2) +
+    $(window).scrollLeft()) + "px"
+  console.log(top, left, $(window).height())
+  dlg.css("top", top);
+  dlg.css("left", left);
+  dlg.show("slow");
+  setTimeout(() => {
+    dlg.hide("slow")
+  }, timeout);
+}

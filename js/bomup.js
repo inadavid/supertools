@@ -42,7 +42,7 @@ $("button[type=submit][step=1]").on("click", (e) => {
 $("button[type=submit][step=2]").on("click", (e) => {
     $(e.currentTarget).prop("disabled", true);
     if (config.fSQLserver != 2) {
-        alert("数据库未准备好");
+        popup("数据读取出错！", "danger");
         return;
     }
 
@@ -88,10 +88,10 @@ $("button[type=submit][step=2]").on("click", (e) => {
             }
             formatBOM(bom_top, 1);
             var id = generateSQL(bom);
-            if (!id) alert("本地数据库保存失败");
+            if (!id) popup("本地数据保存失败", "danger");
             else savegoback(id);
         }
-        else alert(err);
+        else popup(err, "danger");
     });
 
 
@@ -192,7 +192,7 @@ function savegoback(id) {
     $("button[meta=next][step=3]").on("click", () => {
         var name = $("input[meta=bom_name]").val().trim();
         if (name.length == 0) {
-            alert("命名错误，请检查后重试");
+            popup("命名错误，请检查后重试", "danger");
             return;
         }
         sqlite.update("bom", { remark: name }, { sn: id });
