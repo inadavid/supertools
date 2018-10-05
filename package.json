@@ -17,5 +17,8 @@
     "ping": "^0.2.2",
     "sqlite-sync": "^0.3.8",
     "underscore": "^1.9.1"
+  },
+  "devDependencies": {
+    "electron-packager": "^12.2.0"
   }
 }

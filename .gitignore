@@ -75,3 +75,6 @@ typings/
 #Electron-packager built packager
 SuperTools-*
 release-builds
+
+#vscode config
+.vscode
