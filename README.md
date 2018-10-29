@@ -3,7 +3,6 @@
 #### 项目介绍
 Electron练笔项目，为SuperData 5000生成批量SQL语句。
 
-欢迎Jane的加入。
 
 #### 软件架构
 
