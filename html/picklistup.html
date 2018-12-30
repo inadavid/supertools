@@ -1,0 +1,68 @@
+<div class="card">
+    <div class="card-body">
+        <div class="form-group">
+            <h5>Copy目前的Excel Picklist表格内容（包含表头）</h5>
+            <textarea class="form-control" rows="3" meta="bomexcel"></textarea>
+            <input class="form-control" meta="bomtop" placeholder="Finish Goods number" value="">
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-form btn-primary btn-sm" meta="next" step="1">下一步</button>
+        </div>
+    </div>
+</div>
+<div class="card" meta="bomup" step="2">
+    <div class="card-body">
+        <h5>选择对应信息所在的列</h5>
+
+        <table class="table table-sm table-hover">
+            <tbody>
+                <tr class="category-row">
+                    <td style="width: 300px;">
+                        代表物料号（ERP号）的列
+                    </td>
+                    <td>
+                        <select class="form-control form-control-sm" meta="bomexcel.code"></select>
+                    </td>
+                </tr>
+                <tr class="category-row">
+                    <td style="width: 300px;">
+                        代表用量\数量的列
+                    </td>
+                    <td>
+                        <select class="form-control form-control-sm" meta="bomexcel.quantity"></select>
+                    </td>
+                </tr>
+                <tr class="category-row">
+                    <td style="width: 300px;">
+                        代表“购买方式”的列
+                    </td>
+                    <td>
+                        <select class="form-control form-control-sm" meta="bomexcel.procumenttype"></select>
+                    </td>
+                </tr>
+                <tr class="category-row">
+                    <td style="width: 300px;">
+                        代表“物料类型”的列
+                    </td>
+                    <td>
+                        <select class="form-control form-control-sm" meta="bomexcel.materialtype"></select>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-form btn-primary btn-sm" meta="next" step="2">下一步</button>
+        </div>
+    </div>
+</div>
+<div class="card" meta="bomup" step="3">
+    <div class="card-body">
+        <h5>整理Picklist信息</h5>
+        <div bid="bomdatainfo"></div>
+    </div>
+</div>
+
+
+<script src="../js/lib/SheetClip.min.js"></script>
+<script src="../js/picklistup.js"></script>

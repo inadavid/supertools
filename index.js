@@ -7,29 +7,31 @@ global.appPath = app.getAppPath();
 
 function createWindow() {
 
-  win = new BrowserWindow({ width: 800, height: 600, show: false, fullscreen: false, fullscreenable: false, resizable: false, maximizable: true, });//
+    win = new BrowserWindow({ width: 1024, height: 768, show: false, fullscreen: false, fullscreenable: false, resizable: true, maximizable: true, }); //
 
-  win.loadFile('html/index.html')
+    win.loadFile('html/index.html')
 
-  // 打开开发者工具
-  win.webContents.openDevTools()
+    // 打开开发者工具
+    win.webContents.openDevTools()
 
-  win.on('closed', () => {
-    win = null
-  })
-  win.setMenu(null);
-  win.once('ready-to-show', () => {
-    // win.show();
-    // win.maximize()
-  })
+    win.on('closed', () => {
+        win = null
+    })
+    win.setMenu(null);
+    win.once('ready-to-show', () => {
+        // win.show();
+        // win.maximize()
+    })
 
-  flash = new BrowserWindow({ width: 525, height: 370, show: false, frame: false });
-  flash.loadFile("html/flash.html");
-  global.flash = flash;
-  flash.once('ready-to-show', () => {
-    flash.show();
+    flash = new BrowserWindow({ width: 525, height: 370, show: false, frame: false });
+    flash.loadFile("html/flash.html");
     global.flash = flash;
-  })
+    console.log("init flash")
+    flash.once('ready-to-show', () => {
+        flash.show();
+        global.flash = flash;
+        console.log("show flash")
+    })
 }
 
 // app.commandLine.appendSwitch('remote-debugging-port', '8315')
@@ -37,9 +39,9 @@ function createWindow() {
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+    if (process.platform !== 'darwin') {
+        app.quit()
+    }
 })
 
 // app.on('activate', () => {

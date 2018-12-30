@@ -2,39 +2,47 @@
 <html>
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>SuperTools - SQL Generater</title>
-  <!-- Insert this line above script imports  -->
-  <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
-  <!-- normal script imports etc  -->
-  <script src="../js/lib/jquery-3.3.1.min.js"></script>
-  <!-- Insert this line after script imports -->
-  <script>if (window.module) module = window.module;</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>SuperTools - SQL Generater</title>
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+    <!-- normal script imports etc  -->
+    <script src="../js/lib/jquery-3.3.1.min.js"></script>
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
 
-  <link rel="stylesheet" href="../css/bootstrap.min.css">
-  <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/main.css">
 </head>
 
 <body>
-  <div class="container-fluid">
-    <div class="row row-offcanvas row-offcanvas-right">
-      <div class="col-xs-6 col-sm-3 col-sm-pull-9 sidebar-offcanvas" bid="sidebar">
-        <div class="list-group">
-          <a href="dashboard" class="list-group-item active">导入控制台</a>
-          <a href="bomup" class="list-group-item">BOM导入</a>
-          <a href="bommass" class="list-group-item">批量更新BOM</a>
-          <a href="mdmass" class="list-group-item">批量更新MasterData</a>
-          <a href="debug" class="list-group-item list-group-item-warning">打开调试终端</a>
-          <a href="#" class="list-group-item" bid="SQLServerStatus"></a>
+    <div class="container-fluid">
+        <div class="row row-offcanvas row-offcanvas-right">
+            <div class="col-xs-6 col-sm-3 col-sm-pull-9 sidebar-offcanvas" bid="sidebar">
+                <div class="list-group">
+                    <a href="dashboard" class="list-group-item active">导入控制台</a>
+                    <a href="bomup" class="list-group-item">BOM导入</a>
+                    <a href="picklistup" class="list-group-item">Picklist导入</a>
+                    <a href="bommass" class="list-group-item">批量更新BOM</a>
+                    <a href="mdmass" class="list-group-item">批量更新MasterData</a>
+                    <a href="debug" class="list-group-item list-group-item-warning">打开调试终端</a>
+                    <a href="#" class="list-group-item" bid="SQLServerStatus"></a>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-9 col-sm-push-3" bid="main">
+            </div>
         </div>
-      </div>
-      <div class="col-xs-12 col-sm-9 col-sm-push-3" bid="main">
-      </div>
     </div>
-  </div>
-  <div bid="popUp" style="display: none; z-index: 10000;"> </div>
-  <script src="../js/index.js"></script>
+    <div bid="popUp" style="display: none; z-index: 10000;"> </div>
+    <script src="../js/index.js"></script>
 </body>
 
 </html>
