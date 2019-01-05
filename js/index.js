@@ -18,7 +18,7 @@ $(() => {
     config.fSQLserver = 0;
     var win = require("electron").remote.getCurrentWindow();
     win.show();
-    win.maximize();
+    //win.maximize();
     require("electron").remote.getGlobal("flash").close();
     document.title += " - " + require("electron").remote.getGlobal("version");
     loadPanel(action);

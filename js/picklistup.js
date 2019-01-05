@@ -5,7 +5,7 @@ bom = [];
 if (Base64 == null) var Base64 = require('js-base64').Base64;
 $("button[type=submit][step=1]").on("click", (e) => {
     $(e.currentTarget).prop("disabled", true);
-    //if ($("input[meta=bomtop]").val().trim().length == 0) $("input[meta=bomtop]").val("2532000228");
+    if ($("input[meta=bomtop]").val().trim().length == 0) $("input[meta=bomtop]").val("3613000001");
     if ($("input[meta=bomtop]").val().trim().length == 0) {
         popup("必须输入成品物料号！", "danger");
         $(e.currentTarget).prop("disabled", false);
@@ -26,6 +26,7 @@ $("button[type=submit][step=1]").on("click", (e) => {
     }
     bomexcel_arr = SheetClip.parse(bomexcel);
     var header = bomexcel_arr[0];
+    bomexcel_arr.splice(0, 1);
     var options = "";
     for (var i in header) {
         options += "<option value='" + i + "'>" + header[i] + "</option>";
@@ -35,10 +36,12 @@ $("button[type=submit][step=1]").on("click", (e) => {
     $("select[meta='bomexcel.code']").append(options);
     $("select[meta='bomexcel.quantity']").append(options);
     $("select[meta='bomexcel.procumenttype']").append(options);
+    $("select[meta='bomexcel.materialtype']").append(options);
 
     selectKey($("select[meta='bomexcel.code']"), "material");
     selectKey($("select[meta='bomexcel.quantity']"), "qty");
     selectKey($("select[meta='bomexcel.procumenttype']"), "ptype");
+    selectKey($("select[meta='bomexcel.materialtype']"), "M. type");
 
     $('div[meta="bomup"][step="2"]').css("display", "block");
 });
@@ -58,17 +61,17 @@ $("button[type=submit][step=2]").on("click", (e) => {
     var length_code = 0;
     pos.code = parseInt($("select[meta='bomexcel.code']").val());
     codes[bom_top] = 0;
-    for (var i = 1; i < bomexcel_arr.length; i++) {
+    for (var i in bomexcel_arr) {
         if (codes[bomexcel_arr[i][pos.code]] == undefined) {
             codes[bomexcel_arr[i][pos.code]] = 0;
             length_code++;
         }
     }
     getCodesInfo(codes, (rtn) => {
-        console.log(rtn)
+        //console.log(rtn)
         if (!rtn.err) {
             codes = rtn.codes;
-            formatBOM(bom_top);
+            formatPL(bom_top, codes);
             var id = generateSQL(bom);
             if (!id) popup("本地数据保存失败", "danger");
             else savegoback(id);
@@ -90,23 +93,44 @@ function addResultText(text) {
     p.append(text);
 }
 
-function formatBOM(bom_top, level = 1) {
+function formatPL(bom_top, codes) {
     var setup = {};
-    setup.level = parseInt($("select[meta='bomexcel.level']").val());
     setup.code = parseInt($("select[meta='bomexcel.code']").val());
     setup.qty = parseInt($("select[meta='bomexcel.quantity']").val());
     setup.pt = parseInt($("select[meta='bomexcel.procumenttype']").val());
-    setup.pfep = parseInt($("select[meta='bomexcel.pfep']").val());
-
+    setup.mt = parseInt($("select[meta='bomexcel.materialtype']").val());
+    setup.count = 1;
     addResultText("<div class='alert alert-primary' role='alert'>取得相关列信息</div>");
-
-    gFormatBOM(bom_top, setup, level);
+    for (var i in bomexcel_arr) {
+        var el = bom.indexOf(_.findWhere(bom, { code: codes[bomexcel_arr[i][setup.code]] }));
+        if (el == -1) {
+            bom.push({
+                "code": codes[bomexcel_arr[i][setup.code]],
+                "parent": codes[bom_top],
+                "qty": parseInt(bomexcel_arr[i][setup.qty]),
+                "item": setup.count,
+                "order": setup.count < 10 ? "0" + (setup.count * 10) : "" + (setup.count * 10),
+                "procumenttype": setup.pt == -1 ? "" : bomexcel_arr[i][setup.pt],
+                "materialtype": setup.mt == -1 ? "" : bomexcel_arr[i][setup.mt],
+                "pfep": "",
+                "debug": {
+                    code: bomexcel_arr[i][setup.code],
+                    parent: bom_top
+                }
+            });
+            setup.count++;
+        } else {
+            bom[el].qty += parseInt(bomexcel_arr[i][setup.qty]);
+        }
+    }
     addResultText("<div class='alert alert-primary' role='alert'>整理BOM上级件</div>");
+
 }
 
 function generateSQL(bom) {
     var sql_insert = "insert into dbo.l_goodsbom (goodsid, elemgid, quantity, mnfqty, masterqty, usetime, wasterate, memo, orderno, state, pretime, itemno, userdef1,userdef2, opid, checkorid) values ";
-    var sql_delete = "delete from dbo.l_goodsbom where "
+    var sql_delete = "delete from dbo.l_goodsbom where ";
+    var sql_update = "";
     for (var i = 0; i < bom.length; i++) {
         sql_insert += "('" + bom[i].parent + "','" + bom[i].code + "'," + bom[i].qty + "," + bom[i].qty + ", 1, 1, 0, NULL, '" + bom[i].order + "', 1, 0, " + bom[i].item + ",'" + bom[i].procumenttype + "','" + bom[i].pfep + "', 54, 54)";
         sql_delete += "(goodsid = '" + bom[i].parent + "' and elemgid='" + bom[i].code + "')";
@@ -114,8 +138,9 @@ function generateSQL(bom) {
             sql_insert += ", ";
             sql_delete += " or ";
         }
+        sql_update += "update l_goods set guserdef3='" + bom[i].materialtype + "' where goodsid=" + bom[i].code + "; "
     }
-    sql_insert += ";";
+    sql_insert += "; " + sql_update;
     sql_delete += ";";
     addResultText("<div class='alert alert-success' role='alert'>数据库语句已经生成。</div>");
     var moment = require('moment');
@@ -125,7 +150,7 @@ function generateSQL(bom) {
         sql_insert: sql_insert,
         sql_delete: sql_delete,
         stat: 0,
-        remark: "new bom @" + moment().format("YYMMDD_HHmmss"),
+        remark: "new picklist @" + moment().format("YYMMDD_HHmmss"),
         json_bom: JSON.stringify(bom),
         json_excel: JSON.stringify(bomexcel_arr),
         rows: bom.length

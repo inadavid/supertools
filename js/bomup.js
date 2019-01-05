@@ -59,15 +59,14 @@ $("button[type=submit][step=2]").on("click", (e) => {
         }
     }
     getCodesInfo(codes, (rtn) => {
-        console.log(rtn)
+        //console.log(rtn)
         if (!rtn.err) {
             codes = rtn.codes;
             formatBOM(bom_top);
             var id = generateSQL(bom);
             if (!id) popup("本地数据保存失败", "danger");
             else savegoback(id);
-        }
-        else if (rtn.err == 1) {
+        } else if (rtn.err == 1) {
             var text = "<h5 color='red'><strong>发生错误：以下物料号在系统中不存在！请检查 </strong></h5> <textarea class='alert alert-danger' role='alert' style='width:100%;height:100px'>";
             for (var i in rtn.data) text += rtn.data[i] + "\n";
             text += "</textarea>";
