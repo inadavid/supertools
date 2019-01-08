@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "electron .",
-        "package": "electron-packager ./ SuperTools --platform=win32 --arch=x64 --asar --overwrite --prune=true --out=release-builds --icon=icon/icon.ico"
+        "package": "electron-packager ./ SuperTools --platform=win32 --arch=x64 --overwrite --prune=true --out=release-builds --icon=icon/icon.ico"
     },
     "author": "David.Wei@schleuniger.com",
     "license": "Schleuniger Software License",

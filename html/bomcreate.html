@@ -1,0 +1,41 @@
+<div class="card">
+    <div class="card-body">
+        <div class="form-group">
+            <h5>创建新的BOM（带有层级的）</h5>
+            <input class="form-control" meta="bomtop" placeholder="Finish Goods number" value="">
+        </div>
+        <div class="form-group" id="bom">
+            <table class="bom">
+                <tr class="header">
+                    <td>层级</td>
+                    <td>物料号</td>
+                    <td>物料名</td>
+                    <td>物料规格</td>
+                    <td>数量</td>
+                    <td>单位</td>
+                    <td>物料类型</td>
+                    <td>采购类型</td>
+                    <td>PFEP</td>
+                    <td>其他注释</td>
+                </tr>
+                <tr v-for="item in bom" sn="{{item.sn}}">
+                    <td>{{item.level}}</td>
+                    <td>{{item.code}}</td>
+                    <td>{{item.codename}}</td>
+                    <td>{{item.codespec}}</td>
+                    <td>{{item.qty}}</td>
+                    <td>{{item.unit}}</td>
+                    <td>{{item.unit}}</td>
+                    <td>{{item.unit}}</td>
+                    <td>
+                        <a href="#" v-on:click="udelete(item.Id)">删除</a>
+                        <a href="#" v-on:click="updateu(item)">更新</a>
+                    </td>
+                </tr>
+            </table>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-form btn-primary btn-sm" meta="next" step="1">下一步</button>
+            </div>
+        </div>
+    </div>
+    <script src="../js/bomcreate.js"></script>
