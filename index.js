@@ -2,7 +2,7 @@ const { app, Menu, BrowserWindow } = require('electron')
 
 let win;
 let flash;
-global.version = "V0103a";
+global.version = "V0104a";
 global.appPath = app.getAppPath();
 
 function createWindow() {
