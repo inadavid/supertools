@@ -10,7 +10,8 @@ var config = {};
 var bomexcel_arr = [];
 var bom = [];
 var bom_top;
-
+var codesInfo = {};
+var codesList = [];
 
 $(() => {
     var sdata = sqlite.run("select * from system where key='serverlist' or key='serverconfig';");
@@ -66,7 +67,7 @@ function tryHost(c) {
     } else {
         config.SQLserver = config.serverlist[c];
         updateSQLserver();
-        ping.promise.probe(config.SQLserver).then(function(res) {
+        ping.promise.probe(config.SQLserver).then(function (res) {
             if (res.alive) {
                 config.fSQLserver = 1;
                 updateSQLserver();
@@ -93,17 +94,20 @@ function updateSQLserver() {
             text += "服务器在线";
             break;
         case 2:
-            text += "数据库已连接";
+            text += "数据库已连接,获取物料号信息";
             break;
         case 3:
             text += "数据库连接失败";
+            break;
+        case 4:
+            text += "系统准备完毕！";
             break;
         default:
             text = "连接初始化";
     }
     a.text(text);
     if (config.fSQLserver == -1 || config.fSQLserver == 3) a.addClass("list-group-item-danger");
-    if (config.fSQLserver == 2) a.addClass("list-group-item-success");
+    if (config.fSQLserver == 4) a.addClass("list-group-item-success");
 }
 
 function connectSQLserver() {
@@ -111,7 +115,10 @@ function connectSQLserver() {
         if (err) {
             config.fSQLserver = 3;
             console.log(err)
-        } else config.fSQLserver = 2;
+        } else {
+            config.fSQLserver = 2;
+            fetchAllCodes();
+        }
         updateSQLserver();
         // console.log(err)
         // new sql.Request().query("select goodsid from dbo.l_goods where code = '1101001010';", (err, result) => {
@@ -194,7 +201,7 @@ function getCodesInfo(codes, cb) {
         sqltxt += " or code = '" + m + "' ";
     }
     sqltxt += ";";
-    (async() => {
+    (async () => {
         try {
             var rst = await sql.query(sqltxt);
             for (var n in rst.recordset) {
@@ -219,4 +226,25 @@ function getCodesInfo(codes, cb) {
         }
     })()
 
+}
+
+
+function fetchAllCodes() {
+    var sqltxt = "select dbo.l_goods.goodsid,dbo.l_goods.code,dbo.l_goods.name,dbo.l_goods.specs,dbo.l_goodsunit.unitname from dbo.l_goods inner join l_goodsunit on l_goods.goodsid=l_goodsunit.goodsid and l_goods.unitid=l_goodsunit.unitid ;";
+    var request = new sql.Request();
+    request.query(sqltxt, function (err, recordset) {
+        // ... error checks
+        var rs = recordset.recordset;
+        for (var i in rs) {
+            codesList.push(rs[i].code);
+            codesInfo[rs[i].code] = {
+                goodsid: rs[i].goodsid,
+                name: rs[i].name,
+                spec: rs[i].specs,
+                unit: rs[i].unitname
+            }
+        }
+        config.fSQLserver = 4;
+        updateSQLserver();
+    });
 }

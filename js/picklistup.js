@@ -107,9 +107,9 @@ function formatPL(bom_top, codes) {
             bom.push({
                 "code": codes[bomexcel_arr[i][setup.code]],
                 "parent": codes[bom_top],
-                "qty": parseInt(bomexcel_arr[i][setup.qty]),
+                "qty": parseFloat(bomexcel_arr[i][setup.qty]),
                 "item": setup.count,
-                "order": setup.count < 10 ? "0" + (setup.count * 10) : "" + (setup.count * 10),
+                "order": setup.count < 10 ? "00" + (setup.count * 10) : (setup.count < 100 ? "0" + (setup.count * 10) : "" + (setup.count * 10)),
                 "procumenttype": setup.pt == -1 ? "" : bomexcel_arr[i][setup.pt],
                 "materialtype": setup.mt == -1 ? "" : bomexcel_arr[i][setup.mt],
                 "pfep": "",
