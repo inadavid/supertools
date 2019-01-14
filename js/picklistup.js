@@ -120,7 +120,7 @@ function formatPL(bom_top, codes) {
             });
             setup.count++;
         } else {
-            bom[el].qty += parseInt(bomexcel_arr[i][setup.qty]);
+            bom[el].qty += parseFloat(bomexcel_arr[i][setup.qty]);
         }
     }
     addResultText("<div class='alert alert-primary' role='alert'>整理BOM上级件</div>");
