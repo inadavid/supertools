@@ -2,11 +2,7 @@ const { app, Menu, BrowserWindow } = require('electron')
 
 let win;
 let flash;
-<<<<<<< HEAD
-global.version = "V0104a";
-=======
-global.version = "V0105";
->>>>>>> 062a01e2e73cac8b1f241627d4c71dff591e5ecd
+global.version = "V0106";
 global.appPath = app.getAppPath();
 
 function createWindow() {
@@ -16,7 +12,7 @@ function createWindow() {
     win.loadFile('html/index.html')
 
     // 打开开发者工具
-    win.webContents.openDevTools()
+    //win.webContents.openDevTools()
 
     win.on('closed', () => {
         win = null

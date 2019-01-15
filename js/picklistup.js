@@ -49,7 +49,7 @@ $("button[type=submit][step=1]").on("click", (e) => {
 
 $("button[type=submit][step=2]").on("click", (e) => {
     $(e.currentTarget).prop("disabled", true);
-    if (config.fSQLserver != 2) {
+    if (config.fSQLserver != 4) {
         popup("数据读取出错！", "danger");
         return;
     }

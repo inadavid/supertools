@@ -19,7 +19,7 @@ $(() => {
     $("table[bid=dtable] tbody").append(tbody);
 
     $("button[bid]").on("click", (e) => {
-        if (config.fSQLserver != 2) {
+        if (config.fSQLserver != 4) {
             popup("数据库未准备好", "danger");
             return;
         }
