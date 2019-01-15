@@ -3,7 +3,9 @@ var _ = require("underscore");
 var appPath = require("electron").remote.getGlobal("appPath");
 sqlite.connect(appPath + '/db/db.sqlite');
 const sql = require('mssql');
-var { BrowserWindow } = require("electron").remote;
+var {
+    BrowserWindow
+} = require("electron").remote;
 
 var action = "dashboard";
 var config = {};
@@ -12,12 +14,24 @@ var bom = [];
 var bom_top;
 var codesInfo = {};
 var codesList = [];
+var win = require("electron").remote.getCurrentWindow();
 
 $(() => {
-    var sdata = sqlite.run("select * from system where key='serverlist' or key='serverconfig';");
+    document.getElementById('passwd').focus();
+    var sdata = sqlite.run("select * from system where key='serverlist' or key='serverconfig' or key='userid';");
     for (var i in sdata) config[sdata[i].key] = JSON.parse(sdata[i].value);
+    if (config.userid == undefined) {
+        config.userid = [];
+        sqlite.run("insert into system (key,value) values ('userid','[]');");
+    }
+    if (config.userid.length == 0) config.userid[0] = "";
+    $("div.login_form input[tag=userid]").val(config.userid[0]);
+    $("#login_form").modal({
+        escapeClose: false,
+        clickClose: false,
+        showClose: false
+    });
     config.fSQLserver = 0;
-    var win = require("electron").remote.getCurrentWindow();
     win.show();
     win.maximize();
     require("electron").remote.getGlobal("flash").close();
@@ -39,6 +53,38 @@ $("div[bid=sidebar] a").on("click", (e) => {
     action = ts.attr("href");
     loadPanel(action);
     return false;
+});
+
+$("div.login_form button.btn-success").on("click", function () {
+    var userid = $("div.login_form input[tag=userid]").val().trim();
+    var passwd = $("div.login_form input[tag=passwd]").val().trim();
+    if (userid.length == 0 || passwd.length == 0) {
+        popup("请正确输入与用户或密码", "danger");
+        return;
+    }
+    if (config.fSQLserver <= 1) {
+        popup("数据库连接中，请等待！");
+        return;
+    }
+    if (config.fSQLserver == 3) {
+        popup("数据库连接失败！请重启程序再试");
+        return;
+    }
+    $("div.login_form button.btn-success").prop("disabled", true);
+    sqlt = "select win8 from m_operator where opname='" + userid + "' and oppassword='" + passwd + "'";
+    sqll = "update system set value='[\"" + userid + "\"]' where key='userid';";
+    sqlite.run(sqll);
+    new sql.Request().query(sqlt, (err, result) => {
+        // ... error checks
+
+        console.dir(result)
+        if (result.rowsAffected == 0) {
+            popup("用户名或密码错误，请检查后再试。", "danger");
+            $("div.login_form button.btn-success").prop("disabled", false);
+        } else {
+            $.modal.close();
+        }
+    })
 });
 
 function loadPanel(pname) {

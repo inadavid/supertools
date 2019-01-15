@@ -21,8 +21,8 @@
         if (window.module) module = window.module;
     </script>
 
-<link rel="stylesheet" href="../css/bootstrap.min.css">
-<link rel="stylesheet" href="../css/jquery.modal.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/jquery.modal.min.css">
     <link rel="stylesheet" href="../css/main.css">
 </head>
 
@@ -47,6 +47,12 @@
         </div>
     </div>
     <div bid="popUp" style="display: none; z-index: 10000;"> </div>
+    <div class="login_form modal" id="login_form" style="display:none;">
+        <h3>请输入速达ERP登陆信息</h3>
+        <p><label>用户名:</label><input type="text" tag="userid" placeholder="" /></p>
+        <p> <label>密码:</label><input type="password" id="passwd" tag="passwd" autofocus /></p>
+        <p style="text-align: right"> <button class="btn btn-success">登陆</button> </p>
+    </div>
     <script src="../js/index.js"></script>
     <script src="../js/lib/jquery.modal.min.js"></script>
 </body>
