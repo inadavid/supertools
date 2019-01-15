@@ -11,24 +11,27 @@ function createWindow() {
 
     win.loadFile('html/index.html')
 
-    // 打开开发者工具
-    //win.webContents.openDevTools()
+    //打开开发者工具
+    win.webContents.openDevTools()
 
     win.on('closed', () => {
         win = null
     })
     win.setMenu(null);
     win.once('ready-to-show', () => {
+        global.win = win;
         // win.show();
         // win.maximize()
     })
 
     flash = new BrowserWindow({ width: 525, height: 370, show: false, frame: false });
     flash.loadFile("html/flash.html");
-    global.flash = flash;
     flash.once('ready-to-show', () => {
         flash.show();
         global.flash = flash;
+    })
+    flash.on('closed', () => {
+        flash = null
     })
 }
 
