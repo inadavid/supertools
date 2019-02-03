@@ -1,6 +1,7 @@
 const sqlite = require('sqlite-sync');
 var _ = require("underscore");
 var appPath = require("electron").remote.getGlobal("appPath");
+var argv = require("electron").remote.getGlobal("argv");
 sqlite.connect(appPath + '/db/db.sqlite');
 const sql = require('mssql');
 var {
@@ -14,7 +15,13 @@ var bom = [];
 var bom_top;
 var codesInfo = {};
 var codesList = [];
+var bomtopList = [];
 var win = require("electron").remote.getCurrentWindow();
+var user = {};
+
+function updateUserinfo() {
+    $("a[bid=userinfo]").text("User:" + user.name + "; UID:" + user.id)
+}
 
 $(() => {
     document.getElementById('passwd').focus();
@@ -26,14 +33,21 @@ $(() => {
     }
     if (config.userid.length == 0) config.userid[0] = "";
     $("div.login_form input[tag=userid]").val(config.userid[0]);
-    $("#login_form").modal({
-        escapeClose: false,
-        clickClose: false,
-        showClose: false
-    });
+    if (argv[2] != "dev") {
+        $("#login_form").modal({
+            escapeClose: false,
+            clickClose: false,
+            showClose: false
+        });
+    } else {
+        user.id = 54;
+        user.name = "魏亮";
+        user.perm = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        updateUserinfo();
+    }
     config.fSQLserver = 0;
     win.show();
-    win.maximize();
+    if (argv[2] == "dev") win.maximize();
     require("electron").remote.getGlobal("flash").close();
     document.title += " - " + require("electron").remote.getGlobal("version");
     loadPanel(action);
@@ -55,6 +69,10 @@ $("div[bid=sidebar] a").on("click", (e) => {
     return false;
 });
 
+$("div.login_form input[tag=passwd]").on("keydown", function (event) {
+    if (event.which == 13) $("div.login_form button.btn-success").trigger("click");
+})
+
 $("div.login_form button.btn-success").on("click", function () {
     var userid = $("div.login_form input[tag=userid]").val().trim();
     var passwd = $("div.login_form input[tag=passwd]").val().trim();
@@ -71,7 +89,7 @@ $("div.login_form button.btn-success").on("click", function () {
         return;
     }
     $("div.login_form button.btn-success").prop("disabled", true);
-    sqlt = "select win8 from m_operator where opname='" + userid + "' and oppassword='" + passwd + "'";
+    sqlt = "select win8,opid from m_operator where opname='" + userid + "' and oppassword='" + passwd + "'";
     sqll = "update system set value='[\"" + userid + "\"]' where key='userid';";
     sqlite.run(sqll);
     new sql.Request().query(sqlt, (err, result) => {
@@ -83,6 +101,10 @@ $("div.login_form button.btn-success").on("click", function () {
             $("div.login_form button.btn-success").prop("disabled", false);
         } else {
             $.modal.close();
+            user.id = result.recordset[0].opid;
+            user.perm = eval('(' + result.recordset[0].win8 + ')');
+            user.name = userid;
+            updateUserinfo();
         }
     })
 });
@@ -164,6 +186,7 @@ function connectSQLserver() {
         } else {
             config.fSQLserver = 2;
             fetchAllCodes();
+            fetchBOMtop();
         }
         updateSQLserver();
         // console.log(err)
@@ -203,7 +226,7 @@ function gFormatBOM(bom_top, setup, level = 1) {
         bomexcel_arr[i][setup.level] = bomexcel_arr[i][setup.level].trim().split('…').join("");
         bomexcel_arr[i][setup.level] = parseInt(bomexcel_arr[i][setup.level].trim().split('.').join(""));
     }
-
+    if (argv[2] == "dev") console.log("received " + bomexcel_arr.length + " lines.")
     for (var i = 1; i < bomexcel_arr.length; i++) {
         if (bomexcel_arr[i][setup.level] > lq) {
             //check if this level existed already.
@@ -226,8 +249,8 @@ function gFormatBOM(bom_top, setup, level = 1) {
             bomexcel_arr[i][100] = sq[sq.length - 1];
             bomexcel_arr[i][101] = sn[sn.length - 1]++;
             bom.push({
-                "code": codes[bomexcel_arr[i][setup.code]],
-                "parent": codes[bomexcel_arr[i][100]],
+                "code": bomexcel_arr[i][setup.code],
+                "parent": bomexcel_arr[i][100],
                 "qty": bomexcel_arr[i][setup.qty],
                 "item": bomexcel_arr[i][101],
                 "order": bomexcel_arr[i][101] < 10 ? "0" + (bomexcel_arr[i][101] * 10) : "" + (bomexcel_arr[i][101] * 10),
@@ -242,35 +265,19 @@ function getCodesInfo(codes, cb) {
     var rtn = {
         err: false
     }
-    var sqltxt = "select code,goodsid from dbo.l_goods where code='0' ";
+    var filter = [];
     for (var m in codes) {
-        sqltxt += " or code = '" + m + "' ";
+        codes[m] = 0;
+        if (codesList.indexOf(m) == -1) filter.push(m);
+        else codes[m] = codesInfo[m].goodsid;
     }
-    sqltxt += ";";
-    (async () => {
-        try {
-            var rst = await sql.query(sqltxt);
-            for (var n in rst.recordset) {
-                codes[rst.recordset[n].code] = rst.recordset[n].goodsid;
-            }
-            var filter = [];
-            for (var i in codes) {
-                if (codes[i] == 0) filter.push(i);
-            }
-            if (filter.length != 0) {
-                rtn.err = 1;
-                rtn.errMsg = "物料号在ERP里不存在。";
-                rtn.data = filter;
-            }
-            rtn.codes = codes;
-            cb(rtn);
-        } catch (err) {
-            rtn.err = 2
-            rtn.errMsg = err;
-            console.log(err)
-            cb(rtn);
-        }
-    })()
+    if (filter.length != 0) {
+        rtn.err = 1;
+        rtn.errMsg = "物料号在ERP里不存在。";
+        rtn.data = filter;
+    }
+    rtn.codes = codes;
+    cb(rtn);
 
 }
 
@@ -287,8 +294,22 @@ function fetchAllCodes() {
                 goodsid: rs[i].goodsid,
                 name: rs[i].name,
                 spec: rs[i].specs,
-                unit: rs[i].unitname
+                unit: rs[i].unitname,
             }
+        }
+        config.fSQLserver = 4;
+        updateSQLserver();
+    });
+}
+
+function fetchBOMtop() {
+    var sqltxt = "select dbo.l_goods.code from dbo.l_goods  inner join dbo.st_goodsbom on dbo.l_goods.goodsid=dbo.st_goodsbom.goodsid group by dbo.l_goods.code;";
+    var request = new sql.Request();
+    request.query(sqltxt, function (err, recordset) {
+        // ... error checks
+        var rs = recordset.recordset;
+        for (var i in rs) {
+            bomtopList.push(rs[i].code);
         }
         config.fSQLserver = 4;
         updateSQLserver();

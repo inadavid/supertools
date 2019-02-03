@@ -4,7 +4,7 @@
     "description": "SuperData SQL generation tools",
     "main": "index.js",
     "scripts": {
-        "start": "electron .",
+        "start": "electron ./ dev",
         "package": "electron-packager ./ SuperTools --platform=win32 --arch=x64 --overwrite --prune=true --out=release-builds --icon=icon/icon.ico"
     },
     "author": "David.Wei@schleuniger.com",

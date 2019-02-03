@@ -4,6 +4,7 @@ let win;
 let flash;
 global.version = "V0106";
 global.appPath = app.getAppPath();
+global.argv =  process.argv;
 
 function createWindow() {
 
@@ -12,7 +13,7 @@ function createWindow() {
     win.loadFile('html/index.html')
 
     //打开开发者工具
-    win.webContents.openDevTools()
+    if(process.argv[2]=="dev") win.webContents.openDevTools()
 
     win.on('closed', () => {
         win = null
