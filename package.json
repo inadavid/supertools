@@ -5,6 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "electron ./ dev",
+        "production": "electron ./ production",
         "package": "electron-packager ./ SuperTools --platform=win32 --arch=x64 --overwrite --prune=true --out=release-builds --icon=icon/icon.ico"
     },
     "author": "David.Wei@schleuniger.com",

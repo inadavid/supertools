@@ -7,7 +7,7 @@ const sql = require('mssql');
 var {
     BrowserWindow
 } = require("electron").remote;
-
+if (Base64 == null) var Base64 = require('js-base64').Base64;
 var action = "dashboard";
 var config = {};
 var bomexcel_arr = [];
@@ -18,6 +18,7 @@ var codesList = [];
 var bomtopList = [];
 var win = require("electron").remote.getCurrentWindow();
 var user = {};
+const fs = require('fs');
 
 function updateUserinfo() {
     $("a[bid=userinfo]").text("User:" + user.name + "; UID:" + user.id)
@@ -186,7 +187,6 @@ function connectSQLserver() {
         } else {
             config.fSQLserver = 2;
             fetchAllCodes();
-            fetchBOMtop();
         }
         updateSQLserver();
         // console.log(err)
@@ -283,35 +283,68 @@ function getCodesInfo(codes, cb) {
 
 
 function fetchAllCodes() {
-    var sqltxt = "select dbo.l_goods.goodsid,dbo.l_goods.code,dbo.l_goods.name,dbo.l_goods.specs,dbo.l_goodsunit.unitname from dbo.l_goods inner join l_goodsunit on l_goods.goodsid=l_goodsunit.goodsid and l_goods.unitid=l_goodsunit.unitid ;";
-    var request = new sql.Request();
-    request.query(sqltxt, function (err, recordset) {
-        // ... error checks
-        var rs = recordset.recordset;
-        for (var i in rs) {
-            codesList.push(rs[i].code);
-            codesInfo[rs[i].code] = {
-                goodsid: rs[i].goodsid,
-                name: rs[i].name,
-                spec: rs[i].specs,
-                unit: rs[i].unitname,
-            }
+    var flag = false;
+    const filepath = "db/codes.txt";
+    if (!fs.existsSync(filepath)) {
+        var fid = fs.openSync(filepath, "w");
+        fs.writeFileSync(filepath, "eyJjb2Rlc0luZm8iOnt9LCJjb2Rlc0xpc3QiOltdfQ==");
+        fs.closeSync(fid);
+        flag = true;
+    } else {
+        var fid = fs.openSync(filepath, "r");
+        var data = JSON.parse(Base64.decode(fs.readFileSync(filepath)));
+        if (data.codesInfo) codesInfo = data.codesInfo;
+        if (data.codesList) codesList = data.codesList;
+        fs.closeSync(fid);
+        console.log(codesList.length)
+        if (codesList.length < 100) flag = true;
+        else {
+            config.fSQLserver = 4;
+            updateSQLserver();
+            return;
         }
-        config.fSQLserver = 4;
-        updateSQLserver();
-    });
+    }
+    console.log(flag)
+    if (argv[2] != "dev" || flag) {
+        sqltxt = "select dbo.l_goods.goodsid,dbo.l_goods.code,dbo.l_goods.name,dbo.l_goods.specs,dbo.l_goodsunit.unitname from dbo.l_goods inner join l_goodsunit on l_goods.goodsid=l_goodsunit.goodsid and l_goods.unitid=l_goodsunit.unitid ;";
+        var request = new sql.Request();
+        request.query(sqltxt, function (err, recordset) {
+            // ... error checks
+            var rs = recordset.recordset;
+            for (var i in rs) {
+                codesList.push(rs[i].code);
+                codesInfo[rs[i].code] = {
+                    goodsid: rs[i].goodsid,
+                    name: rs[i].name,
+                    spec: rs[i].specs,
+                    unit: rs[i].unitname,
+                }
+            }
+            console.log(codesList.length)
+
+            var fid = fs.openSync(filepath, "w");
+            fs.writeFileSync(filepath, Base64.encode(JSON.stringify({
+                codesInfo: codesInfo,
+                codesList: codesList
+            })));
+            fs.closeSync(fid);
+            config.fSQLserver = 4;
+            updateSQLserver();
+        });
+
+    }
 }
 
-function fetchBOMtop() {
-    var sqltxt = "select dbo.l_goods.code from dbo.l_goods  inner join dbo.st_goodsbom on dbo.l_goods.goodsid=dbo.st_goodsbom.goodsid group by dbo.l_goods.code;";
-    var request = new sql.Request();
-    request.query(sqltxt, function (err, recordset) {
-        // ... error checks
-        var rs = recordset.recordset;
-        for (var i in rs) {
-            bomtopList.push(rs[i].code);
-        }
-        config.fSQLserver = 4;
+
+$("a[bid='SQLServerStatus']").on("dblclick", function () {
+    if (config.fSQLserver == 4) {
+        const filepath = "db/codes.txt";
+        fs.unlinkSync(filepath);
+        config.fSQLserver = 2;
+        codesInfo = {};
+        codesList = [];
         updateSQLserver();
-    });
-}
+        fetchAllCodes();
+        popup("Refreshing code database!");
+    }
+})

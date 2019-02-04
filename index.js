@@ -1,19 +1,31 @@
-const { app, Menu, BrowserWindow } = require('electron')
+const {
+    app,
+    Menu,
+    BrowserWindow
+} = require('electron')
 
 let win;
 let flash;
 global.version = "V0106";
 global.appPath = app.getAppPath();
-global.argv =  process.argv;
+global.argv = process.argv;
 
 function createWindow() {
 
-    win = new BrowserWindow({ width: 1024, height: 768, show: false, fullscreen: false, fullscreenable: false, resizable: true, maximizable: true, }); //
+    win = new BrowserWindow({
+        width: 1500,
+        height: 768,
+        show: false,
+        fullscreen: false,
+        fullscreenable: false,
+        resizable: true,
+        maximizable: true,
+    }); //
 
     win.loadFile('html/index.html')
 
     //打开开发者工具
-    if(process.argv[2]=="dev") win.webContents.openDevTools()
+    if (process.argv[2] == "dev") win.webContents.openDevTools()
 
     win.on('closed', () => {
         win = null
@@ -25,7 +37,12 @@ function createWindow() {
         // win.maximize()
     })
 
-    flash = new BrowserWindow({ width: 525, height: 370, show: false, frame: false });
+    flash = new BrowserWindow({
+        width: 525,
+        height: 370,
+        show: false,
+        frame: false
+    });
     flash.loadFile("html/flash.html");
     flash.once('ready-to-show', () => {
         flash.show();
