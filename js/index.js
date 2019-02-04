@@ -2,6 +2,9 @@ const sqlite = require('sqlite-sync');
 var _ = require("underscore");
 var appPath = require("electron").remote.getGlobal("appPath");
 var argv = require("electron").remote.getGlobal("argv");
+const dialog = require('electron').remote.dialog;
+const app = require('electron').remote.app;
+
 sqlite.connect(appPath + '/db/db.sqlite');
 const sql = require('mssql');
 var {
@@ -348,3 +351,32 @@ $("a[bid='SQLServerStatus']").on("dblclick", function () {
         popup("Refreshing code database!");
     }
 })
+
+function data2csv(data = null, columnDelimiter = ",", lineDelimiter = "\n") { // convert an array of objects to csv string.
+    let result, ctr, keys
+
+    if (data === null || !data.length) {
+        return false;
+    }
+
+    keys = Object.keys(data[0])
+
+    result = ""
+    result += keys.join(columnDelimiter)
+    result += lineDelimiter
+
+    data.forEach(item => {
+        ctr = 0
+        keys.forEach(key => {
+            if (ctr > 0) {
+                result += columnDelimiter
+            }
+
+            result += typeof item[key] === "string" && item[key].includes(columnDelimiter) ? `"${item[key]}"` : item[key]
+            ctr++
+        })
+        result += lineDelimiter
+    })
+
+    return result
+}
