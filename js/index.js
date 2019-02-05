@@ -55,8 +55,8 @@ $(() => {
     document.title += " - " + require("electron").remote.getGlobal("version");
     loadPanel(action);
     tryHost(0);
-    require("electron").remote.getGlobal("flash").close();
 
+    if (!require("electron").remote.getGlobal("flashClosed")) require("electron").remote.getGlobal("flash").close();
 });
 
 $("div[bid=sidebar] a").on("click", (e) => {

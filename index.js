@@ -9,6 +9,7 @@ let flash;
 global.version = "V0150";
 global.appPath = app.getAppPath();
 global.argv = process.argv;
+global.flashClosed = false;
 
 function createWindow() {
 
@@ -49,7 +50,8 @@ function createWindow() {
         global.flash = flash;
     })
     flash.on('closed', () => {
-        flash = null
+        flash = null;
+        global.flashClosed = true;
     })
 }
 
