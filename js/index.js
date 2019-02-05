@@ -52,10 +52,10 @@ $(() => {
     config.fSQLserver = 0;
     win.show();
     if (argv[2] == "dev") win.maximize();
-    require("electron").remote.getGlobal("flash").close();
     document.title += " - " + require("electron").remote.getGlobal("version");
     loadPanel(action);
     tryHost(0);
+    require("electron").remote.getGlobal("flash").close();
 
 });
 
@@ -112,6 +112,23 @@ $("div.login_form button.btn-success").on("click", function () {
         }
     })
 });
+
+$("a[bid='SQLServerStatus']").on("dblclick", function () {
+    if (config.fSQLserver == 4) {
+        const filepath = "db/codes.txt";
+        fs.unlinkSync(filepath);
+        config.fSQLserver = 2;
+        codesInfo = {};
+        codesList = [];
+        updateSQLserver();
+        fetchAllCodes();
+        popup("Refreshing code database!");
+    }
+})
+
+$("a[bid='userinfo']").on("dblclick", function () {
+    win.reload();
+})
 
 function loadPanel(pname) {
     action = pname;
@@ -338,19 +355,6 @@ function fetchAllCodes() {
     }
 }
 
-
-$("a[bid='SQLServerStatus']").on("dblclick", function () {
-    if (config.fSQLserver == 4) {
-        const filepath = "db/codes.txt";
-        fs.unlinkSync(filepath);
-        config.fSQLserver = 2;
-        codesInfo = {};
-        codesList = [];
-        updateSQLserver();
-        fetchAllCodes();
-        popup("Refreshing code database!");
-    }
-})
 
 function data2csv(data = null, columnDelimiter = ",", lineDelimiter = "\n") { // convert an array of objects to csv string.
     let result, ctr, keys
