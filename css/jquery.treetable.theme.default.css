@@ -71,6 +71,8 @@ table.treetable tr.branch {
 
 table.treetable tr.branch td:first-child {
   background-color: #eeffee;
+  min-width: 50px;
+  max-width: 200px;
 }
 
 table.treetable tr.selected {

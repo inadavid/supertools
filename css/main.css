@@ -33,35 +33,21 @@ div[step] {
   margin-top: 10px;
 }
 
-@media screen and (max-width: 767px) {
-  .row-offcanvas {
-    position: relative;
-    -webkit-transition: all .25s ease-out;
-    -o-transition: all .25s ease-out;
-    transition: all .25s ease-out;
-  }
-
-  .sidebar-offcanvas {
-    position: absolute;
-    width: 60%;
-    /* 6 columns */
-    display: none;
-  }
-
-  .row-offcanvas-right {
-    right: 0;
-  }
-
-  .row-offcanvas-right.active .sidebar-offcanvas {
-    display: block;
-    right: 0;
-    top: 0;
-    z-index: 1;
-  }
-
-  .row-offcanvas-right.active {}
-
+.bodydiv {
+  width: 100%;
+  display: flex;
 }
+
+.sidebar {
+  width: 200px;
+  display: inline-block;
+  margin: 10px;
+}
+
+.maindiv {
+  flex: 1;
+}
+
 
 div[bid=sidebar] {
   margin-top: 10px;
