@@ -109,8 +109,8 @@ function generateSQL(bom) {
             sql_delete += " or ";
         }
     }
-    sql_insert += ";";
-    sql_delete += ";";
+    sql_insert += "; insert into st_bomtop (goodsid) values ( '" + bom_top + "');";
+    sql_delete += "; delete from st_bomtop where goodsid='" + bom_top + "';";
     addResultText("<div class='alert alert-success' role='alert'>数据库语句已经生成。</div>");
     var moment = require('moment');
     var id = sqlite.insert('bom', {
