@@ -1,6 +1,8 @@
 var codes = {};
 bomexcel_arr = [];
 bom = [];
+var parents = [];
+var countNode = 1;
 
 if (Base64 == null) var Base64 = require('js-base64').Base64;
 $("button[type=submit][step=1]").on("click", (e) => {
@@ -21,7 +23,7 @@ $("button[type=submit][step=1]").on("click", (e) => {
         options += "<option value='" + i + "'>" + header[i] + "</option>";
     }
     options = "<option value='-1'> 无 </option>" + options;
-    console.log(options)
+    if (argv[2] == "dev") console.log(options)
     $("select[meta='bomexcel.level']").append(options);
     $("select[meta='bomexcel.code']").append(options);
     $("select[meta='bomexcel.quantity']").append(options);
@@ -62,10 +64,16 @@ $("button[type=submit][step=2]").on("click", (e) => {
         //console.log(rtn)
         if (!rtn.err) {
             codes = rtn.codes;
-            formatBOM(bom_top);
-            var id = generateSQL(bom);
-            if (!id) popup("本地数据保存失败", "danger");
-            else savegoback(id);
+            parents = [];
+            new sql.Request().query("select goodsid from st_goodsbom group by goodsid;", (err, result) => {
+                for (var i in result.recordset) {
+                    parents.push(result.recordset[i].goodsid);
+                }
+                bom = formatBOM(bom_top);
+                var id = generateSQL(bom);
+                if (!id) popup("本地数据保存失败", "danger");
+                else savegoback(id);
+            });
         } else if (rtn.err == 1) {
             var text = "<h5 color='red'><strong>发生错误：以下物料号在系统中不存在！请检查 </strong></h5> <textarea class='alert alert-danger' role='alert' style='width:100%;height:100px'>";
             for (var i in rtn.data) text += rtn.data[i] + "\n";
@@ -94,8 +102,52 @@ function formatBOM(bom_top, level = 1) {
 
     addResultText("<div class='alert alert-primary' role='alert'>取得相关列信息</div>");
 
-    gFormatBOM(bom_top, setup, level);
+    for (var i = 1; i < bomexcel_arr.length; i++) {
+        bomexcel_arr[i][setup.level] = bomexcel_arr[i][setup.level].trim().split('…').join("");
+        bomexcel_arr[i][setup.level] = parseInt(bomexcel_arr[i][setup.level].trim().split('.').join(""));
+    }
+    bomexcel_arr.splice(0, 1);
+    if (argv[2] == "dev") console.log("this bom has " + bomexcel_arr.length + " lines.")
+    countNode = 1;
+    var bom = _.sortBy(gFormatBOM(bom_top, setup, level), "item");
+    if (argv[2] == "dev") console.log("bom after generation: ", bom)
     addResultText("<div class='alert alert-primary' role='alert'>整理BOM上级件</div>");
+    return bom;
+}
+
+
+function gFormatBOM(bom_top, setup, level = 1, i = 0) {
+    var rtnArr = [];
+    while (true) {
+        if (bomexcel_arr[i][setup.level] == level) {
+            rtnArr.push({
+                "code": bomexcel_arr[i][setup.code],
+                "parent": bom_top,
+                "qty": bomexcel_arr[i][setup.qty],
+                "item": countNode++,
+                "procumenttype": setup.pt == -1 ? "" : bomexcel_arr[i][setup.pt],
+                "pfep": setup.pfep == -1 ? "" : bomexcel_arr[i][setup.pfep]
+            });
+        } else if (bomexcel_arr[i][setup.level] > level) {
+            var curParent = bomexcel_arr[i - 1][setup.code];
+            var subArr = gFormatBOM(curParent, setup, level + 1, i);
+            if (subArr.length > 0) {
+                i += subArr.length;
+                if (parents.indexOf(curParent) == -1) {
+                    rtnArr = rtnArr.concat(subArr);
+                    parents.push(curParent);
+                }
+                continue;
+            }
+        } else {
+            break;
+        }
+
+        i++;
+        if (i >= bomexcel_arr.length) break;
+
+    }
+    return rtnArr;
 }
 
 function generateSQL(bom) {

@@ -163,3 +163,13 @@ input[type=submit] {
   border: 1px solid #ddd;
   width: 200px;
 }
+
+.bgcolor_highlight {
+  font-weight: bold;
+  color: #FF9900;
+}
+
+.bgcolor_highlight input {
+  font-weight: bold;
+  color: #FF9900;
+}

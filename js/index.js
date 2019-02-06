@@ -4,6 +4,7 @@ var appPath = require("electron").remote.getGlobal("appPath");
 var argv = require("electron").remote.getGlobal("argv");
 const dialog = require('electron').remote.dialog;
 const app = require('electron').remote.app;
+const clipboard = require('electron').remote.clipboard;
 
 sqlite.connect(appPath + '/db/db.sqlite');
 const sql = require('mssql');
@@ -235,52 +236,6 @@ function popup(html, cl = "primary", timeout = 5000) {
 }
 
 
-function gFormatBOM(bom_top, setup, level = 1) {
-    //need to define "bomexcel_arr" and "bom" as global.
-    var lq = 1;
-    var sq = [bom_top]; //parent queue; will be push and pop.
-    var sn = [1]; //order number queue; will be push and pop.
-    var aq = [bom_top]; //assembly queue; will only be push. to skip the already existed assembly
-
-    for (var i = 1; i < bomexcel_arr.length; i++) {
-        bomexcel_arr[i][setup.level] = bomexcel_arr[i][setup.level].trim().split('…').join("");
-        bomexcel_arr[i][setup.level] = parseInt(bomexcel_arr[i][setup.level].trim().split('.').join(""));
-    }
-    if (argv[2] == "dev") console.log("received " + bomexcel_arr.length + " lines.")
-    for (var i = 1; i < bomexcel_arr.length; i++) {
-        if (bomexcel_arr[i][setup.level] > lq) {
-            //check if this level existed already.
-            if (aq.indexOf(bomexcel_arr[i - 1][setup.code]) == -1) { //add this new level when it's not existed.
-                aq.push(bomexcel_arr[i - 1][setup.code]);
-
-                lq++;
-                sq.push(bomexcel_arr[i - 1][setup.code]);
-                sn.push(1);
-            } else { // skip this level and all below when already existed.
-                while (bomexcel_arr[i][setup.level] > lq) i++;
-            }
-        }
-        if (bomexcel_arr[i][setup.level] < lq) {
-            lq--;
-            sq.pop();
-            sn.pop();
-        }
-        if (bomexcel_arr[i][setup.level] == lq) {
-            bomexcel_arr[i][100] = sq[sq.length - 1];
-            bomexcel_arr[i][101] = sn[sn.length - 1]++;
-            bom.push({
-                "code": bomexcel_arr[i][setup.code],
-                "parent": bomexcel_arr[i][100],
-                "qty": bomexcel_arr[i][setup.qty],
-                "item": bomexcel_arr[i][101],
-                "order": bomexcel_arr[i][101] < 10 ? "0" + (bomexcel_arr[i][101] * 10) : "" + (bomexcel_arr[i][101] * 10),
-                "procumenttype": setup.pt == -1 ? "" : bomexcel_arr[i][setup.pt],
-                "pfep": setup.pfep == -1 ? "" : bomexcel_arr[i][setup.pfep]
-            });
-        }
-    }
-}
-
 function getCodesInfo(codes, cb) {
     var rtn = {
         err: false
@@ -306,17 +261,12 @@ function fetchAllCodes() {
     var flag = false;
     const filepath = "db/codes.txt";
     if (!fs.existsSync(filepath)) {
-        var fid = fs.openSync(filepath, "w");
         fs.writeFileSync(filepath, "eyJjb2Rlc0luZm8iOnt9LCJjb2Rlc0xpc3QiOltdfQ==");
-        fs.closeSync(fid);
         flag = true;
     } else {
-        var fid = fs.openSync(filepath, "r");
         var data = JSON.parse(Base64.decode(fs.readFileSync(filepath)));
         if (data.codesInfo) codesInfo = data.codesInfo;
         if (data.codesList) codesList = data.codesList;
-        fs.closeSync(fid);
-        console.log(codesList.length)
         if (codesList.length < 100) flag = true;
         else {
             config.fSQLserver = 4;
@@ -324,7 +274,6 @@ function fetchAllCodes() {
             return;
         }
     }
-    console.log(flag)
     if (argv[2] != "dev" || flag) {
         sqltxt = "select dbo.l_goods.goodsid,dbo.l_goods.code,dbo.l_goods.name,dbo.l_goods.specs,dbo.l_goodsunit.unitname from dbo.l_goods inner join l_goodsunit on l_goods.goodsid=l_goodsunit.goodsid and l_goods.unitid=l_goodsunit.unitid ;";
         var request = new sql.Request();
@@ -342,12 +291,10 @@ function fetchAllCodes() {
             }
             console.log(codesList.length)
 
-            var fid = fs.openSync(filepath, "w");
             fs.writeFileSync(filepath, Base64.encode(JSON.stringify({
                 codesInfo: codesInfo,
                 codesList: codesList
             })));
-            fs.closeSync(fid);
             config.fSQLserver = 4;
             updateSQLserver();
         });

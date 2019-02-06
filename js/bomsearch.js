@@ -2,18 +2,38 @@ var allcodesHint = [];
 var displayBOM = [];
 
 $(function () {
-    $("head").append("<link rel='stylesheet' id='extracss' href='../css/awesomplete.css' type='text/css' />");
-    $("head").append("<link rel='stylesheet' id='extracss' href='../css/jquery.treetable.theme.default.css' type='text/css' />");
-    for (var m in codesInfo) {
-        allcodesHint.push({
-            label: m + " | " + codesInfo[m].name + " | " + codesInfo[m].spec,
-            value: m
-        })
-    }
+    if ($("head").has("link[name=awesomeplete]").length < 1) $("head").append("<link rel='stylesheet' name='awesomeplete' href='../css/awesomplete.css' type='text/css' />");
+    if ($("head").has("link[name=treeable]").length < 1) $("head").append("<link rel='stylesheet' name='treeable' href='../css/jquery.treetable.theme.default.css' type='text/css' />");
+
+    var sqltext = "select goodsid from st_bomtop;";
+    new sql.Request().query(sqltext, (err, result) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        allcodesHint = [];
+        for (var m in result.recordset) {
+            allcodesHint.push({
+                label: result.recordset[m].goodsid + " | " + codesInfo[result.recordset[m].goodsid].name + " | " + codesInfo[result.recordset[m].goodsid].spec,
+                value: result.recordset[m].goodsid
+            })
+        }
+        new Awesomplete("input[bid=bomtop]", {
+            list: allcodesHint,
+            minChars: 4,
+            maxItems: 15,
+        });
+    });
+
 })
 
-$("input[bid=bomtop]").on("keypress", function () {
-    var val = $(this).val();
+$("input[bid=bomtop]").on("keypress", function (event) {
+    if (event.which == 13) $("button[bid=bomSearch]").trigger("click");
+
+}).css("display", "inline-block").css("width", "200px")
+
+$("button[bid=bomSearch]").on("click", function () {
+    var val = $("input[bid=bomtop]").val();
     var spec = $("span[bid=codespec]")
     spec.css("margin-left", "50px").css("margin-right", "50px")
     if (codesList.indexOf(val) == -1) {
@@ -23,11 +43,6 @@ $("input[bid=bomtop]").on("keypress", function () {
         spec.text(codesInfo[val].name + " | " + codesInfo[val].spec);
         searchBOM(val);
     }
-
-}).css("display", "inline-block").css("width", "200px")
-
-$("button[bid=bomSearch]").on("click", function () {
-    $("input[bid=bomtop]").trigger("keypress");
 })
 
 function reOrderBOM(dbom, top, level = 1) { // rearrange order of BOM for display
@@ -107,7 +122,7 @@ function showBOM(dbom) {
     $("td[did=Order],td[did=SN]").on("dblclick", function () {
         var code = $(this).parent("tr").find("input[did='Code']").val();
         $("input[bid=bomtop]").val(code);
-        $("input[bid=bomtop]").trigger("keypress");
+        $("button[bid=bomSearch]").trigger("click");
     });
 
     $("table.treetable tbody tr td:first-child").on("dblclick", function () {
@@ -146,7 +161,21 @@ function showBOM(dbom) {
             });
 
         }
-    })
+    });
+
+    $("table.treetable tbody tr").on("mousedown", function (e) {
+        if (e.button == 2) {
+            var codetr = $(this);
+            var codeinput = codetr.find("input[did=Code]");
+            clipboard.writeText(codeinput.val().trim());
+            codetr.addClass("bgcolor_highlight");
+            setTimeout(function () {
+                codetr.removeClass("bgcolor_highlight");
+            }, 500)
+            return false;
+        }
+        return true;
+    });
 
 }
 
