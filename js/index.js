@@ -331,3 +331,25 @@ function data2csv(data = null, columnDelimiter = ",", lineDelimiter = "\n") { //
 
     return result
 }
+
+function savedata(filepath, data, open = false) {
+    var msExcelBuffer = Buffer.concat([
+        new Buffer.from('\xEF\xBB\xBF', 'binary'),
+        new Buffer.from(data2csv(data))
+    ]);
+    var fs = require("fs");
+    fs.writeFile(filepath, msExcelBuffer, function (err) {
+        if (!err) {
+            if (open) {
+                const {
+                    shell
+                } = require('electron');
+                // Open a local file in the default app
+                shell.openItem(filepath);
+            } else {
+                popup("CVS file exported successfully!", "success");
+            }
+        } else popup(err, "danger");
+    });
+
+}

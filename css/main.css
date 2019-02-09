@@ -173,3 +173,78 @@ input[type=submit] {
   font-weight: bold;
   color: #FF9900;
 }
+
+div[bid=bomtable] h5 button {
+  font-size: 12px;
+  margin: 5px;
+  padding: 3px;
+}
+
+table.treetable {
+  font-size: 12px;
+  border: 1px solid #cccccc;
+}
+
+table.treetable th {
+  background: #999999;
+  font-weight: bold;
+  border: 1px solid #cccccc;
+  padding: 2px;
+}
+
+table.treetable tr td {
+  border: 1px solid #999999;
+  padding: 2px;
+}
+
+table.treetable tbody tr td:first-child,
+table.treetable th:first-child {
+  max-width: 200px;
+  min-width: 80px;
+}
+
+table.treetable tbody tr td input[did=Code] {
+  width: 80px;
+}
+
+table.treetable tbody tr td input[did=Qty] {
+  width: 30px;
+}
+
+table.treetable tbody tr td input[did=PFEP] {
+  width: 50px;
+}
+
+table.treetable tbody tr td input[did=Name] {
+  width: 250px;
+}
+
+table.treetable tbody tr td input[did=Spec] {
+  width: 250px;
+}
+
+table.treetable tbody tr td input {
+  border: none;
+  margin: 0px;
+  padding: 0px;
+  font-size: 12px;
+  background: transparent;
+}
+
+table.treetable tbody tr:hover {
+  background: rgb(255, 223, 175);
+}
+
+table.treetable tbody tr.selected td {
+  background-color: #ff9900;
+  color: #fff
+}
+
+table.treetable tbody tr.selected td input {
+  background-color: #ff9900;
+  color: #fff
+}
+
+table.treetable tbody tr.branch {
+  background: #cccccc;
+}
