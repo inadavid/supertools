@@ -144,8 +144,20 @@ function showBOM(dbom) {
         $("div[bid=bomcard] table").treetable("collapseAll");
     });
     $("button[bid=exportBOM]").click(function () {
+        var top = $("input[bid=bomtop]").val().trim();
         var cloneArr = JSON.parse(JSON.stringify(dbom));
-        var rdata = [];
+        var rdata = [{
+            SN: "-",
+            Level: "-",
+            Order: "-",
+            Code: top,
+            Qty: "-",
+            Unit: "-",
+            PT: "-",
+            Name: codesInfo[top].name,
+            Spec: codesInfo[top].spec,
+            PFEP: ""
+        }];
         var count = 1;
         for (var i in cloneArr) {
             var obj = {};
@@ -177,8 +189,16 @@ function showBOM(dbom) {
     });
 
     $("button[bid=exportPL]").click(function () {
+        var top = $("input[bid=bomtop]").val().trim();
         var cloneArr = JSON.parse(JSON.stringify(dbom));
-        var rdata = [];
+        var rdata = [{
+            SN: "===============BEGIN OF PICKLIST " + top + "===============",
+            Code: "",
+            Qty: "",
+            Unit: "",
+            Name: "",
+            Spec: "",
+        }];
         var count = 1;
         for (var i in cloneArr) {
             if (cloneArr[i].ProchasingType != "B" && cloneArr[i].ProchasingType != "b") continue;
@@ -199,6 +219,14 @@ function showBOM(dbom) {
                 oobj.Qty += cloneArr[i].rQty;
             }
         }
+        rdata.push({
+            SN: "===============END OF PICKLIST " + top + "===============",
+            Code: "",
+            Qty: "",
+            Unit: "",
+            Name: "",
+            Spec: "",
+        });
         var path = require('path');
         var toLocalPath = path.resolve(app.getPath("documents"));
         var filepath = dialog.showSaveDialog({
