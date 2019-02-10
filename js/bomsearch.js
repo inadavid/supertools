@@ -25,6 +25,20 @@ $(function () {
         });
     });
 
+
+    $(document).on("mousedown", "table.treetable tbody tr", function (e) {
+        if (e.button == 2) {
+            var codetr = $(this);
+            var codeinput = codetr.find("input[did=Code]");
+            clipboard.writeText(codeinput.val().trim());
+            codetr.addClass("bgcolor_highlight");
+            setTimeout(function () {
+                codetr.removeClass("bgcolor_highlight");
+            }, 500)
+            return false;
+        }
+        return true;
+    });
 })
 
 $("input[bid=bomtop]").on("keypress", function (event) {
@@ -105,7 +119,7 @@ function showBOM(dbom) {
     }
     table.append(tbody);
 
-    $("div[bid=bomcard]").html("<h5><strong>" + $("input[bid=bomtop]").val() + "</strong> BOM Tree View &nbsp; &nbsp; &nbsp;<button class='btn btn-form btn-primary btn-sm' bid='expandAll'>Expand All</button> <button class='btn btn-form btn-success btn-sm' bid='collapseAll'>Collapse All</button> <button class='btn btn-form btn-warning btn-sm' bid='exportBOM'>Export BOM</button> <button class='btn btn-form btn-danger btn-sm' bid='exportPL'>Export Picklist</button></h5>").append(table);
+    $("div[bid=bomcard]").html("<h5><strong>" + $("input[bid=bomtop]").val() + "</strong> BOM Tree View &nbsp; &nbsp; &nbsp; <button class='btn btn-form btn-warning btn-sm' bid='exportBOM'>Export BOM</button> <button class='btn btn-form btn-primary btn-sm' bid='exportPL'>Export Picklist</button></h5>").append(table);
 
     var jstt = com_github_culmat_jsTreeTable;
     // $("div[bid=bomcard] table").treetable({
@@ -121,28 +135,12 @@ function showBOM(dbom) {
         $(this).attr("title", $(this).val());
     });
 
-    $("div[bid=bomcard] table tbody tr").on("click", function () {
-        if ($(this).hasClass("selected")) $(this).removeClass("selected");
-        else {
-            $("div[bid=bomcard] table tbody tr").removeClass("selected");
-            $(this).addClass("selected");
-        }
-    });
     $("td[did=Order],td[did=SN]").on("dblclick", function () {
         var code = $(this).parent("tr").find("input[did='Code']").val();
         $("input[bid=bomtop]").val(code);
         $("button[bid=bomSearch]").trigger("click");
     });
 
-    $("table.treetable tbody tr td:first-child").on("dblclick", function () {
-        $(this).find("div").trigger("click");
-    });
-    $("button[bid=expandAll]").click(function () {
-        $("div[bid=bomcard] table").treetable("expandAll");
-    });
-    $("button[bid=collapseAll]").click(function () {
-        $("div[bid=bomcard] table").treetable("collapseAll");
-    });
     $("button[bid=exportBOM]").click(function () {
         var top = $("input[bid=bomtop]").val().trim();
         var cloneArr = JSON.parse(JSON.stringify(dbom));
@@ -242,19 +240,6 @@ function showBOM(dbom) {
         }
     });
 
-    $("table.treetable tbody tr").on("mousedown", function (e) {
-        if (e.button == 2) {
-            var codetr = $(this);
-            var codeinput = codetr.find("input[did=Code]");
-            clipboard.writeText(codeinput.val().trim());
-            codetr.addClass("bgcolor_highlight");
-            setTimeout(function () {
-                codetr.removeClass("bgcolor_highlight");
-            }, 500)
-            return false;
-        }
-        return true;
-    });
 
 }
 
