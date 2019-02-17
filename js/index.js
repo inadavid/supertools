@@ -5,7 +5,7 @@ var argv = require("electron").remote.getGlobal("argv");
 const dialog = require('electron').remote.dialog;
 const app = require('electron').remote.app;
 const clipboard = require('electron').remote.clipboard;
-
+const moment = require('moment');
 sqlite.connect(appPath + '/db/db.sqlite');
 const sql = require('mssql');
 var {
@@ -20,6 +20,17 @@ var bom_top;
 var codesInfo = {};
 var codesList = [];
 var bomtopList = [];
+const ptypeList = {
+    "B": "Buy from supplier",
+    "A": "Assemble in house",
+    "P": "Buy and PUSH to other supplier",
+    "N": "Supplier by from appointed sub-supplier",
+    "F": "Supplier by from any sub-supplier",
+    "C": "Created temp material during manufacturing",
+    "V": "Virtual material physically",
+    "M": "Manufactured in hourse"
+};
+var ptypeKeys = _.keys(ptypeList);
 var win = require("electron").remote.getCurrentWindow();
 var user = {};
 const fs = require('fs');

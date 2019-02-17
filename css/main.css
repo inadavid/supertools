@@ -207,7 +207,15 @@ table.treetable tbody tr td input[did=Code] {
   width: 80px;
 }
 
+table.treetable tbody tr td input[did=Order] {
+  width: 80px;
+}
+
 table.treetable tbody tr td input[did=Qty] {
+  width: 30px;
+}
+
+table.treetable tbody tr td input[did=Ptype] {
   width: 30px;
 }
 
@@ -216,11 +224,13 @@ table.treetable tbody tr td input[did=PFEP] {
 }
 
 table.treetable tbody tr td input[did=Name] {
-  width: 250px;
+  min-width: 150px;
+  width: 100%;
 }
 
 table.treetable tbody tr td input[did=Spec] {
-  width: 250px;
+  min-width: 150px;
+  width: 100%;
 }
 
 table.treetable tbody tr td input {
@@ -247,4 +257,44 @@ table.treetable tbody tr.selected td input {
 
 table.treetable tbody tr.branch {
   background: #cccccc;
+}
+
+table.treetable tbody tr td[bid=action] span {
+  cursor: pointer;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+table.treetable tbody tr.deletion {
+  color: #fff;
+  background: #FF0000;
+}
+
+table.treetable tbody tr.deletion input {
+  color: #fff;
+}
+
+table.treetable tbody tr.addition {
+  color: #fff;
+  background: rgb(0, 128, 0);
+}
+
+table.treetable tbody tr.addition input {
+  color: #fff;
+}
+
+table.treetable tbody tr.addaction {
+  color: #333;
+  background: rgb(176, 255, 180);
+  border: 2px solid #333;
+  margin-top: 10px;
+}
+
+table.treetable tbody tr.addaction input {
+  color: #333;
+}
+
+.form-inline {
+  width: 200px;
+  display: inline-block;
 }

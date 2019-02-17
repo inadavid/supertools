@@ -1,10 +1,13 @@
 var allcodesHint = [];
 var displayBOM = [];
-
+var appliedDate = '2019-02-01';
 $(function () {
     if ($("head").has("link[name=awesomeplete]").length < 1) $("head").append("<link rel='stylesheet' name='awesomeplete' href='../css/awesomplete.css' type='text/css' />");
     //if ($("head").has("link[name=treeable]").length < 1) $("head").append("<link rel='stylesheet' name='treeable' href='../css/jquery.treetable.theme.default.css' type='text/css' />");
 
+    var moment = require('moment');
+    appliedDate = moment().format("YYYY-MM-DD");
+    $('input[name="appliedDate"]').val(appliedDate);
     var sqltext = "select goodsid from st_bomtop;";
     new sql.Request().query(sqltext, (err, result) => {
         if (err) {
@@ -48,13 +51,20 @@ $("input[bid=bomtop]").on("keypress", function (event) {
 
 $("button[bid=bomSearch]").on("click", function () {
     var val = $("input[bid=bomtop]").val();
-    var spec = $("span[bid=codespec]")
+    var spec = $("span[bid=codespec]");
+
     spec.css("margin-left", "50px").css("margin-right", "50px")
     if (codesList.indexOf(val) == -1) {
         spec.text("");
         return;
     } else {
         spec.text(codesInfo[val].name + " | " + codesInfo[val].spec);
+        var d = $('input[name="appliedDate"]').val().trim();
+        if (d.length < 10) {
+            popup("AppliedDate not valid.", "danger");
+            return;
+        }
+        appliedDate = d;
         searchBOM(val);
         searchParent(val);
         searchFG(val);
@@ -245,9 +255,10 @@ function showBOM(dbom) {
 
 function searchBOM(code) {
     if (code.length != 10) return false;
+
     displayBOM = [];
     $("div[bid=bomcard]").html("<h5>Searching BOM, please wait...</h5>");
-    sqltext = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.quantity*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid) SELECT * FROM CTE order by pid asc,itemno asc;";
+    sqltext = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.quantity*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid where b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT * FROM CTE order by pid asc,itemno asc;";
     new sql.Request().query(sqltext, (err, result) => {
         // ... error checks
 
@@ -278,7 +289,7 @@ function searchBOM(code) {
 }
 
 function searchParent(code) {
-    var sqltxt = "select goodsid from st_goodsbom where elemgid='" + code + "' group by goodsid";
+    var sqltxt = "select goodsid from st_goodsbom where elemgid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' group by goodsid";
     var parentsList = [];
     $("div[bid=parentcard]").html("<h5>Searching parents, please wait...</h5>")
     new sql.Request().query(sqltxt, (err, result) => {
@@ -331,7 +342,7 @@ function searchParent(code) {
 function searchFG(code) {
     $("div[bid=fgcard]").html("<h5>Searching applied Finish Goods, please wait...</h5>");
     var fglist = [];
-    var sqltxt = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1 FROM dbo.st_goodsbom as b WHERE elemgid='" + code + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1 FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON c.goodsid=b.elemgid) SELECT e.goodsid FROM CTE as e inner join st_bomtop as d on d.goodsid=e.goodsid group by e.goodsid;";
+    var sqltxt = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1 FROM dbo.st_goodsbom as b WHERE elemgid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1 FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON c.goodsid=b.elemgid where  b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT e.goodsid FROM CTE as e inner join st_bomtop as d on d.goodsid=e.goodsid group by e.goodsid;";
     new sql.Request().query(sqltxt, (err, result) => {
         // ... error checks
 
