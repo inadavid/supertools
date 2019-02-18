@@ -8,9 +8,7 @@ const clipboard = require('electron').remote.clipboard;
 const moment = require('moment');
 sqlite.connect(appPath + '/db/db.sqlite');
 const sql = require('mssql');
-var {
-    BrowserWindow
-} = require("electron").remote;
+const { ipcRenderer } = require('electron')
 if (Base64 == null) var Base64 = require('js-base64').Base64;
 var action = "dashboard";
 var config = {};
@@ -34,6 +32,7 @@ var ptypeKeys = _.keys(ptypeList);
 var win = require("electron").remote.getCurrentWindow();
 var user = {};
 const fs = require('fs');
+const rejectTimeDiff = 30; //30min time difference allowed.
 
 function updateUserinfo() {
     $("a[bid=userinfo]").text("User:" + user.name + "; UID:" + user.id)
@@ -61,6 +60,7 @@ $(() => {
         user.perm = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         updateUserinfo();
     }
+
     config.fSQLserver = 0;
     win.show();
     if (argv[2] == "dev") win.maximize();
@@ -105,7 +105,8 @@ $("div.login_form button.btn-success").on("click", function () {
         return;
     }
     $("div.login_form button.btn-success").prop("disabled", true);
-    sqlt = "select win8,opid from m_operator where opname='" + userid + "' and oppassword='" + passwd + "'";
+    var now = moment().format("YYYY-MM-DD HH:mm:ss");
+    sqlt = "select win8,opid,(SELECT cast(getdate() - cast('" + now + "' as datetime) as float)*60*24) as timediff from m_operator where opname='" + userid + "' and oppassword='" + passwd + "'";
     sqll = "update system set value='[\"" + userid + "\"]' where key='userid';";
     sqlite.run(sqll);
     new sql.Request().query(sqlt, (err, result) => {
@@ -116,6 +117,10 @@ $("div.login_form button.btn-success").on("click", function () {
             popup("用户名或密码错误，请检查后再试。", "danger");
             $("div.login_form button.btn-success").prop("disabled", false);
         } else {
+            if (Math.abs(result.recordset[0].timediff) > rejectTimeDiff) {
+                popup("请检查本地电脑的时间!!", "danger");
+                return;
+            }
             $.modal.close();
             user.id = result.recordset[0].opid;
             user.perm = eval('(' + result.recordset[0].win8 + ')');
@@ -278,6 +283,14 @@ function fetchAllCodes() {
         var data = JSON.parse(Base64.decode(fs.readFileSync(filepath)));
         if (data.codesInfo) codesInfo = data.codesInfo;
         if (data.codesList) codesList = data.codesList;
+        // var tmd = [];
+        // for (var i in codesInfo) {
+        //     codesInfo[i].codenumber = i;
+        //     tmd.push(codesInfo[i]);
+        // }
+        // var td = data2csv(tmd);
+        // console.log(tmd)
+        // fs.writeFileSync("db/codes.new.csv", td);
         if (codesList.length < 100) flag = true;
         else {
             config.fSQLserver = 4;
@@ -364,3 +377,7 @@ function savedata(filepath, data, open = false) {
     });
 
 }
+
+ipcRenderer.on('win-menu-toggle-sidebar', (event, arg) => {
+    $('div[bid="sidebar"]').toggle(500);
+})

@@ -91,6 +91,17 @@ function searchChildren(code) {
         })
         tableArea.html("<h5><b>" + code + "</b> children list for ECO </h5>").append(table);
 
+        //make area for condition
+        var div = $("<div bid='hr'>");
+        var datePicker = $('<input type="date" max="2098-12-31" class="form-control form-inline">');
+        var dateLabel = $('<span class="form-inline-label"></span>');
+        var today = moment().format("YYYY-MM-DD");
+        var tomorrow = moment().add(1, 'days').format("YYYY-MM-DD");
+        var comments = $('<input type="text" name="comments" class="form-control">');
+        var conditionDiv = div.clone().append(dateLabel.clone().text("BOM Applied Date: ")).append(datePicker.clone().attr("min", today).attr("value", tomorrow).attr("name", "bomAppliedDate")).append(dateLabel.clone().text("  | Picklist Applied Date: ")).append(datePicker.clone().attr("min", today).attr("value", tomorrow).attr("name", "picklistAppliedDate"));
+        var commentDiv = div.clone().append(dateLabel.clone().text("ECO Comment:")).append(comments.clone());
+        tableArea.append(conditionDiv).append(commentDiv);
+
         tableArea.on("click", "table tbody tr td[bid=action] span[bid=delete]", function () {
             var tr = $(this).parents("tr");
             var curCode = tr.find("input[did=Code]").val().trim();

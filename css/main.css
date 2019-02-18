@@ -298,3 +298,13 @@ table.treetable tbody tr.addaction input {
   width: 200px;
   display: inline-block;
 }
+
+.form-inline-label {
+  display: inline-block;
+  font-size: 14px;
+}
+
+div[bid='hr'] {
+  margin-top : 20px;
+  margin-bottom: 20px;
+}

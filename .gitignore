@@ -78,3 +78,7 @@ release-builds
 
 #vscode config
 .vscode
+
+#database and reference
+db/
+reference/

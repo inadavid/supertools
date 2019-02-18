@@ -1,7 +1,9 @@
 const {
     app,
     Menu,
-    BrowserWindow
+    BrowserWindow,
+    MenuItem,
+    ipcMain
 } = require('electron')
 
 let win;
@@ -31,12 +33,22 @@ function createWindow() {
     win.on('closed', () => {
         win = null
     })
-    win.setMenu(null);
+    var menu = new Menu()
+
+    menu.append(new MenuItem({
+        label: 'Toggle Sidebar',
+        accelerator: 'CmdOrCtrl+t',
+        click: () => {
+            win.webContents.send('win-menu-toggle-sidebar', 'nothing');
+        }
+    }))
+    win.setMenu(menu);
     win.once('ready-to-show', () => {
         global.win = win;
         // win.show();
         // win.maximize()
     })
+
 
     flash = new BrowserWindow({
         width: 525,
