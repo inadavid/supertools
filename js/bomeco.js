@@ -93,14 +93,12 @@ function searchChildren(code) {
 
         //make area for condition
         var div = $("<div bid='hr'>");
-        var datePicker = $('<input type="date" max="2098-12-31" class="form-control form-inline">');
         var dateLabel = $('<span class="form-inline-label"></span>');
-        var today = moment().format("YYYY-MM-DD");
-        var tomorrow = moment().add(1, 'days').format("YYYY-MM-DD");
         var comments = $('<input type="text" name="comments" class="form-control">');
-        var conditionDiv = div.clone().append(dateLabel.clone().text("BOM Applied Date: ")).append(datePicker.clone().attr("min", today).attr("value", tomorrow).attr("name", "bomAppliedDate")).append(dateLabel.clone().text("  | Picklist Applied Date: ")).append(datePicker.clone().attr("min", today).attr("value", tomorrow).attr("name", "picklistAppliedDate"));
+        var btnSubmit = $("<button>").attr("bid", "submit").addClass("btn btn-form btn-primary");
         var commentDiv = div.clone().append(dateLabel.clone().text("ECO Comment:")).append(comments.clone());
-        tableArea.append(conditionDiv).append(commentDiv);
+
+        tableArea.append(commentDiv).append(div.clone().append(btnSubmit.text("Submit").prop("disabled", true)));
 
         tableArea.on("click", "table tbody tr td[bid=action] span[bid=delete]", function () {
             var tr = $(this).parents("tr");
@@ -115,10 +113,16 @@ function searchChildren(code) {
                 tr.remove();
             } else {
                 var sn = parseInt(tr.attr("bomsn"));
+
                 ECOList.push({
                     sn: sn,
                     action: "deletion",
-                    data: {}
+                    data: {
+                        order: parseInt(tr.find("td[did=Order]").text().trim()),
+                        code: curCode,
+                        qty: parseFloat(tr.find("input[did=Qty]").val().trim()),
+                        ptype: tr.find("input[did=Ptype]").val().trim()
+                    }
                 });
                 tr.addClass("deletion").find("td[bid=status]").text("Deleted");
                 tr.find("td[bid=action] span[bid=delete]").remove();
@@ -184,7 +188,7 @@ function searchChildren(code) {
                 return;
             }
 
-            var qty = parseInt(tableArea.find("table tr[type=newitem] input[did=Qty]").val());
+            var qty = parseFloat(tableArea.find("table tr[type=newitem] input[did=Qty]").val());
             if (isNaN(qty)) {
                 alert("The 'Quantity' is not correct!");
                 tableArea.find("table tr[type=newitem] input[did=Qty]").focus().select();
@@ -199,7 +203,6 @@ function searchChildren(code) {
                 data: {
                     order: order,
                     code: codeNew,
-                    parent: code,
                     qty: qty,
                     ptype: ptype
                 }
@@ -227,10 +230,33 @@ function searchChildren(code) {
             tableArea.find("table tr[type=newitem] input[did=Spec]").val("");
             tableArea.find("table tr[type=newitem] td[did=Unit]").text("");
         });
+
+        tableArea.on("click", "button[bid=submit]", function () {
+            var comments = $("input[name=comments]").val().trim();
+            if (comments.length <= 2) {
+                alert("Please write more comments to this ECO");
+                return;
+            }
+            $("button[bid=submit]").prop("disabled", true);
+            var sqltext = "insert into st_bomeco (parentgid, comments, date, data, userid) values ('" + code + "','" + Base64.encode(comments) + "', GETDATE(), '" + Base64.encode(ECOList) + "', " + user.id + " ); SELECT SCOPE_IDENTITY() as sn;";
+            new sql.Request().query(sqltext, (err, result) => {
+                if (err) {
+                    console.error(err);
+                    return;
+                } else {
+                    console.log(result.recordset)
+                }
+            });
+        });
     });
 }
 
 function ECOCheckChange() {
-    if (ECOList.length > 0) ECOchanged = true;
-    else ECOchanged = false;
+    if (ECOList.length > 0) {
+        ECOchanged = true;
+        $("button[bid=submit]").prop("disabled", false);
+    } else {
+        ECOchanged = false;
+        $("button[bid=submit]").prop("disabled", true);
+    }
 }
