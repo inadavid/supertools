@@ -1,0 +1,36 @@
+<div class="card ">
+    <div class="card-body">
+        <div class="form-group">
+            <h5>BOM ECO Search</h5>
+            <table class="optionTable">
+                <tr name="byECOcode">
+                    <td> <input type="radio" name="searchtype" value="byECOcode" selected></td>
+                    <td name="byECOcode"> By BOM ECO code</td>
+                    <td name="byECOcode"> <input type="text" name="code" placeholder="ECO# or Code#" class="form-control form-inline"
+                            style="width:200px"></td>
+                </tr>
+                <tr name="byECOdate">
+                    <td> <input type="radio" name="searchtype" value="byECOdate"></td>
+                    <td name="byECOdate"> By BOM ECO Day or Date range</td>
+                    <td name="byECOdate">
+                        FROM: <input type="date" name="fromDate" min='2019-02-01' max='2099-01-01' class="form-control form-inline">
+                        TO: <input type="date" name="fromDate" min='2019-02-01' max='2099-01-01' class="form-control form-inline">
+                    </td>
+                </tr>
+                <tr name="byFGcode">
+                    <td> <input type="radio" name="searchtype" value="byFGcode"></td>
+                    <td name="byFGcode"> By FinishGood code (need an applied date)</td>
+                    <td name="byFGcode">
+                        <input type="text" name="fgcode" class="form-control form-inline" placeholder="FG Code#" style="width:200px">
+                        Date:
+                        <input type="date" name="fgdate" min='2019-02-01' max='2099-01-01' class="form-control form-inline">
+                    </td>
+                </tr>
+            </table>
+            <button class="btn btn-form btn-primary" bid="bomecoSearch">Search</button>
+        </div>
+    </div>
+    <div bid="ecoBody">
+    </div>
+</div>
+<script src="../js/bomecosearch.js"></script>

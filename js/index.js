@@ -8,8 +8,14 @@ const clipboard = require('electron').remote.clipboard;
 const moment = require('moment');
 sqlite.connect(appPath + '/db/db.sqlite');
 const sql = require('mssql');
+var co = require('co');
+var cosql = require('co-mssql');
 const { ipcRenderer } = require('electron')
 if (Base64 == null) var Base64 = require('js-base64').Base64;
+var win = require("electron").remote.getCurrentWindow();
+const fs = require('fs');
+
+
 var action = "dashboard";
 var config = {};
 var bomexcel_arr = [];
@@ -29,9 +35,8 @@ const ptypeList = {
     "M": "Manufactured in hourse"
 };
 var ptypeKeys = _.keys(ptypeList);
-var win = require("electron").remote.getCurrentWindow();
 var user = {};
-const fs = require('fs');
+var ecosn = 0;
 const rejectTimeDiff = 30; //30min time difference allowed.
 
 function updateUserinfo() {
@@ -73,7 +78,10 @@ $(() => {
 
 $("div[bid=sidebar] a").on("click", (e) => {
     var ts = $(e.currentTarget)
-    if (ts.attr("href") == "#") return false;
+    if (ts.attr("href") == "#") {
+        popup("Under construction...", "warning");
+        return false;
+    }
     if (ts.attr("href") == "debug") {
         require("electron").remote.getCurrentWebContents().openDevTools();
         return false;
@@ -381,3 +389,7 @@ function savedata(filepath, data, open = false) {
 ipcRenderer.on('win-menu-toggle-sidebar', (event, arg) => {
     $('div[bid="sidebar"]').toggle(500);
 })
+
+function ecoID(sn) {
+    return sn < 10 ? "ECO-000" + sn : (sn < 100 ? "ECO-00" + sn : (sn < 1000 ? "ECO-0" + sn : "ECO-" + sn));
+}

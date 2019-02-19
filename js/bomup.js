@@ -155,7 +155,6 @@ function gFormatBOM(bom_top, setup, index = 0) {
             var subArr = gFormatBOM(curParent, setup, i);
             i += subArr.count;
             rtnCount += subArr.count;
-            if (curParent == "2532000283") console.log("2532000283 => ", subArr);
             if (parents.indexOf(curParent) == -1) {
                 rtnArr = rtnArr.concat(JSON.parse(JSON.stringify(subArr.data)));
                 parents.push(curParent);
@@ -185,7 +184,7 @@ function generateSQL(bom) {
     var sql_insert = "insert into dbo.st_goodsbom (goodsid, elemgid, quantity, mnfqty, masterqty, usetime, wasterate, memo,  state, pretime, itemno, ptype,pfep, opid, checkorid, startDate, endDate) values ";
     var sql_delete = "delete from dbo.st_goodsbom where "
     for (var i = 0; i < bom.length; i++) {
-        sql_insert += "('" + bom[i].parent + "','" + bom[i].code + "'," + bom[i].qty + "," + bom[i].qty + ", 1, 1, 0, NULL,  1, 0, " + bom[i].item + ",'" + bom[i].procumenttype + "','" + bom[i].pfep + "', " + user.id + ", " + user.id + ", dateadd(day,-1, cast(getdate() as date)), '2099-12-31')";
+        sql_insert += "('" + bom[i].parent + "','" + bom[i].code + "'," + bom[i].qty + "," + bom[i].qty + ", 1, 1, 0, NULL,  1, 0, " + bom[i].item + ",'" + bom[i].procumenttype + "','" + bom[i].pfep + "', " + user.id + ", " + user.id + ", dateadd(day,-1, cast(getdate() as date)), '2099-01-01')";
         sql_delete += "(goodsid = '" + bom[i].parent + "' and elemgid='" + bom[i].code + "')";
         if (i != bom.length - 1) {
             sql_insert += ", ";
@@ -227,8 +226,8 @@ function savegoback(id) {
         sqlite.update("bom", {
             remark: name
         }, {
-            sn: id
-        });
+                sn: id
+            });
         loadPanel("dashboard");
     });
 }

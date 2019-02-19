@@ -308,3 +308,24 @@ div[bid='hr'] {
   margin-top : 20px;
   margin-bottom: 20px;
 }
+
+table.optionTable {
+  border: 0;
+}
+
+table.optionTable tr {
+ border:  20px solid #FFFFFF;
+}
+
+table.optionTable tr td {
+ border:  0;
+ padding: 2px;
+ padding-right: 20px;
+ height: 15px;
+  font-size: 14x;
+}
+
+
+table.optionTable tr td:first-child{
+ width: 50px;
+}
