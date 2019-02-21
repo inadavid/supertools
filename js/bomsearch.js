@@ -1,10 +1,6 @@
-var allcodesHint = [];
 var displayBOM = [];
 var appliedDate = '2019-02-01';
 $(function () {
-    if ($("head").has("link[name=awesomeplete]").length < 1) $("head").append("<link rel='stylesheet' name='awesomeplete' href='../css/awesomplete.css' type='text/css' />");
-    //if ($("head").has("link[name=treeable]").length < 1) $("head").append("<link rel='stylesheet' name='treeable' href='../css/jquery.treetable.theme.default.css' type='text/css' />");
-
     var moment = require('moment');
     appliedDate = moment().format("YYYY-MM-DD");
     $('input[name="appliedDate"]').val(appliedDate);

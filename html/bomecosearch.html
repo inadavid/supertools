@@ -6,15 +6,27 @@
                 <tr name="byECOcode">
                     <td> <input type="radio" name="searchtype" value="byECOcode" selected></td>
                     <td name="byECOcode"> By BOM ECO code</td>
-                    <td name="byECOcode"> <input type="text" name="code" placeholder="ECO# or Code#" class="form-control form-inline"
+                    <td name="byECOcode"> <input type="text" name="eco" placeholder="ECO#" class="form-control form-inline"
+                            style="width:200px"></td>
+                </tr>
+                <tr name="byCode">
+                    <td> <input type="radio" name="searchtype" value="byCode" selected></td>
+                    <td name="byCode"> By BOM ECO code</td>
+                    <td name="byCode"> <input type="text" name="code" placeholder="Code#" class="form-control form-inline"
+                            style="width:200px"></td>
+                </tr>
+                <tr name="byName">
+                    <td> <input type="radio" name="searchtype" value="byName" selected></td>
+                    <td name="byName"> By BOM ECO code</td>
+                    <td name="byName"> <input type="text" name="name" placeholder="Operator name" class="form-control form-inline"
                             style="width:200px"></td>
                 </tr>
                 <tr name="byECOdate">
                     <td> <input type="radio" name="searchtype" value="byECOdate"></td>
                     <td name="byECOdate"> By BOM ECO Day or Date range</td>
                     <td name="byECOdate">
-                        FROM: <input type="date" name="fromDate" min='2019-02-01' max='2099-01-01' class="form-control form-inline">
-                        TO: <input type="date" name="fromDate" min='2019-02-01' max='2099-01-01' class="form-control form-inline">
+                        FROM: <input type="date" name="startDate" min='2019-02-01' max='2099-01-01' class="form-control form-inline">
+                        TO: <input type="date" name="endDate" min='2019-02-01' max='2099-01-01' class="form-control form-inline">
                     </td>
                 </tr>
                 <tr name="byFGcode">
@@ -22,8 +34,6 @@
                     <td name="byFGcode"> By FinishGood code (need an applied date)</td>
                     <td name="byFGcode">
                         <input type="text" name="fgcode" class="form-control form-inline" placeholder="FG Code#" style="width:200px">
-                        Date:
-                        <input type="date" name="fgdate" min='2019-02-01' max='2099-01-01' class="form-control form-inline">
                     </td>
                 </tr>
             </table>
@@ -34,3 +44,4 @@
     </div>
 </div>
 <script src="../js/bomecosearch.js"></script>
+<script src="../js/lib/awesomplete.js"></script>

@@ -10,7 +10,9 @@ sqlite.connect(appPath + '/db/db.sqlite');
 const sql = require('mssql');
 var co = require('co');
 var cosql = require('co-mssql');
-const { ipcRenderer } = require('electron')
+const {
+    ipcRenderer
+} = require('electron')
 if (Base64 == null) var Base64 = require('js-base64').Base64;
 var win = require("electron").remote.getCurrentWindow();
 const fs = require('fs');
@@ -38,6 +40,7 @@ var ptypeKeys = _.keys(ptypeList);
 var user = {};
 var ecosn = 0;
 const rejectTimeDiff = 30; //30min time difference allowed.
+var allcodesHint = [];
 
 function updateUserinfo() {
     $("a[bid=userinfo]").text("User:" + user.name + "; UID:" + user.id)
@@ -62,7 +65,7 @@ $(() => {
     } else {
         user.id = 54;
         user.name = "魏亮";
-        user.perm = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        user.perm = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
         updateUserinfo();
     }
 
@@ -134,6 +137,7 @@ $("div.login_form button.btn-success").on("click", function () {
             user.perm = eval('(' + result.recordset[0].win8 + ')');
             user.name = userid;
             updateUserinfo();
+            updatePerminfo();
         }
     })
 });
@@ -392,4 +396,21 @@ ipcRenderer.on('win-menu-toggle-sidebar', (event, arg) => {
 
 function ecoID(sn) {
     return sn < 10 ? "ECO-000" + sn : (sn < 100 ? "ECO-00" + sn : (sn < 1000 ? "ECO-0" + sn : "ECO-" + sn));
+}
+
+function IDeco(id, n = 4) {
+    if (id.length == 8 && id.substr(0, 4) == "ECO-") {
+        return parseInt(id.substr(4, n));
+
+    } else return false;
+}
+
+function updatePerminfo() {
+    $("div[bid=sidebar] a[perm]").each(function () {
+        if (user.perm.indexOf(parseInt($(this).attr("perm"))) == -1) $(this).css("display", "none");
+    });
+    $("div[bid=sidebar] div.list-group").each(function () {
+        console.log($(this).find("a[perm]:visible").length)
+        if ($(this).find("a[perm]:visible").length == 0) $(this).css("display", "none");
+    });
 }

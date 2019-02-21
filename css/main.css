@@ -265,32 +265,32 @@ table.treetable tbody tr td[bid=action] span {
   margin-right: 5px;
 }
 
-table.treetable tbody tr.deletion {
+table.treetable tr.deletion {
   color: #fff;
   background: #FF0000;
 }
 
-table.treetable tbody tr.deletion input {
+table.treetable tr.deletion input {
   color: #fff;
 }
 
-table.treetable tbody tr.addition {
+table.treetable tr.addition {
   color: #fff;
   background: rgb(0, 128, 0);
 }
 
-table.treetable tbody tr.addition input {
+table.treetable tr.addition input {
   color: #fff;
 }
 
-table.treetable tbody tr.addaction {
+table.treetable tr.addaction {
   color: #333;
   background: rgb(176, 255, 180);
   border: 2px solid #333;
   margin-top: 10px;
 }
 
-table.treetable tbody tr.addaction input {
+table.treetable tr.addaction input {
   color: #333;
 }
 
@@ -305,7 +305,7 @@ table.treetable tbody tr.addaction input {
 }
 
 div[bid='hr'] {
-  margin-top : 20px;
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 
@@ -314,18 +314,26 @@ table.optionTable {
 }
 
 table.optionTable tr {
- border:  20px solid #FFFFFF;
+  border: 10px solid #FFFFFF;
 }
 
 table.optionTable tr td {
- border:  0;
- padding: 2px;
- padding-right: 20px;
- height: 15px;
+  border: 0;
+  padding: 2px;
+  padding-right: 20px;
+  height: 15px;
   font-size: 14x;
 }
 
 
-table.optionTable tr td:first-child{
- width: 50px;
+table.optionTable tr td:first-child {
+  width: 50px;
+}
+
+td.selectable {
+  -webkit-user-select: text;
+}
+
+div.sidebar .list-group {
+  margin-bottom: 10px;
 }
