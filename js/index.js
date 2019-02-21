@@ -414,3 +414,11 @@ function updatePerminfo() {
         if ($(this).find("a[perm]:visible").length == 0) $(this).css("display", "none");
     });
 }
+
+function loglog(action, remark) {
+    opid = user.id;
+    var sqlt = "insert into st_log (opid, action, remark, [date]) values (" + opid + ", '" + action + "', '" + Base64.encode(remark) + "', getdate());";
+    new sql.Request().query(sqlt, (err, result) => {
+        console.log("sql executed:", sqlt);
+    });
+}

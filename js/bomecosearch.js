@@ -94,7 +94,7 @@ $('button[bid="bomecoSearch"]').click(function () {
             //senario 4: search by ECO date
             if (selectedAction == "byECOdate") {
                 var startDate = moment($('table.optionTable tr[name="' + selectedAction + '"] input[name="startDate"]').val() + " 00:00:01");
-                var endDate = moment($('table.optionTable tr[name="' + selectedAction + '"] input[name="endDate"]').val() + " 23:59:59");
+                var endDate = moment($('table.optionTable tr[name="' + selectedAction + '"] input[name="endDate"]').val() + " 00:00:01").add(1, 'day');
                 if (startDate > endDate || startDate > moment() || endDate < moment()) {
                     alert("Please check your date info.");
                     return;
@@ -129,6 +129,7 @@ $('button[bid="bomecoSearch"]').click(function () {
                 html.append(tr.clone().append(td.clone().css("width", "100px").text("ECO ID:")).append(td.clone().text(ecoID(recordset[i].sn)).addClass("selectable")));
                 html.append(tr.clone().append(td.clone().text("Owner")).append(td.clone().text(recordset[i].opname).addClass("selectable")));
                 html.append(tr.clone().append(td.clone().text("Applied Date")).append(td.clone().text(day).addClass("selectable")));
+                html.append(tr.clone().append(td.clone().text("Comments")).append(td.clone().text(Base64.decode(recordset[i].comments)).addClass("selectable")));
                 html.append(tr.clone().append(td.clone().text("Affected rows")).append(td.clone().text(affectedRows.length).addClass("selectable")));
                 html.append(tr.clone().append(td.clone().text("Parent code")).append(td.clone().text(recordset[i].parentgid).addClass("selectable")));
 

@@ -211,6 +211,7 @@ function generateSQL(bom) {
         rows: bom.length
     });
     addResultText("<div class='alert alert-success' role='alert'>数据库语句已经存储。</div>");
+    loglog("GenerateBOMsql", sql_insert + " | " + sql_delete);
     return id;
 }
 
@@ -226,8 +227,8 @@ function savegoback(id) {
         sqlite.update("bom", {
             remark: name
         }, {
-                sn: id
-            });
+            sn: id
+        });
         loadPanel("dashboard");
     });
 }

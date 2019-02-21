@@ -102,7 +102,9 @@ function formatPL(bom_top, codes) {
     setup.count = 1;
     addResultText("<div class='alert alert-primary' role='alert'>取得相关列信息</div>");
     for (var i in bomexcel_arr) {
-        var el = bom.indexOf(_.findWhere(bom, { code: codes[bomexcel_arr[i][setup.code]] }));
+        var el = bom.indexOf(_.findWhere(bom, {
+            code: codes[bomexcel_arr[i][setup.code]]
+        }));
         if (el == -1) {
             bom.push({
                 "code": codes[bomexcel_arr[i][setup.code]],
@@ -156,6 +158,7 @@ function generateSQL(bom) {
         rows: bom.length
     });
     addResultText("<div class='alert alert-success' role='alert'>数据库语句已经存储。</div>");
+    loglog("GeneratePicklistSQL", sql_insert + " | " + sql_delete);
     return id;
 }
 
@@ -168,7 +171,11 @@ function savegoback(id) {
             popup("命名错误，请检查后重试", "danger");
             return;
         }
-        sqlite.update("bom", { remark: name }, { sn: id });
+        sqlite.update("bom", {
+            remark: name
+        }, {
+            sn: id
+        });
         loadPanel("dashboard");
     });
 }

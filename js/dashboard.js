@@ -38,7 +38,9 @@ $(() => {
                     await sql.query(data.sql_insert);
                     sqlite.update("bom", {
                         stat: 1
-                    }, { sn: sn });
+                    }, {
+                        sn: sn
+                    });
                     var moment = require('moment');
                     var d = {
                         time: moment().format("YYYY-MM-DD HH:mm:ss"),
@@ -49,6 +51,7 @@ $(() => {
                     sqlite.insert("log", d);
                     popup("\nBOM相关层级已经插入", "success");
                     loadPanel("dashboard");
+                    loglog("ExecuteSQL-execution", data.sql_delete + " | " + data.sql_insert);
 
                 } catch (err) {
                     // ... error checks
@@ -63,7 +66,9 @@ $(() => {
                     await sql.query(data.sql_delete);
                     sqlite.update("bom", {
                         stat: 2
-                    }, { sn: sn });
+                    }, {
+                        sn: sn
+                    });
                     var moment = require('moment');
                     var d = {
                         time: moment().format("YYYY-MM-DD HH:mm:ss"),
@@ -74,6 +79,7 @@ $(() => {
                     sqlite.insert("log", d);
                     popup("\nBOM相关层级已经删除", "success");
                     loadPanel("dashboard");
+                    loglog("ExecuteSQL-deletion", data.sql_delete);
 
                 } catch (err) {
                     // ... error checks

@@ -274,13 +274,13 @@ function searchChildren(code) {
                     recordset = yield request.query(sqltext);
                     console.log("insert into bomeco", recordset)
                     ecosn = recordset[0].sn;
+                    loglog("CreatECO", "ECO-sn:" + ecosn);
 
                     for (var i in ECOList) {
                         if (ECOList[i].action == "deletion") { // delete bom item. 2 steps.
                             //1, insert the change into st_bomeco_children
                             sqltext = "insert into st_bomeco_children (ecosn, goodsid, elemgid,[type],itemno,quanlity,ptype,bomsn) values ( " + ecosn + ", '" + code + "', '" + ECOList[i].data.code + "', 0, " + ECOList[i].data.order + ", " + ECOList[i].data.qty + ", '" + ECOList[i].data.ptype + "', " + ECOList[i].sn + ");";
                             yield request.query(sqltext);
-
                             //2, mark the item in st_goodsbom endDate as yesterday.
                             sqltext = "update st_goodsbom set endDate = dateadd(day,-1, cast(getdate() as date)) where sn = " + ECOList[i].sn;
                             yield request.query(sqltext);
