@@ -7,7 +7,8 @@
         "start": "electron ./ dev",
         "production": "electron ./ production",
         "package": "electron-packager ./ SuperTools --platform=win32 --arch=x64 --overwrite --prune=true --out=release-builds --icon=icon/icon.ico",
-        "packagelinux": "electron-packager ./ SuperTools --platform=linux --arch=x64 --overwrite --prune=true --out=release-builds --icon=icon/icon.ico"
+        "packagelinux": "electron-packager ./ SuperTools --platform=linux --arch=x64 --overwrite --prune=true --out=release-builds --icon=icon/icon.ico",
+        "packagemac": "electron-packager ./ SuperTools --platform=darwin --arch=x64 --overwrite --prune=true --out=release-builds --icon=icon/icon.icns"
     },
     "author": "David.Wei@schleuniger.com",
     "license": "Schleuniger Software License",
