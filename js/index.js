@@ -143,7 +143,7 @@ $("div.login_form button.btn-success").on("click", function () {
 
 $("a[bid='SQLServerStatus']").on("dblclick", function () {
     if (config.fSQLserver == 4) {
-        const filepath = "db/codes.txt";
+        const filepath = appPath + "/db/codes.txt";
         fs.unlinkSync(filepath);
         config.fSQLserver = 2;
         codesInfo = {};
@@ -229,8 +229,7 @@ function updateSQLserver() {
 
 function connectSQLserver() {
     sql.connect(config.serverconfig, err => {
-        alert(JSON.stringify(err))
-        if (err > 0) {
+        if (err) {
             config.fSQLserver = 3;
         } else {
             config.fSQLserver = 2;
@@ -286,7 +285,7 @@ function getCodesInfo(codes, cb) {
 
 function fetchAllCodes() {
     var flag = false;
-    const filepath = "db/codes.txt";
+    const filepath = appPath + "/db/codes.txt";
     if (!fs.existsSync(filepath)) {
         fs.writeFileSync(filepath, "eyJjb2Rlc0luZm8iOnt9LCJjb2Rlc0xpc3QiOltdfQ==");
         flag = true;
