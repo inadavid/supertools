@@ -122,7 +122,6 @@ $("div.login_form button.btn-success").on("click", function () {
     sqlite.run(sqll);
     new sql.Request().query(sqlt, (err, result) => {
         // ... error checks
-
         console.dir(result)
         if (result.rowsAffected == 0) {
             popup("用户名或密码错误，请检查后再试。", "danger");
@@ -230,9 +229,9 @@ function updateSQLserver() {
 
 function connectSQLserver() {
     sql.connect(config.serverconfig, err => {
-        if (err) {
+        alert(JSON.stringify(err))
+        if (err > 0) {
             config.fSQLserver = 3;
-            console.log(err)
         } else {
             config.fSQLserver = 2;
             fetchAllCodes();
@@ -307,9 +306,9 @@ function fetchAllCodes() {
         else {
             config.fSQLserver = 4;
             updateSQLserver();
-            return;
         }
     }
+
     if (argv[2] != "dev" || flag) {
         sqltxt = "select dbo.l_goods.goodsid,dbo.l_goods.code,dbo.l_goods.name,dbo.l_goods.specs,dbo.l_goodsunit.unitname from dbo.l_goods inner join l_goodsunit on l_goods.goodsid=l_goodsunit.goodsid and l_goods.unitid=l_goodsunit.unitid ;";
         var request = new sql.Request();
@@ -327,7 +326,8 @@ function fetchAllCodes() {
             }
             console.log(codesList.length)
 
-            fs.writeFileSync(filepath, Base64.encode(JSON.stringify({
+            fs.unlinkSync(filepath);
+            if (argv[2] == "dev") fs.writeFileSync(filepath, Base64.encode(JSON.stringify({
                 codesInfo: codesInfo,
                 codesList: codesList
             })));
