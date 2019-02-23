@@ -10,6 +10,10 @@ $(function () {
         $('button[bid="bomecoSearch"]').click();
     }
 
+    new Awesomplete('table.optionTable tr[name="byName"] input[name=name]', {
+        list: ["王福顺", "王世静", "王佳宇", "毕磊", "杨竣轶", "张瑞", "刘洪杰", "魏亮"],
+        minChars: 0
+    });
     var sqltext = "select goodsid from st_bomtop;";
     new sql.Request().query(sqltext, (err, result) => {
         if (err) {

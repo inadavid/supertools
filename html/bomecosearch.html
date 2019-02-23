@@ -1,44 +1,42 @@
 <div class="card ">
-    <div class="card-body">
-        <div class="form-group">
-            <h5>BOM ECO Search</h5>
-            <table class="optionTable">
-                <tr name="byECOcode">
-                    <td> <input type="radio" name="searchtype" value="byECOcode" selected></td>
-                    <td name="byECOcode"> By BOM ECO code</td>
-                    <td name="byECOcode"> <input type="text" name="eco" placeholder="ECO#" class="form-control form-inline"
-                            style="width:200px"></td>
-                </tr>
-                <tr name="byCode">
-                    <td> <input type="radio" name="searchtype" value="byCode" selected></td>
-                    <td name="byCode"> By BOM ECO code</td>
-                    <td name="byCode"> <input type="text" name="code" placeholder="Code#" class="form-control form-inline"
-                            style="width:200px"></td>
-                </tr>
-                <tr name="byName">
-                    <td> <input type="radio" name="searchtype" value="byName" selected></td>
-                    <td name="byName"> By BOM ECO code</td>
-                    <td name="byName"> <input type="text" name="name" placeholder="Operator name" class="form-control form-inline"
-                            style="width:200px"></td>
-                </tr>
-                <tr name="byECOdate">
-                    <td> <input type="radio" name="searchtype" value="byECOdate"></td>
-                    <td name="byECOdate"> By BOM ECO Day or Date range</td>
-                    <td name="byECOdate">
-                        FROM: <input type="date" name="startDate" min='2019-02-01' max='2099-01-01' class="form-control form-inline">
-                        TO: <input type="date" name="endDate" min='2019-02-01' max='2099-01-01' class="form-control form-inline">
-                    </td>
-                </tr>
-                <tr name="byFGcode">
-                    <td> <input type="radio" name="searchtype" value="byFGcode"></td>
-                    <td name="byFGcode"> By FinishGood code (need an applied date)</td>
-                    <td name="byFGcode">
-                        <input type="text" name="fgcode" class="form-control form-inline" placeholder="FG Code#" style="width:200px">
-                    </td>
-                </tr>
-            </table>
-            <button class="btn btn-form btn-primary" bid="bomecoSearch">Search</button>
-        </div>
+    <div class="card-body" style="min-height:900px">
+        <h5>BOM ECO Search</h5>
+        <table class="optionTable">
+            <tr name="byECOcode">
+                <td> <input type="radio" name="searchtype" value="byECOcode" selected></td>
+                <td name="byECOcode"> By BOM ECO#</td>
+                <td name="byECOcode"> <input type="text" name="eco" placeholder="ECO#" class="form-control form-inline"
+                        style="width:200px"></td>
+            </tr>
+            <tr name="byCode">
+                <td> <input type="radio" name="searchtype" value="byCode" selected></td>
+                <td name="byCode"> By BOM Code#</td>
+                <td name="byCode"> <input type="text" name="code" placeholder="Code#" class="form-control form-inline"
+                        style="width:200px"></td>
+            </tr>
+            <tr name="byName">
+                <td> <input type="radio" name="searchtype" value="byName" selected></td>
+                <td name="byName"> By BOM ECO Operator</td>
+                <td name="byName"> <input type="text" name="name" placeholder="Operator name" class="form-control form-inline"
+                        style="width:200px"></td>
+            </tr>
+            <tr name="byECOdate">
+                <td> <input type="radio" name="searchtype" value="byECOdate"></td>
+                <td name="byECOdate"> By BOM ECO Day or Date range</td>
+                <td name="byECOdate">
+                    FROM: <input type="date" name="startDate" min='2019-02-01' max='2099-01-01' class="form-control form-inline">
+                    TO: <input type="date" name="endDate" min='2019-02-01' max='2099-01-01' class="form-control form-inline">
+                </td>
+            </tr>
+            <tr name="byFGcode">
+                <td> <input type="radio" name="searchtype" value="byFGcode"></td>
+                <td name="byFGcode"> By FinishGood code (need an applied date)</td>
+                <td name="byFGcode">
+                    <input type="text" name="fgcode" class="form-control form-inline" placeholder="FG Code#" style="width:200px">
+                </td>
+            </tr>
+        </table>
+        <button class="btn btn-form btn-primary" bid="bomecoSearch">Search</button>
     </div>
     <div bid="ecoBody">
     </div>
