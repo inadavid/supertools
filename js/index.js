@@ -48,6 +48,7 @@ function updateUserinfo() {
 
 $(() => {
     document.getElementById('passwd').focus();
+    $("div[bid=sidebar] a[perm!=0]").hide();
     var sdata = sqlite.run("select * from system where key='serverlist' or key='serverconfig' or key='userid';");
     for (var i in sdata) config[sdata[i].key] = JSON.parse(sdata[i].value);
     if (config.userid == undefined) {
@@ -73,7 +74,6 @@ $(() => {
     win.show();
     if (argv[2] == "dev") win.maximize();
     document.title += " - " + require("electron").remote.getGlobal("version");
-    loadPanel(action);
     tryHost(0);
 
     if (!require("electron").remote.getGlobal("flashClosed")) require("electron").remote.getGlobal("flash").close();
@@ -236,6 +236,8 @@ function connectSQLserver() {
             fetchAllCodes();
         }
         updateSQLserver();
+        if (argv[2] == "dev") updatePerminfo();
+        $("div.login_form input[tag=passwd]").prop("disabled", false).focus();
         // console.log(err)
         // new sql.Request().query("select goodsid from dbo.l_goods where code = '1101001010';", (err, result) => {
         //   // ... error checks
@@ -406,12 +408,20 @@ function IDeco(id, n = 4) {
 
 function updatePerminfo() {
     $("div[bid=sidebar] a[perm]").each(function () {
-        if (user.perm.indexOf(parseInt($(this).attr("perm"))) == -1) $(this).css("display", "none");
+        if (user.perm.indexOf(parseInt($(this).attr("perm"))) == -1) {
+            $(this).hide();
+        } else {
+            $(this).show();
+        }
     });
     $("div[bid=sidebar] div.list-group").each(function () {
-        console.log($(this).find("a[perm]:visible").length)
-        if ($(this).find("a[perm]:visible").length == 0) $(this).css("display", "none");
+        if ($(this).find("a[perm]:visible").length == 0) {
+            $(this).hide();
+        } else {
+            $(this).show();
+        }
     });
+    loadPanel($("div[bid=sidebar] a[perm]:visible:first-child").attr("href"));
 }
 
 function loglog(action, remark) {
