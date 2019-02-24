@@ -15,18 +15,25 @@ $(function () {
 function updatePicklists() {
     var picklistSelect = $('select[name="picklists"]').html("");
     for (var i in picklists) {
-        var option = $("<option>").clone().val(picklists[i].sn).attr("type", picklists[i].type).text(picklists[i].code + " | " + codesInfo[picklists[i].code].name + "(" + codesInfo[picklists[i].code].spec + ") | " + (picklists[i].type == 0 ? "Make" : "Buy"));
+        var option = $("<option>").clone().val(picklists[i].sn).attr("type", picklists[i].type).text(picklists[i].code + " | " + codesInfo[picklists[i].code].name + "(" + codesInfo[picklists[i].code].spec + ") | " + (picklists[i].type == 0 ? "Make" : "Buy") + (picklists[i].reflag == 1 ? " | rebuilt needed" : "")).attr("rebuilt", picklists[i].reflag);
         picklistSelect.append(option);
     };
 }
 $('select[name="picklists"]').on("change", function () {
     $("button[bid=delpl]").prop("disabled", false);
+    $("button[bid=dlpl]").prop("disabled", false);
+    if ($(this).find("option:selected").attr("rebuilt") == "1") $("button[bid=rebuildpl]").prop("disabled", false);
+    else $("button[bid=rebuildpl]").prop("disabled", true);
 });
 
 $('input[name="newpl"]').on("keyup", function () {
     var val = $('input[name="newpl"]').val().trim();
     $("span[bid=spec]").text("");
-    if (codesList.indexOf(val) != -1) $("span[bid=spec]").text(codesInfo[val].name + " | " + codesInfo[val].spec);
+    if (codesList.indexOf(val) != -1) {
+        $("span[bid=spec]").text(codesInfo[val].name + " | " + codesInfo[val].spec);
+        $("button[bid=newpl]").prop("disabled", false);
+    } else
+        $("button[bid=newpl]").prop("disabled", true);
 })
 $('input[name="newpl"]').on("keypress", function (e) {
     if (e.which == 13) $("button[bid=newpl]").trigger("click");
@@ -58,10 +65,14 @@ $("button[bid=newpl]").click(function () {
                     code: plcode.val().trim(),
                     date: moment().format("YYYY-MM-DD HH:mm:ss"),
                     opid: user.id,
-                    type: type
+                    type: type,
+                    reflag: 1
                 });
                 plcode.prop("disabled", false).val("");
                 updatePicklists();
+                $("span[bid=spec]").text("");
+                $("button[bid=newpl]").prop("disabled", true);
+                loglog("PicklistAdd", "sn:" + result.recordset[0].sn + "; code:" + plcode.val().trim());
             });
 
         } else {
@@ -80,8 +91,11 @@ $("button[bid=delpl]").click(function () {
     if (!confirm("Are you sure you want to delete code " + item.code + " from plicklist generation list?")) return;
 
     new sql.Request().query("delete from st_picklists where sn = " + sn + "; ", (err) => {
+        loglog("PicklistDelete", "sn:" + sn + "; code:" + item.code);
         picklists.splice(picklists.indexOf(item), 1);
         $("button[bid=delpl]").prop("disabled", true);
+        $("button[bid=dlpl]").prop("disabled", true);
+        $("button[bid=rebuildpl]").prop("disabled", true);
         updatePicklists();
     });
 });

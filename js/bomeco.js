@@ -300,6 +300,9 @@ function searchChildren(code) {
                     yield request.query(sqltext);
                     coConn.close();
                     popup("ECO has been applied to BOM", "success");
+                    setTimeout(function () {
+                        checkPicklistUpdate(ecosn);
+                    }, 10);
                     loadPanel("bomecosearch");
 
                 } catch (ex) {

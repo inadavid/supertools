@@ -1,7 +1,7 @@
 {
     "name": "supertools",
-    "version": "1.5.1",
-    "description": "SuperData SQL generation tools",
+    "version": "1.6.0",
+    "description": "SuperData addon tools",
     "main": "index.js",
     "scripts": {
         "start": "electron ./ dev",

@@ -399,3 +399,8 @@ input:checked+.slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+select option[rebuilt="1"] {
+  background: #ffc0a3;
+  font-weight: bold;
+}
