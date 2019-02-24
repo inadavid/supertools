@@ -425,6 +425,7 @@ function loglog(action, remark) {
 function checkPicklistUpdate(picklist = false, ecosn = false) {
     co(function* () {
         try {
+            var picklistUpdate = [];
             var coConn = new cosql.Connection(config.serverconfig);
             yield coConn.connect();
             var request = new cosql.Request(coConn);
@@ -434,18 +435,31 @@ function checkPicklistUpdate(picklist = false, ecosn = false) {
                 sqltxt += " code='' "
             }
             if (picklist && typeof (picklist) === "string") sqltxt += "code = '" + picklist + "' ";
-            if (picklist === false) sqltxt += " true ";
+            if (picklist === false) sqltxt += " code!='' ";
 
             var picklists = yield request.query(sqltxt);
-            for (var j in picklists) {
 
-            }
 
             sqltxt = " select * from st_bomeco where ";
             if (ecosn && typeof (ecosn) === "number") sqltxt += " sn = " + ecosn + " and ";
             sqltxt += " status = 1;"
-
-
+            var ecolists = yield request.query(sqltxt);
+            var finalSQL = "update st_bomeco set status = 2 where ecosn = 0"
+            for (var k in ecolists) {
+                //select all relevant parents that connected to relevant picklist codes.
+                sqltxt = "WITH CTE AS (SELECT b.*,cast('" + ecolists[k].parentgid + "' as varchar(2000)) as pid , lvl=1 FROM dbo.st_goodsbom as b WHERE goodsid='" + ecolists[k].parentgid + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1 FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid) select c.goodsid from CTE as c where ";
+                for (var j in picklists) {
+                    sqltxt += " c.goodsid='" + picklists[j].code + "' or ";
+                }
+                sqltxt += " c.goodsid='' group by c.goodsid;";
+                var tmprs = yield request.query(sqltxt);
+                for (var l in tmprs) picklistUpdate.push(tmprs[l].goodsid);
+                finalSQL += " or ecosn = " + ecolists[k].sn;
+            }
+            finalSQL += "; update st_picklists set reflag =1 where code = '' ";
+            for (var m in picklistUpdate) finalSQL += " or code = '" + picklistUpdate[m] + "' ";
+            finalSQL += ";";
+            console.log(finalSQL)
         } catch (ex) {
             // ... error checks
             console.error(ex)
