@@ -421,3 +421,34 @@ function loglog(action, remark) {
         console.log("sql executed:", sqlt);
     });
 }
+
+function checkPicklistUpdate(picklist = false, ecosn = false) {
+    co(function* () {
+        try {
+            var coConn = new cosql.Connection(config.serverconfig);
+            yield coConn.connect();
+            var request = new cosql.Request(coConn);
+            var sqltxt = "select * from st_picklists where ";
+            if (picklist && Array.isArray(picklist)) {
+                for (var i in picklist) sqltxt += " code = '" + picklist[i] + "' or ";
+                sqltxt += " code='' "
+            }
+            if (picklist && typeof (picklist) === "string") sqltxt += "code = '" + picklist + "' ";
+            if (picklist === false) sqltxt += " true ";
+
+            var picklists = yield request.query(sqltxt);
+            for (var j in picklists) {
+
+            }
+
+            sqltxt = " select * from st_bomeco where ";
+            if (ecosn && typeof (ecosn) === "number") sqltxt += " sn = " + ecosn + " and ";
+            sqltxt += " status = 1;"
+
+
+        } catch (ex) {
+            // ... error checks
+            console.error(ex)
+        }
+    })();
+}

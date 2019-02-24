@@ -1,15 +1,25 @@
 <div class="card ">
     <div class="card-body">
-        <div class="form-group">
-            <h5>Picklist management</h5>
-            <select multiple class="form-control" name="picklists">
-                <option>Loading picklist now</option>
-            </select>
+        <h5>Picklist management</h5>
+        <select multiple class="form-control" name="picklists" style="min-height:300px">
+            <option>Loading picklist now</option>
+        </select>
 
-            <label for="newpl">New picklist</label>
-            <input type="text" id="newpl" name="newpl" class="form-control">
-            <button class="btn btn-form btn-primary" bid="newpl">Search</button>
+    </div>
+    <div class="card-body">
+        <h5>Add code# as new picklist</h5>
+        <input type="text" name="newpl" class="form-control form-inline" style="width:200px; display:inline-block;">
+        <div style="display:inline-block;">
+            <span style="font-size: 16px;font-weight: bold">Make</span>
+            <label class="switch form-control">
+                <input type="checkbox" bid="type" value="0">
+                <span class="slider"></span>
+            </label>
+            <span style="font-size: 16px;font-weight: bold">Buy</span>
         </div>
+        <span bid="spec" style="margin-left:20px; font-size: 16px;"></span> <br>
+        <button class="btn btn-form btn-primary" bid="newpl">Search</button>
+        <button class="btn btn-form btn-danger" bid="delpl" disabled>Delete</button>
     </div>
 </div>
 <script src="../js/picklist.js"></script>

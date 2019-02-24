@@ -1,8 +1,20 @@
 var displayBOM = [];
 var appliedDate = '2019-02-01';
+var searchHistory = [];
+var historyLength = 5;
 $(function () {
     var moment = require('moment');
     appliedDate = moment().format("YYYY-MM-DD");
+
+    var sdata = sqlite.run("select value from system where key='bomsearchhistory';");
+    if (sdata.length != 0) {
+        searchHistory = JSON.parse(Base64.decode(sdata[0]["value"]));
+        searchHistories();
+    } else {
+        sqlite.run("insert into system (key,value) values ('bomsearchhistory','W10=');");
+        $('div[bid="searchHistory"]').hide();
+    }
+
     $('input[name="appliedDate"]').val(appliedDate);
     var sqltext = "select goodsid from st_bomtop;";
     new sql.Request().query(sqltext, (err, result) => {
@@ -23,7 +35,6 @@ $(function () {
             maxItems: 15,
         });
     });
-
 
     $(document).on("mousedown", "table.treetable tbody tr", function (e) {
         if (e.button == 2) {
@@ -46,7 +57,7 @@ $("input[bid=bomtop]").on("keypress", function (event) {
 })
 
 $("button[bid=bomSearch]").on("click", function () {
-    var val = $("input[bid=bomtop]").val();
+    var val = $("input[bid=bomtop]").val().trim();
     var spec = $("span[bid=codespec]");
 
     spec.css("margin-left", "50px").css("margin-right", "50px")
@@ -64,8 +75,38 @@ $("button[bid=bomSearch]").on("click", function () {
         searchBOM(val);
         searchParent(val);
         searchFG(val);
+
+        //history of the button:
+
+        if (searchHistory.indexOf(val) == -1) {
+            searchHistory.push(val);
+            if (searchHistory.length > historyLength) searchHistory.splice(0, 1);
+        } else {
+            searchHistory.splice(searchHistory.indexOf(val), 1);
+            searchHistory.push(val);
+        }
+        sqlite.run("update system set value = '" + Base64.encode(JSON.stringify(searchHistory)) + "' where key='bomsearchhistory';");
+        searchHistories();
     }
 })
+
+function searchHistories() {
+    var historyHTML = $('div[bid="searchHistory"]');
+    historyHTML.hide();
+    if (searchHistory.length == 0) return;
+    historyHTML.html("<label style='margin-right:20px'>Search history:</label>");
+    for (var n = searchHistory.length - 1; n >= 0; n--) {
+        var span = $("<button bid='searchHistory' class='btn btn-form btn-secondary btn-sm'>").text(searchHistory[n] + " | " + codesInfo[searchHistory[n]].name).attr("code", searchHistory[n]).css("margin", "5px");
+        historyHTML.append(span);
+    }
+    historyHTML.show();
+
+    $("button[bid='searchHistory']").click(function () {
+        var code = $(this).attr("code").trim();
+        $("input[bid=bomtop]").val(code);
+        $("button[bid=bomSearch]").trigger("click");
+    })
+}
 
 function reOrderBOM(dbom, top) { // rearrange order of BOM for display
     var tmpArr = [];
