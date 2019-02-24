@@ -195,7 +195,7 @@ function generateSQL(bom) {
         sql_insert += "; insert into st_bomtop (goodsid) values ( '" + bom_top + "') ";
         sql_delete += "; delete from st_bomtop where goodsid='" + bom_top + "' ";
     }
-    sql_insert += "; insert into st_picklists (code, date, opid,type) values ('" + bom_top + "', GETDATE(), " + user.id + ", 0);";
+    sql_insert += "; insert into st_picklists (code, date, opid,type) values ('" + bom_top + "', GETDATE(), " + user.id + ", 0); insert into st_bomeco (parentgid, comments, date, data, userid, status) values ( '" + bom_top + "', '" + Base64.encode("New BOM upload") + "', GETDATE(), '" + Base64.encode(JSON.stringify([])) + "', " + user.id + " ,1 );";
     sql_delete += "; delete from st_picklists where code = '" + bom_top + "';";
     addResultText("<div class='alert alert-success' role='alert'>数据库语句已经生成。</div>");
     var moment = require('moment');
