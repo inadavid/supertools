@@ -41,6 +41,7 @@ var user = {};
 var ecosn = 0;
 const rejectTimeDiff = 30; //30min time difference allowed.
 var allcodesHint = [];
+var shifted = false;
 
 function updateUserinfo() {
     $("a[bid=userinfo]").text("User:" + user.name + "; UID:" + user.id)
@@ -78,6 +79,13 @@ $(() => {
 
     if (!require("electron").remote.getGlobal("flashClosed")) require("electron").remote.getGlobal("flash").close();
 });
+
+$(document).on("keydown", function (e) {
+    if (e.which == 16) shifted = true;
+})
+$(document).on("keyup", function (e) {
+    shifted = false;
+})
 
 $("div[bid=sidebar] a").on("click", (e) => {
     var ts = $(e.currentTarget)
@@ -470,4 +478,69 @@ function checkPicklistUpdate(eco = false) {
             console.error(ex)
         }
     })();
+}
+
+function getPicklist(code, type) {
+    var data = co(function* () {
+        try {
+            var coConn = new cosql.Connection(config.serverconfig);
+            yield coConn.connect();
+            var appliedDate = moment().format("YYYY-MM-DD");
+            var request = new cosql.Request(coConn);
+
+            var rdata = [];
+            var sqltxt = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.quantity*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid where b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT ptype as ProchasingType, elemgid as Code, quantity as Qty  FROM CTE order by pid asc,itemno asc;";
+
+            var dbom = yield request.query(sqltxt);
+            dbom = _.sortBy(dbom, 'Code')
+            var count = 1;
+            for (var i in dbom) {
+                if (type == 0 && dbom[i].ProchasingType != "B" && dbom[i].ProchasingType != "b") continue;
+                if (type == 1 && dbom[i].ProchasingType != "P" && dbom[i].ProchasingType != "p") continue;
+                if (dbom[i].Qty == 0) continue;
+                var oobj = _.find(rdata, function (obj) {
+                    return obj.Code == dbom[i].Code;
+                })
+                if (oobj == undefined) {
+                    var nobj = {};
+                    nobj.SN = count++;
+                    nobj.Code = dbom[i].Code;
+                    nobj.Qty = dbom[i].Qty;
+                    nobj.Unit = codesInfo[dbom[i].Code].unit;
+                    nobj.Name = codesInfo[dbom[i].Code].name;
+                    nobj.Spec = codesInfo[dbom[i].Code].spec;
+                    rdata.push(nobj);
+                } else {
+                    oobj.Qty += dbom[i].Qty;
+                }
+            }
+            rdata.push({
+                SN: "===============END OF PICKLIST " + code + "(" + (type == 0 ? "MAKE" : "BUY") + ")===============",
+                Code: "",
+                Qty: "",
+                Unit: "",
+                Name: "",
+                Spec: "",
+            });
+            var path = require('path');
+            var toLocalPath = path.resolve(app.getPath("documents"));
+            var filepath = dialog.showSaveDialog({
+                defaultPath: toLocalPath,
+                title: 'Save exported Picklist for ' + code,
+                filters: [{
+                    name: 'CSV (Comma-Separated Values) for Excel',
+                    extensions: ['csv']
+                }]
+            });
+            if (filepath !== undefined) {
+                savedata(filepath, rdata, true);
+            }
+        } catch (ex) {
+            // ... error checks
+            console.error(ex)
+        }
+    })();
+
+    console.log("about to return:", data)
+    return data;
 }

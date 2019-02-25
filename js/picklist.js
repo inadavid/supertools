@@ -15,7 +15,7 @@ $(function () {
 function updatePicklists() {
     var picklistSelect = $('select[name="picklists"]').html("");
     for (var i in picklists) {
-        var option = $("<option>").clone().val(picklists[i].sn).attr("type", picklists[i].type).text(picklists[i].code + " | " + codesInfo[picklists[i].code].name + "(" + codesInfo[picklists[i].code].spec + ") | " + (picklists[i].type == 0 ? "Make" : "Buy") + (picklists[i].reflag == 1 ? " | rebuilt needed" : "")).attr("rebuilt", picklists[i].reflag);
+        var option = $("<option>").clone().val(picklists[i].sn).attr("type", picklists[i].type).attr("code", picklists[i].code).text(picklists[i].code + " | " + codesInfo[picklists[i].code].name + "(" + codesInfo[picklists[i].code].spec + ") | " + (picklists[i].type == 0 ? "Make" : "Buy") + (picklists[i].reflag == 1 ? " | rebuilt needed" : "")).attr("rebuilt", picklists[i].reflag);
         picklistSelect.append(option);
     };
 }
@@ -49,8 +49,8 @@ $("button[bid=newpl]").click(function () {
         return;
     }
     if (_.find(picklists, function (obj) {
-            return obj.code == plcode.val().trim();
-        }) != undefined) {
+        return obj.code == plcode.val().trim();
+    }) != undefined) {
         alert("Code# " + plcode.val() + " already existed in picklist code list.");
         plcode.prop("disabled", false);
         return;
@@ -98,5 +98,15 @@ $("button[bid=delpl]").click(function () {
         $("button[bid=rebuildpl]").prop("disabled", true);
         updatePicklists();
     });
+});
+
+$("button[bid=dlpl]").click(function () {
+    var code = $('select[name="picklists"]').find("option:selected").attr("code");
+    var type = parseInt($('select[name="picklists"]').find("option:selected").attr("type"));
+    getPicklist(code, type);
+});
+
+$("button[bid=rebuildpl]").click(function () {
+    alert("Under construction.")
 });
 //////////////////////old ///////////////////

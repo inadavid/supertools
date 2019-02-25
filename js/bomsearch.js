@@ -235,56 +235,9 @@ function showBOM(dbom) {
 
     $("button[bid=exportPL]").click(function () {
         var top = $("input[bid=bomtop]").val().trim();
-        var cloneArr = JSON.parse(JSON.stringify(dbom));
-        var rdata = [{
-            SN: "===============BEGIN OF PICKLIST " + top + "===============",
-            Code: "",
-            Qty: "",
-            Unit: "",
-            Name: "",
-            Spec: "",
-        }];
-        var count = 1;
-        for (var i in cloneArr) {
-            if (cloneArr[i].ProchasingType != "B" && cloneArr[i].ProchasingType != "b") continue;
-            if (cloneArr[i].rQty == 0) continue;
-            var oobj = _.find(rdata, function (obj) {
-                return obj.Code == cloneArr[i].Code;
-            })
-            if (oobj == undefined) {
-                var nobj = {};
-                nobj.SN = count++;
-                nobj.Code = cloneArr[i].Code;
-                nobj.Qty = cloneArr[i].rQty;
-                nobj.Unit = cloneArr[i].Unit;
-                nobj.Name = cloneArr[i].Name;
-                nobj.Spec = cloneArr[i].Spec;
-                rdata.push(nobj);
-            } else {
-                oobj.Qty += cloneArr[i].rQty;
-            }
-        }
-        rdata.push({
-            SN: "===============END OF PICKLIST " + top + "===============",
-            Code: "",
-            Qty: "",
-            Unit: "",
-            Name: "",
-            Spec: "",
-        });
-        var path = require('path');
-        var toLocalPath = path.resolve(app.getPath("documents"));
-        var filepath = dialog.showSaveDialog({
-            defaultPath: toLocalPath,
-            title: 'Save exported Picklist for ' + $("input[bid=bomtop]").val(),
-            filters: [{
-                name: 'CSV (Comma-Separated Values) for Excel',
-                extensions: ['csv']
-            }]
-        });
-        if (filepath !== undefined) {
-            savedata(filepath, rdata, true);
-        }
+        console.log(shifted)
+        if (shifted) getPicklist(top, 1);
+        else getPicklist(top, 0);
     });
 
 
