@@ -1,0 +1,34 @@
+<div class="card" step="1">
+    <div class="card-body">
+        <div class="form-group">
+            <h5>Drawing import</h5>
+            <button class="btn btn-form btn-primary btn-sm" bid="dfolder">Select drawing folder</button>
+            <span bid="dfolder" style="font-size: 16px; margin-left:20px; background: #efefef"></span><br>
+
+            <h5>Drawing filename and code info</h5>
+            <textarea class="form-control" rows="10" meta="dinfo"></textarea>
+            <select bid="dtype" class="form-control form-inline">
+                <option value='0'>2D PDF drawings</option>
+                <option value='1'>2D Solidworks drawings</option>
+                <option value='2'>3D eDrawings drawings</option>
+                <option value='3'>3D Solidworks drawings</option>
+            </select>
+
+            <button class="btn btn-form btn-primary" bid="submit">Submit</button>
+        </div>
+    </div>
+</div>
+<div class="card" step="2" style="display: none">
+    <div class="card-body">
+        <h5>Drawing information preview before upload</h5>
+
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-form btn-primary btn-sm" meta="next" step="2">下一步</button>
+        </div>
+    </div>
+</div>
+
+
+<script src="../js/lib/SheetClip.min.js"></script>
+<script src="../js/drawingup.js"></script>

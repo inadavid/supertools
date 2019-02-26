@@ -189,6 +189,7 @@ function tryHost(c) {
                 config.fSQLserver = 1;
                 updateSQLserver();
                 config.serverconfig.server = config.SQLserver;
+                fs.writeFileSync(configFile, ini.stringify(config));
                 connectSQLserver();
             } else {
                 return tryHost(c + 1)
