@@ -1,4 +1,3 @@
-const sqlite = require('sqlite-sync');
 var _ = require("underscore");
 var appPath = require("electron").remote.getGlobal("appPath");
 var argv = require("electron").remote.getGlobal("argv");
@@ -6,7 +5,6 @@ const dialog = require('electron').remote.dialog;
 const app = require('electron').remote.app;
 const clipboard = require('electron').remote.clipboard;
 const moment = require('moment');
-sqlite.connect(appPath + '/db/db.sqlite');
 const sql = require('mssql');
 var co = require('co');
 var cosql = require('co-mssql');
@@ -16,10 +14,13 @@ const {
 if (Base64 == null) var Base64 = require('js-base64').Base64;
 var win = require("electron").remote.getCurrentWindow();
 const fs = require('fs');
+const ini = require('ini');
+var configFile = appPath + '/config.ini';
+if (argv[2] != "dev") configFile = appPath + '/../config.ini';
+var config = ini.parse(fs.readFileSync(configFile, 'utf-8'));
 
 
 var action = "dashboard";
-var config = {};
 var bomexcel_arr = [];
 var bom = [];
 var bom_top;
@@ -50,14 +51,7 @@ function updateUserinfo() {
 $(() => {
     document.getElementById('passwd').focus();
     $("div[bid=sidebar] a[perm!=0]").hide();
-    var sdata = sqlite.run("select * from system where key='serverlist' or key='serverconfig' or key='userid';");
-    for (var i in sdata) config[sdata[i].key] = JSON.parse(sdata[i].value);
-    if (config.userid == undefined) {
-        config.userid = [];
-        sqlite.run("insert into system (key,value) values ('userid','[]');");
-    }
-    if (config.userid.length == 0) config.userid[0] = "";
-    $("div.login_form input[tag=userid]").val(config.userid[0]);
+    $("div.login_form input[tag=userid]").val(config.userid);
     if (argv[2] != "dev") {
         $("#login_form").modal({
             escapeClose: false,
@@ -126,8 +120,8 @@ $("div.login_form button.btn-success").on("click", function () {
     $("div.login_form button.btn-success").prop("disabled", true);
     var now = moment().format("YYYY-MM-DD HH:mm:ss");
     sqlt = "select win8,opid,(SELECT cast(getdate() - cast('" + now + "' as datetime) as float)*60*24) as timediff from m_operator where opname='" + userid + "' and oppassword='" + passwd + "'";
-    sqll = "update system set value='[\"" + userid + "\"]' where key='userid';";
-    sqlite.run(sqll);
+    config.userid = userid;
+    fs.writeFileSync(configFile, ini.stringify(config));
     new sql.Request().query(sqlt, (err, result) => {
         // ... error checks
         console.dir(result)
@@ -151,8 +145,6 @@ $("div.login_form button.btn-success").on("click", function () {
 
 $("a[bid='SQLServerStatus']").on("dblclick", function () {
     if (config.fSQLserver == 4) {
-        const filepath = appPath + "/db/codes.txt";
-        fs.unlinkSync(filepath);
         config.fSQLserver = 2;
         codesInfo = {};
         codesList = [];
@@ -296,21 +288,32 @@ function getCodesInfo(codes, cb) {
 function fetchAllCodes() {
     var flag = false;
     const filepath = appPath + "/db/codes.txt";
-    if (!fs.existsSync(filepath)) {
-        fs.writeFileSync(filepath, "eyJjb2Rlc0luZm8iOnt9LCJjb2Rlc0xpc3QiOltdfQ==");
-        flag = true;
-    } else {
+    // if (!fs.existsSync(filepath)) {
+    //     fs.writeFileSync(filepath, "eyJjb2Rlc0luZm8iOnt9LCJjb2Rlc0xpc3QiOltdfQ==");
+    //     flag = true;
+    // } else {
+    //     var data = JSON.parse(Base64.decode(fs.readFileSync(filepath)));
+    //     if (data.codesInfo) codesInfo = data.codesInfo;
+    //     if (data.codesList) codesList = data.codesList;
+    //     // var tmd = [];
+    //     // for (var i in codesInfo) {
+    //     //     codesInfo[i].codenumber = i;
+    //     //     tmd.push(codesInfo[i]);
+    //     // }
+    //     // var td = data2csv(tmd);
+    //     // console.log(tmd)
+    //     // fs.writeFileSync("db/codes.new.csv", td);
+    //     if (codesList.length < 100) flag = true;
+    //     else {
+    //         config.fSQLserver = 4;
+    //         updateSQLserver();
+    //     }
+    // }
+    if (argv[2] == "dev") {
         var data = JSON.parse(Base64.decode(fs.readFileSync(filepath)));
         if (data.codesInfo) codesInfo = data.codesInfo;
         if (data.codesList) codesList = data.codesList;
-        // var tmd = [];
-        // for (var i in codesInfo) {
-        //     codesInfo[i].codenumber = i;
-        //     tmd.push(codesInfo[i]);
-        // }
-        // var td = data2csv(tmd);
-        // console.log(tmd)
-        // fs.writeFileSync("db/codes.new.csv", td);
+
         if (codesList.length < 100) flag = true;
         else {
             config.fSQLserver = 4;
@@ -335,7 +338,6 @@ function fetchAllCodes() {
             }
             console.log(codesList.length)
 
-            fs.unlinkSync(filepath);
             if (argv[2] == "dev") fs.writeFileSync(filepath, Base64.encode(JSON.stringify({
                 codesInfo: codesInfo,
                 codesList: codesList
@@ -489,7 +491,7 @@ function getPicklist(code, type) {
             var request = new cosql.Request(coConn);
 
             var rdata = [];
-            var sqltxt = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.quantity*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid where b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT ptype as ProchasingType, elemgid as Code, quantity as Qty  FROM CTE order by pid asc,itemno asc;";
+            var sqltxt = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.quantity*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid where b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT ptype as ProchasingType, elemgid as Code, rQty as Qty  FROM CTE order by pid asc,itemno asc;";
 
             var dbom = yield request.query(sqltxt);
             dbom = _.sortBy(dbom, 'Code')

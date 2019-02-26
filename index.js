@@ -8,7 +8,7 @@ const {
 
 let win;
 let flash;
-global.version = "V0160";
+global.version = "V0162";
 global.appPath = app.getAppPath();
 global.argv = process.argv;
 global.flashClosed = false;

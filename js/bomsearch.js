@@ -5,13 +5,13 @@ var historyLength = 5;
 $(function () {
     var moment = require('moment');
     appliedDate = moment().format("YYYY-MM-DD");
-
-    var sdata = sqlite.run("select value from system where key='bomsearchhistory';");
-    if (sdata.length != 0) {
-        searchHistory = JSON.parse(Base64.decode(sdata[0]["value"]));
+    config = ini.parse(fs.readFileSync(configFile, 'utf-8'));
+    searchHistory = JSON.parse(Base64.decode(config.bomsearchhistory));
+    if (searchHistory.length > 0) {
         searchHistories();
     } else {
-        sqlite.run("insert into system (key,value) values ('bomsearchhistory','W10=');");
+        config.bomsearchhistory = 'W10=';
+        fs.writeFileSync(configFile, ini.stringify(config));
         $('div[bid="searchHistory"]').hide();
     }
 
@@ -85,7 +85,8 @@ $("button[bid=bomSearch]").on("click", function () {
             searchHistory.splice(searchHistory.indexOf(val), 1);
             searchHistory.push(val);
         }
-        sqlite.run("update system set value = '" + Base64.encode(JSON.stringify(searchHistory)) + "' where key='bomsearchhistory';");
+        config.bomsearchhistory = Base64.encode(JSON.stringify(searchHistory));
+        fs.writeFileSync(configFile, ini.stringify(config));
         searchHistories();
     }
 })

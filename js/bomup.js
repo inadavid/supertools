@@ -73,18 +73,19 @@ $("button[type=submit][step=2]").on("click", (e) => {
                 }
                 bomtopArr = [bom_top];
                 bom = formatBOM(bom_top);
-                if (argv[2] == "dev") { //export a temp file for check
-                    var savebom = JSON.parse(JSON.stringify(bom));
-                    for (var i in savebom) {
-                        savebom[i].Name = codesInfo[savebom[i].code].name;
-                        savebom[i].Spec = codesInfo[savebom[i].code].spec
-                    }
-                    savedata(appPath + '/db/' + bom_top + '.csv', savebom);
-                    //return;
-                }
-                var id = generateSQL(bom);
-                if (!id) popup("本地数据保存失败", "danger");
-                else savegoback(id);
+                // if (argv[2] == "dev") { //export a temp file for check
+                //     var savebom = JSON.parse(JSON.stringify(bom));
+                //     for (var i in savebom) {
+                //         savebom[i].Name = codesInfo[savebom[i].code].name;
+                //         savebom[i].Spec = codesInfo[savebom[i].code].spec
+                //     }
+                //     savedata(appPath + '/db/' + bom_top + '.csv', savebom);
+                //     //return;
+                // }
+                // var id = 
+                generateSQL(bom);
+                // if (!id) popup("本地数据保存失败", "danger");
+                // else savegoback(id);
             });
         } else if (rtn.err == 1) {
             var text = "<h5 color='red'><strong>发生错误：以下物料号在系统中不存在！请检查 </strong></h5> <textarea class='alert alert-danger' role='alert' style='width:100%;height:100px'>";
@@ -197,38 +198,40 @@ function generateSQL(bom) {
     }
     sql_insert += "; insert into st_picklists (code, date, opid,type) values ('" + bom_top + "', GETDATE(), " + user.id + ", 0); insert into st_bomeco (parentgid, comments, date, data, userid, status) values ( '" + bom_top + "', '" + Base64.encode("New BOM upload") + "', GETDATE(), '" + Base64.encode(JSON.stringify([])) + "', " + user.id + " ,1 );";
     sql_delete += "; delete from st_picklists where code = '" + bom_top + "';";
-    addResultText("<div class='alert alert-success' role='alert'>数据库语句已经生成。</div>");
-    var moment = require('moment');
-    var id = sqlite.insert('bom', {
-        time: moment().format("YYYY-MM-DD HH:mm:ss"),
-        bom_top: bom_top,
-        sql_insert: sql_insert,
-        sql_delete: sql_delete,
-        stat: 0,
-        remark: "new bom @" + moment().format("YYMMDD_HHmmss"),
-        json_bom: JSON.stringify(bom),
-        json_excel: JSON.stringify(bomexcel_arr),
-        rows: bom.length
+    addResultText("<div class='alert alert-success' role='alert'>数据库语句已经生成。执行数据导入中……</div>");
+    // var moment = require('moment');
+    // var id = sqlite.insert('bom', {
+    //     time: moment().format("YYYY-MM-DD HH:mm:ss"),
+    //     bom_top: bom_top,
+    //     sql_insert: sql_insert,
+    //     sql_delete: sql_delete,
+    //     stat: 0,
+    //     remark: "new bom @" + moment().format("YYMMDD_HHmmss"),
+    //     json_bom: JSON.stringify(bom),
+    //     json_excel: JSON.stringify(bomexcel_arr),
+    //     rows: bom.length
+    // });
+    new sql.Request().query(sql_insert, (err, result) => {
+        addResultText("<div class='alert alert-success' role='alert'>数据库语句已经导入！</div>");
+        loglog("GenerateBOMsql", sql_insert + " | " + sql_delete);
     });
-    addResultText("<div class='alert alert-success' role='alert'>数据库语句已经存储。</div>");
-    loglog("GenerateBOMsql", sql_insert + " | " + sql_delete);
-    return id;
+    // return id;
 }
 
-function savegoback(id) {
-    addResultText('<input class="form-control" meta="bom_name" placeholder="命名本次导入内容" value="">');
-    addResultText('<button type="submit" class="btn btn-form btn-primary btn-sm" meta="next" step="3">更名并返回控制台</button>');
-    $("button[meta=next][step=3]").on("click", () => {
-        var name = $("input[meta=bom_name]").val().trim();
-        if (name.length == 0) {
-            popup("命名错误，请检查后重试", "danger");
-            return;
-        }
-        sqlite.update("bom", {
-            remark: name
-        }, {
-            sn: id
-        });
-        loadPanel("dashboard");
-    });
-}
+// function savegoback(id) {
+//     addResultText('<input class="form-control" meta="bom_name" placeholder="命名本次导入内容" value="">');
+//     addResultText('<button type="submit" class="btn btn-form btn-primary btn-sm" meta="next" step="3">更名并返回控制台</button>');
+//     $("button[meta=next][step=3]").on("click", () => {
+//         var name = $("input[meta=bom_name]").val().trim();
+//         if (name.length == 0) {
+//             popup("命名错误，请检查后重试", "danger");
+//             return;
+//         }
+//         sqlite.update("bom", {
+//             remark: name
+//         }, {
+//             sn: id
+//         });
+//         loadPanel("dashboard");
+//     });
+// }
