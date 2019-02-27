@@ -43,6 +43,7 @@ var ecosn = 0;
 const rejectTimeDiff = 30; //30min time difference allowed.
 var allcodesHint = [];
 var shifted = false;
+var drawingSN = 0;
 
 function updateUserinfo() {
     $("a[bid=userinfo]").text("User:" + user.name + "; UID:" + user.id)
@@ -532,4 +533,35 @@ function getPicklist(code, type) {
 
     console.log("about to return:", data)
     return data;
+}
+
+function displayDrawing(dsn) {
+    var tmppath = app.getPath("temp") + "/SuperTools";
+    if (!fs.existsSync(tmppath)) fs.mkdirSync(tmppath);
+    new sql.Request().query("select * from st_drawings where sn = " + dsn + ";", (err, result) => {
+        if (err) {
+            console.error(err);
+            alert("An error occur when open drawing.\n" + JSON.stringify(err));
+            return;
+        }
+        var mysql = require('mysql');
+        var connection = mysql.createConnection({
+            host: config.mysqlServer,
+            user: config.serverconfig.user,
+            password: config.serverconfig.password,
+            database: config.serverconfig.user
+        });
+        connection.connect();
+        query = "select data from st_drawings where dsn=" + dsn;
+        filepath = tmppath + "/" + result.recordset[0].filename;
+        connection.query(query, function (error, results, fields) {
+            fs.writeFileSync(filepath, results[0].data);
+            const {
+                shell
+            } = require('electron');
+            // Open a local file in the default app
+            shell.openItem(filepath);
+        });
+        connection.close();
+    });
 }

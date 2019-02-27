@@ -43,3 +43,9 @@
 .icon-open:before {
   content: "\e607";
 }
+
+span.iconfont {
+  cursor: pointer;
+  margin-left: 2px;
+  margin-right: 2px;
+}
