@@ -20,6 +20,7 @@
         "js-base64": "^2.4.9",
         "moment": "^2.22.2",
         "mssql": "^4.2.1",
+        "mysql": "^2.16.0",
         "ping": "^0.2.2",
         "sqlite-sync": "^0.3.8",
         "underscore": "^1.9.1"

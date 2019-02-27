@@ -146,12 +146,12 @@ function showBOM(dbom) {
         .append("<th style='width:10px'>PType</th>")
         .append("<th style='width:150px'>Name</th>")
         .append("<th style='width:150px'>Desc</th>")
-        .append("<th style='width:20px'>PFEP</th>")
+        .append("<th style='width:20px'>Drawing</th>")
     table.append(thead);
     var tbody = $("<tbody>");
     var count = 1;
     for (var i in dbom) {
-        var tr = $("<tr type='bomitem' data-tt-id='" + dbom[i].pid + "." + dbom[i].Code + "' data-tt-parent-id='" + dbom[i].pid + "' class='" + (plist.indexOf(dbom[i].Code) == -1 ? "" : "branch") + "'>")
+        var tr = $("<tr type='bomitem' data-tt-id='" + (dbom[i].pid ? dbom[i].pid + "." : "") + dbom[i].Code + "' data-tt-parent-id='" + dbom[i].pid + "' class='" + (plist.indexOf(dbom[i].Code) == -1 ? "" : "branch") + "'>")
         tr
             .append("<td>" + dbom[i].Level + "</td>")
             .append("<td did='SN'>" + (count++) + "</td>")
@@ -162,7 +162,7 @@ function showBOM(dbom) {
             .append("<td>" + dbom[i].ProchasingType + "</td>")
             .append("<td><input did='Name' value='" + dbom[i].Name + "' readonly></td>")
             .append("<td><input did='Spec' value='" + dbom[i].Spec + "' readonly></td>")
-            .append("<td><input did='PFEP' value='" + dbom[i].PFEP + "' readonly></td>");
+            .append("<td>" + (dbom[i].dsn ? dbom[i].dsn : "") + "</td>");
         tbody.append(tr);
     }
     table.append(tbody);
@@ -249,14 +249,10 @@ function searchBOM(code) {
 
     displayBOM = [];
     $("div[bid=bomcard]").html("<h5>Searching BOM, please wait...</h5>");
-    sqltext = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.quantity*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid where b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT * FROM CTE order by pid asc,itemno asc;";
+    sqltext = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.quantity*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid where b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT a.*, (select top 1 b.sn from st_drawings as b where b.code = a.elemgid order by b.version desc) as dsn FROM CTE as a order by pid asc,itemno asc;";
     new sql.Request().query(sqltext, (err, result) => {
         // ... error checks
-        console.log(sqltext)
-        if (result.rowsAffected == 0) {
-            $("div[bid=bomcard]").html("<h5><strong>" + $("input[bid=bomtop]").val() + "</strong> has no sub/children BOM</h5>");
-            displayBOM = [];
-        } else {
+        if (result.recordset.length > 0) {
             for (var i in result.recordset) {
                 displayBOM.push({
                     Level: result.recordset[i].lvl,
@@ -270,12 +266,32 @@ function searchBOM(code) {
                     ProchasingType: result.recordset[i].ptype,
                     PFEP: result.recordset[i].pfep,
                     pid: result.recordset[i].pid,
-                    rQty: result.recordset[i].rQty
+                    rQty: result.recordset[i].rQty,
+                    dsn: result.recordset[i].dsn
                 });
             }
             displayBOM = reOrderBOM(displayBOM, code);
         }
-        showBOM(displayBOM);
+        new sql.Request().query("select top 1 b.sn from st_drawings as b where b.code = '' order by b.version desc;", (err, result) => {
+
+            displayBOM.splice(0, 0, {
+                Level: 0,
+                Order: 1,
+                Code: code,
+                Parent: "",
+                Name: codesInfo[code].name,
+                Qty: 0,
+                Unit: "",
+                Spec: codesInfo[code].spec,
+                ProchasingType: "",
+                PFEP: "",
+                pid: "",
+                rQty: 0,
+                dsn: false
+            })
+            showBOM(displayBOM);
+        })
+
     })
 }
 

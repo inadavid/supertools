@@ -62,6 +62,7 @@ $('button[bid="submit"]').click(function () {
 
 $('button[step=3]').click(function () {
     var uplist = [];
+    $('button[step=3]').prop("disabled", true);
     $('div[step="3"] div[bid=filelist] input[type=checkbox]:checked').each(function () {
         uplist.push(JSON.parse($(this).attr("data")))
     });
@@ -82,6 +83,7 @@ $('button[step=3]').click(function () {
         if (err) {
             console.error(err);
             alert("An error occur when inserting into DB.\n" + JSON.stringify(err));
+            $('button[step=3]').prop("disabled", false);
             return;
         }
         $('div[step="3"] table tr').removeClass("deletion");
@@ -90,21 +92,48 @@ $('button[step=3]').click(function () {
         }
         if (result.recordset.length > 0) {
             alert("Above red drawing/version already existed in system.\nPlease check again.");
+            $('button[step=3]').prop("disabled", false);
             return;
         } else {
             new sql.Request().query(sqlinsert, (err, result) => {
                 if (err) {
                     console.error(err);
                     alert("An error occur when inserting into DB.\n" + JSON.stringify(err));
+                    $('button[step=3]').prop("disabled", false);
                     return;
                 }
                 var drawingQty = result.recordset.length;
                 var uploadedQty = 0;
                 var progressDiv = $("<div class='alert alert-primary' role='alert'>Uploading " + drawingQty + " drawings:<br>");
-                progressDiv.append('<div class="progress"> <div class="progress-bar" bid="upload" role="progressbar" style="width: 25%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"> 0% </div> </div>')
-                for (var m in result.recordset) {
+                progressDiv.append('<div class="progress"> <div class="progress-bar" bid="upload" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"> 0% </div> </div>');
+                $('div[step="4"]').show().append(progressDiv);
 
+                var mysql = require('mysql');
+                var connection = mysql.createConnection({
+                    host: config.mysqlServer,
+                    user: config.serverconfig.user,
+                    password: config.serverconfig.password,
+                    database: config.serverconfig.user
+                });
+                connection.connect();
+                $([document.documentElement, document.body]).animate({
+                    scrollTop: $('div[step="4"]').offset().top
+                }, 500);
+                for (var m in result.recordset) {
+                    query = "INSERT INTO st_drawings SET ?";
+                    value = {
+                        dsn: result.recordset[m].sn,
+                        data: fs.readFileSync(drawingfilepath + "/" + result.recordset[m].filename)
+                    }
+                    connection.query(query, value, function (error, results, fields) {
+                        if (error) throw error;
+                        var rate = (++uploadedQty / drawingQty * 100).toFixed(2);
+                        $('div[step="4"] div[bid=upload]').css("width", rate + "%").attr("aria-valuenow", rate).text(rate + "%");
+                        if (uploadedQty == drawingQty) popup("All drawings are uploaded!", "success");
+                    });
                 }
+
+                connection.end();
             });
         }
     })
