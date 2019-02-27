@@ -145,6 +145,10 @@ $("div.login_form button.btn-success").on("click", function () {
 
 $("a[bid='SQLServerStatus']").on("dblclick", function () {
     if (config.fSQLserver == 4) {
+        const filepath = appPath + "/db/codes.txt";
+        fs.unlink(filepath, function (err) {
+            if (err) console.error(err)
+        });
         config.fSQLserver = 2;
         codesInfo = {};
         codesList = [];
@@ -187,9 +191,8 @@ function tryHost(c) {
         ping.promise.probe(config.SQLserver).then(function (res) {
             if (res.alive) {
                 config.fSQLserver = 1;
-                updateSQLserver();
                 config.serverconfig.server = config.SQLserver;
-                fs.writeFileSync(configFile, ini.stringify(config));
+                updateSQLserver();
                 connectSQLserver();
             } else {
                 return tryHost(c + 1)
@@ -226,6 +229,7 @@ function updateSQLserver() {
     a.text(text);
     if (config.fSQLserver == -1 || config.fSQLserver == 3) a.addClass("list-group-item-danger");
     if (config.fSQLserver == 4) a.addClass("list-group-item-success");
+    fs.writeFileSync(configFile, ini.stringify(config));
 }
 
 function connectSQLserver() {
@@ -289,36 +293,18 @@ function getCodesInfo(codes, cb) {
 function fetchAllCodes() {
     var flag = false;
     const filepath = appPath + "/db/codes.txt";
-    // if (!fs.existsSync(filepath)) {
-    //     fs.writeFileSync(filepath, "eyJjb2Rlc0luZm8iOnt9LCJjb2Rlc0xpc3QiOltdfQ==");
-    //     flag = true;
-    // } else {
-    //     var data = JSON.parse(Base64.decode(fs.readFileSync(filepath)));
-    //     if (data.codesInfo) codesInfo = data.codesInfo;
-    //     if (data.codesList) codesList = data.codesList;
-    //     // var tmd = [];
-    //     // for (var i in codesInfo) {
-    //     //     codesInfo[i].codenumber = i;
-    //     //     tmd.push(codesInfo[i]);
-    //     // }
-    //     // var td = data2csv(tmd);
-    //     // console.log(tmd)
-    //     // fs.writeFileSync("db/codes.new.csv", td);
-    //     if (codesList.length < 100) flag = true;
-    //     else {
-    //         config.fSQLserver = 4;
-    //         updateSQLserver();
-    //     }
-    // }
-    if (argv[2] == "dev") {
+    if (!fs.existsSync(filepath)) {
+        if (argv[2] == "dev") fs.writeFileSync(filepath, "eyJjb2Rlc0luZm8iOnt9LCJjb2Rlc0xpc3QiOltdfQ==");
+        flag = true;
+    } else {
         var data = JSON.parse(Base64.decode(fs.readFileSync(filepath)));
         if (data.codesInfo) codesInfo = data.codesInfo;
         if (data.codesList) codesList = data.codesList;
-
         if (codesList.length < 100) flag = true;
         else {
             config.fSQLserver = 4;
             updateSQLserver();
+            return;
         }
     }
 
