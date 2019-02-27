@@ -272,8 +272,7 @@ function searchBOM(code) {
             }
             displayBOM = reOrderBOM(displayBOM, code);
         }
-        new sql.Request().query("select top 1 b.sn from st_drawings as b where b.code = '' order by b.version desc;", (err, result) => {
-
+        new sql.Request().query("select top 1 b.sn from st_drawings as b where b.code = '" + code + "' order by b.version desc;", (err, result) => {
             displayBOM.splice(0, 0, {
                 Level: 0,
                 Order: 1,
@@ -287,8 +286,9 @@ function searchBOM(code) {
                 PFEP: "",
                 pid: "",
                 rQty: 0,
-                dsn: false
+                dsn: result.recordset.length == 1 ? result.recordset[0].sn : false
             })
+
             showBOM(displayBOM);
         })
 
