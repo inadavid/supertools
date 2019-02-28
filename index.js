@@ -6,11 +6,15 @@ const {
     ipcMain,
     dialog
 } = require('electron')
+const {
+    exec
+} = require('child_process');
+const fs = require('fs');
+const request = require('request');
 
-const EAU = require('electron-asar-hot-updater');
 let win;
 let flash;
-global.version = "V0165";
+global.version = "V0166";
 global.appPath = app.getAppPath();
 global.argv = process.argv;
 global.flashClosed = false;
@@ -105,21 +109,25 @@ app.on('ready', function () {
                     title: 'Update ' + r.last + ' available',
                     message: "There is an update " + r.last + " available!\n Do you want to update now? \n 有可用系统更新" + r.last + "，是否现在更新？"
                 }, function (fb) {
-                    const fs = require("fs");
-                    var updatefile = app.getAppPath() + '/update.7z';
+                    var updatefile = app.getAppPath() + '/../update.7z';
+                    if (fs.existsSync(updatefile)) fs.unlinkSync(updatefile);
                     if (fb == 1) createWindow();
                     else {
-                        http.get(r.file, function (response) {
-                            var body = '';
-                            response.on('data', function (chunk) { body += chunk; });
-                            response.on('end', function () {
-                                fs.writeFileSync(updatefile, body);
-                                console.log("file downloaded")
-                            });
-                        }).on('error', function (err) { // Handle errors
-                            fs.unlink(updatefile); // Delete the file async. (But we don't check the result)
-                            console.log(err)
-                        });;
+                        download(r.file, updatefile, function (any) {
+                            exec(app.getAppPath() + "/bin/7z.exe x -aoa -o ../ " + updatefile, function (err) {
+                                console.log(err);
+                                //fs.renameSync(app.getAppPath() +
+                                // "/../../app.asar", app.getAppPath() +
+                                // "/../app.asar");
+                                fs.unlinkSync(updatefile);
+                                dialog.showMessageBox({
+                                    type: "info",
+                                    title: "Complete",
+                                    message: "Upgrade complete!"
+                                });
+                                app.quit();
+                            })
+                        })
                     }
                 });
             }
@@ -149,3 +157,32 @@ app.on('window-all-closed', () => {
 //     createWindow()
 //   }
 // })
+
+
+const download = (url, dest, cb) => {
+    const file = fs.createWriteStream(dest);
+    const sendReq = request.get(url);
+
+    // verify response code
+    sendReq.on('response', (response) => {
+        if (response.statusCode !== 200) {
+            return cb('Response status was ' + response.statusCode);
+        }
+
+        sendReq.pipe(file);
+    });
+
+    // close() is async, call cb after close completes
+    file.on('finish', () => file.close(cb));
+
+    // check for request errors
+    sendReq.on('error', (err) => {
+        fs.unlink(dest);
+        return cb(err.message);
+    });
+
+    file.on('error', (err) => { // Handle errors
+        fs.unlink(dest); // Delete the file async. (But we don't check the result)
+        return cb(err.message);
+    });
+};
