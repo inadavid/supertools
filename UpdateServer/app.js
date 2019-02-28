@@ -5,16 +5,21 @@ const app = express()
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-var desktop_app_version = 'v0166';
-var desktop_app_URL = 'http://192.168.16.12:8083/update.zip' // or ../update.zip
-
+var version = 'V0166';
+var filepath = '/home/update/update.0166.7z' // or ../update.zip
+const fs = require("fs");
 app.post('/update', function (req, res) {
-    if (req.body && req.body.current != desktop_app_version) { // check for server side
-        res.write(JSON.stringify({ "last": desktop_app_version, "source": desktop_app_URL }).replace(/[\/]/g, '\\/'));
-    } else {
-        res.write(JSON.stringify({ "last": desktop_app_version }).replace(/[\/]/g, '\\/'));
-    }
+    res.write(JSON.stringify({ "last": version, "file": "http://192.168.16.12:8082/update.7z" }).replace(/[\/]/g, '\\/'));
     res.end();
+});
+app.get('/update.7z', function(req,res) {
+	var stat = fs.statSync(filepath);
+	var file = fs.readFileSync(filepath, 'binary');
+	res.setHeader('Content-Length', stat.size);
+	res.setHeader('Content-Type', 'application/zip');
+	res.setHeader('Content-Disposition', 'attachment; filename=update.7z');
+	res.write(file, 'binary');
+	res.end();
 });
 
 app.listen(8082)
