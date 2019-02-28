@@ -9,6 +9,7 @@ $(function () {
     searchHistory = JSON.parse(Base64.decode(config.bomsearchhistory));
     if (searchHistory.length > 0) {
         searchHistories();
+        $("button[bid='searchHistory']:first").click();
     } else {
         config.bomsearchhistory = 'W10=';
         fs.writeFileSync(configFile, ini.stringify(config));
@@ -137,7 +138,7 @@ function showBOM(dbom) {
     table.addClass("treetable")
     var thead = $("<thead>");
     thead
-        .append("<th width='100%'>Level</th>")
+        .append("<th width='20%'>Level</th>")
         .append("<th style='width:10px'>SN</th>")
         .append("<th style='width:10px'>Order</th>")
         .append("<th style='width:30px'>Code#</th>")
@@ -146,7 +147,7 @@ function showBOM(dbom) {
         .append("<th style='width:10px'>PType</th>")
         .append("<th style='width:150px'>Name</th>")
         .append("<th style='width:150px'>Desc</th>")
-        .append("<th style='width:20px'>Drawing</th>")
+        .append("<th style='width:100px'>Drawing</th>")
     table.append(thead);
     var tbody = $("<tbody>");
     var count = 1;
@@ -162,7 +163,7 @@ function showBOM(dbom) {
             .append("<td>" + dbom[i].ProchasingType + "</td>")
             .append("<td><input did='Name' value='" + dbom[i].Name + "' readonly></td>")
             .append("<td><input did='Spec' value='" + dbom[i].Spec + "' readonly></td>")
-            .append("<td>" + (dbom[i].dversion !== null && user.perm.indexOf(6) != -1 ? "<span class='iconfont icon-drawing' bid='drawing' code='" + dbom[i].Code + "'></span> <span class='iconfont icon-open' bid='dopen' code='" + dbom[i].Code + "' title='V" + dbom[i].dversion + "'></span>" : "-") + "</td>");
+            .append("<td>" + (dbom[i].dversion !== null && user.perm.indexOf(6) != -1 ? "<span class='iconfont icon-drawing' bid='drawing' code='" + dbom[i].Code + "'></span> <span class='iconfont icon-open' bid='dopen' code='" + dbom[i].Code + "''></span> <span>V" + dbom[i].dversion + "</span>" : "-") + "</td>");
         tbody.append(tr);
     }
     table.append(tbody);
