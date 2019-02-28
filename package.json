@@ -6,7 +6,7 @@
     "scripts": {
         "start": "electron ./ dev",
         "production": "electron ./ production",
-        "package": "electron-packager ./ SuperTools --platform=win32 --arch=x64 --overwrite --asar --prune=true --out=release-builds --icon=icon/icon.ico",
+        "package": "electron-packager ./ SuperTools --platform=win32 --arch=x64 --overwrite --asar --prune=true --out=release-builds --icon=icon/icon.ico && xcopy config.ini release-builds\\SuperTools-win32-x64\\resources\\ /Y",
         "packagelinux": "electron-packager ./ SuperTools --platform=linux --arch=x64 --overwrite --asar --prune=true --out=release-builds --icon=icon/icon.ico",
         "packagemac": "electron-packager ./ SuperTools --platform=darwin --arch=x64 --overwrite --asar --prune=true --out=release-builds --icon=icon/icon.icns"
     },
@@ -21,6 +21,7 @@
         "moment": "^2.22.2",
         "mssql": "^4.2.1",
         "mysql": "^2.16.0",
+        "pdf-image": "^2.0.0",
         "ping": "^0.2.2",
         "sqlite-sync": "^0.3.8",
         "underscore": "^1.9.1"

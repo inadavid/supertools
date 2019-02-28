@@ -162,20 +162,26 @@ function showBOM(dbom) {
             .append("<td>" + dbom[i].ProchasingType + "</td>")
             .append("<td><input did='Name' value='" + dbom[i].Name + "' readonly></td>")
             .append("<td><input did='Spec' value='" + dbom[i].Spec + "' readonly></td>")
-            .append("<td>" + (dbom[i].dsn && user.perm.indexOf(6) != -1 ? "<span class='iconfont icon-drawing' bid='drawing' dsn='" + dbom[i].dsn + "'></span> <span class='iconfont icon-open' bid='dopen' dsn='" + dbom[i].dsn + "' title='V" + dbom[i].dversion + "'></span>" : "-") + "</td>");
+            .append("<td>" + (dbom[i].dversion !== null && user.perm.indexOf(6) != -1 ? "<span class='iconfont icon-drawing' bid='drawing' code='" + dbom[i].Code + "'></span> <span class='iconfont icon-open' bid='dopen' code='" + dbom[i].Code + "' title='V" + dbom[i].dversion + "'></span>" : "-") + "</td>");
         tbody.append(tr);
     }
     table.append(tbody);
 
     table.find("span[bid=drawing]").css("cursor", "pointer").click(function () {
-        dsn = parseInt($(this).attr("dsn"));
-        drawingSN = dsn;
+        var code = $(this).attr("code");
+        drawingCode = code;
         loadPanel("drawingdis");
     });
 
     table.find("span[bid=dopen]").css("cursor", "pointer").click(function () {
-        dsn = parseInt($(this).attr("dsn"));
-        displayDrawing(dsn);
+        var btn = $(this);
+        btn.hide();
+
+        var code = $(this).attr("code");
+        displayDrawing(code, false, function (rtn) {
+            console.log(rtn);
+            btn.show();
+        });
     });
     $("div[bid=bomcard]").html("<h5><strong>" + $("input[bid=bomtop]").val() + "</strong> BOM Tree View &nbsp; &nbsp; &nbsp; <button class='btn btn-form btn-warning btn-sm' bid='exportBOM'>Export BOM</button> <button class='btn btn-form btn-primary btn-sm' bid='exportPL'>Export Picklist</button></h5>").append(table);
 
@@ -259,7 +265,8 @@ function searchBOM(code) {
 
     displayBOM = [];
     $("div[bid=bomcard]").html("<h5>Searching BOM, please wait...</h5>");
-    sqltext = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.quantity*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid where b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT a.*, (select top 1 b.sn from st_drawings as b where b.code = a.elemgid and b.filetype=0 order by b.version desc) as dsn,(select top 1 b.version from st_drawings as b where b.code = a.elemgid and b.filetype=0 order by b.version desc) as dversion  FROM CTE as a order by pid asc,itemno asc;";
+    sqltext = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.quantity*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid where b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT a.*, (select max(b.version) from st_drawings as b where b.code = a.elemgid and b.filetype=0) as dversion  FROM CTE as a order by pid asc,itemno asc;";
+
     new sql.Request().query(sqltext, (err, result) => {
         // ... error checks
         if (result.recordset.length > 0) {
@@ -277,13 +284,12 @@ function searchBOM(code) {
                     PFEP: result.recordset[i].pfep,
                     pid: result.recordset[i].pid,
                     rQty: result.recordset[i].rQty,
-                    dsn: result.recordset[i].dsn,
                     dversion: result.recordset[i].dversion,
                 });
             }
             displayBOM = reOrderBOM(displayBOM, code);
         }
-        new sql.Request().query("select top 1 b.sn, b.version from st_drawings as b where b.code = '" + code + "' order by b.version desc;", (err, result) => {
+        new sql.Request().query("select top 1 b.version from st_drawings as b where b.code = '" + code + "' order by b.version desc;", (err, result) => {
             displayBOM.splice(0, 0, {
                 Level: 0,
                 Order: 1,
@@ -297,8 +303,7 @@ function searchBOM(code) {
                 PFEP: "",
                 pid: "",
                 rQty: 0,
-                dsn: result.recordset.length == 1 ? result.recordset[0].sn : false,
-                dversion: result.recordset.length == 1 ? result.recordset[0].version : false,
+                dversion: result.recordset.length == 1 ? result.recordset[0].version : null,
 
             })
 

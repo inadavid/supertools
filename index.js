@@ -8,7 +8,7 @@ const {
 
 let win;
 let flash;
-global.version = "V0162";
+global.version = "V0165";
 global.appPath = app.getAppPath();
 global.argv = process.argv;
 global.flashClosed = false;
@@ -23,6 +23,9 @@ function createWindow() {
         fullscreenable: false,
         resizable: true,
         maximizable: true,
+        webPreferences: {
+            plugins: true
+        }
     }); //
 
     win.loadFile('html/index.html')
