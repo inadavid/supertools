@@ -305,7 +305,6 @@ function fetchAllCodes() {
         else {
             config.fSQLserver = 4;
             updateSQLserver();
-            return;
         }
     }
 
