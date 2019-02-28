@@ -1,0 +1,16 @@
+{
+    "name": "supertools-update-server",
+    "version": "0.0.1",
+    "description": "SuperData update server",
+    "main": "app.js",
+    "scripts": {
+        "start": "electron ./ dev"
+    },
+    "author": "David.Wei@schleuniger.com",
+    "license": "Schleuniger Software License",
+    "dependencies": {
+        "body-parser": "^1.18.3",
+        "express": "^4.16.4"
+    },
+    "devDependencies": {}
+}
