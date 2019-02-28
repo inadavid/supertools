@@ -6,10 +6,15 @@ const {
     ipcMain,
     dialog
 } = require('electron')
+const {
+    exec
+} = require('child_process');
+const fs = require('fs');
+const request = require('request');
 
 let win;
 let flash;
-global.version = "V0165";
+global.version = "V0166";
 global.appPath = app.getAppPath();
 global.argv = process.argv;
 global.flashClosed = false;
@@ -73,43 +78,67 @@ function createWindow() {
 
 app.on('ready', function () {
     // Initiate the module
-    EAU.init({
-        'api': '', // The API EAU will talk to
-        'server': false // Where to check. true: server side, false: client side, default: true.
-    });
-
-    EAU.check(function (error, last, body) {
-        if (error) {
-            if (error === 'no_update_available') { return false; }
-            dialog.showErrorBox('info', error)
-            return false
+    // EAU.init({
+    //     'api': 'http://192.168.16.12:8082', // The API EAU will talk to
+    //     'server': false // Where to check. true: server side, false: client side, default: true.
+    // });
+    const http = require("http");
+    var post_options = {
+        host: '192.168.16.12',
+        port: '8082',
+        path: '/update',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': 2
         }
+    };
+    var req = http.request(post_options, function (res) {
+        var body = '';
 
-        EAU.progress(function (state) {
-            // The state is an object that looks like this:
-            // {
-            //     percent: 0.5,               
-            //     speed: 554732,              
-            //     size: {
-            //         total: 90044871,        
-            //         transferred: 27610959   
-            //     },
-            //     time: {
-            //         elapsed: 36.235,        
-            //         remaining: 81.403       
-            //     }
-            // }
-        })
+        res.on('data', function (chunk) {
+            body += chunk;
+        });
 
-        // EAU.download(function (error) {
-        //     if (error) {
-        //         dialog.showErrorBox('info', error)
-        //         return false
-        //     }
-        //     dialog.showErrorBox('info', 'App updated successfully! Restart it please.')
-        // })
-
-    })
+        res.on('end', function () {
+            var r = JSON.parse(body);
+            if (r.last != global.version) {
+                dialog.showMessageBox({
+                    type: "question",
+                    buttons: ["Yes", "Later"],
+                    title: 'Update ' + r.last + ' available',
+                    message: "There is an update " + r.last + " available!\n Do you want to update now? \n 有可用系统更新" + r.last + "，是否现在更新？"
+                }, function (fb) {
+                    var updatefile = app.getAppPath() + '/../update.7z';
+                    if (fs.existsSync(updatefile)) fs.unlinkSync(updatefile);
+                    if (fb == 1) createWindow();
+                    else {
+                        download(r.file, updatefile, function (any) {
+                            exec(app.getAppPath() + "/bin/7z.exe x -aoa -o ../ " + updatefile, function (err) {
+                                console.log(err);
+                                //fs.renameSync(app.getAppPath() +
+                                // "/../../app.asar", app.getAppPath() +
+                                // "/../app.asar");
+                                fs.unlinkSync(updatefile);
+                                dialog.showMessageBox({
+                                    type: "info",
+                                    title: "Complete",
+                                    message: "Upgrade complete!"
+                                });
+                                app.quit();
+                            })
+                        })
+                    }
+                });
+            }
+        });
+    }).on('error', function (e) {
+        console.log("Got an error: ", e);
+        dialog.showErrorBox('info', "Error connecting update server!");
+        createWindow();
+    });
+    req.write("[]")
+    req.end()
 })
 // app.commandLine.appendSwitch('remote-debugging-port', '8315')
 // app.commandLine.appendSwitch('host-rules', 'MAP * 127.0.0.1')
@@ -128,3 +157,32 @@ app.on('window-all-closed', () => {
 //     createWindow()
 //   }
 // })
+
+
+const download = (url, dest, cb) => {
+    const file = fs.createWriteStream(dest);
+    const sendReq = request.get(url);
+
+    // verify response code
+    sendReq.on('response', (response) => {
+        if (response.statusCode !== 200) {
+            return cb('Response status was ' + response.statusCode);
+        }
+
+        sendReq.pipe(file);
+    });
+
+    // close() is async, call cb after close completes
+    file.on('finish', () => file.close(cb));
+
+    // check for request errors
+    sendReq.on('error', (err) => {
+        fs.unlink(dest);
+        return cb(err.message);
+    });
+
+    file.on('error', (err) => { // Handle errors
+        fs.unlink(dest); // Delete the file async. (But we don't check the result)
+        return cb(err.message);
+    });
+};
