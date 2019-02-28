@@ -7,6 +7,7 @@ const {
     dialog
 } = require('electron')
 
+const EAU = require('electron-asar-hot-updater');
 let win;
 let flash;
 global.version = "V0165";
@@ -73,43 +74,63 @@ function createWindow() {
 
 app.on('ready', function () {
     // Initiate the module
-    EAU.init({
-        'api': '', // The API EAU will talk to
-        'server': false // Where to check. true: server side, false: client side, default: true.
-    });
-
-    EAU.check(function (error, last, body) {
-        if (error) {
-            if (error === 'no_update_available') { return false; }
-            dialog.showErrorBox('info', error)
-            return false
+    // EAU.init({
+    //     'api': 'http://192.168.16.12:8082', // The API EAU will talk to
+    //     'server': false // Where to check. true: server side, false: client side, default: true.
+    // });
+    const http = require("http");
+    var post_options = {
+        host: '192.168.16.12',
+        port: '8082',
+        path: '/update',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': 2
         }
+    };
+    var req = http.request(post_options, function (res) {
+        var body = '';
 
-        EAU.progress(function (state) {
-            // The state is an object that looks like this:
-            // {
-            //     percent: 0.5,               
-            //     speed: 554732,              
-            //     size: {
-            //         total: 90044871,        
-            //         transferred: 27610959   
-            //     },
-            //     time: {
-            //         elapsed: 36.235,        
-            //         remaining: 81.403       
-            //     }
-            // }
-        })
+        res.on('data', function (chunk) {
+            body += chunk;
+        });
 
-        // EAU.download(function (error) {
-        //     if (error) {
-        //         dialog.showErrorBox('info', error)
-        //         return false
-        //     }
-        //     dialog.showErrorBox('info', 'App updated successfully! Restart it please.')
-        // })
-
-    })
+        res.on('end', function () {
+            var r = JSON.parse(body);
+            if (r.last != global.version) {
+                dialog.showMessageBox({
+                    type: "question",
+                    buttons: ["Yes", "Later"],
+                    title: 'Update ' + r.last + ' available',
+                    message: "There is an update " + r.last + " available!\n Do you want to update now? \n 有可用系统更新" + r.last + "，是否现在更新？"
+                }, function (fb) {
+                    const fs = require("fs");
+                    var updatefile = app.getAppPath() + '/update.7z';
+                    if (fb == 1) createWindow();
+                    else {
+                        http.get(r.file, function (response) {
+                            var body = '';
+                            response.on('data', function (chunk) { body += chunk; });
+                            response.on('end', function () {
+                                fs.writeFileSync(updatefile, body);
+                                console.log("file downloaded")
+                            });
+                        }).on('error', function (err) { // Handle errors
+                            fs.unlink(updatefile); // Delete the file async. (But we don't check the result)
+                            console.log(err)
+                        });;
+                    }
+                });
+            }
+        });
+    }).on('error', function (e) {
+        console.log("Got an error: ", e);
+        dialog.showErrorBox('info', "Error connecting update server!");
+        createWindow();
+    });
+    req.write("[]")
+    req.end()
 })
 // app.commandLine.appendSwitch('remote-debugging-port', '8315')
 // app.commandLine.appendSwitch('host-rules', 'MAP * 127.0.0.1')
