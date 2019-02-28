@@ -17,5 +17,5 @@ app.post('/update', function (req, res) {
     res.end();
 });
 
-app.listen(3000)
-console.log('run port: 3000')
+app.listen(8082)
+console.log('run port: 8082')
