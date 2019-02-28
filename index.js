@@ -3,7 +3,8 @@ const {
     Menu,
     BrowserWindow,
     MenuItem,
-    ipcMain
+    ipcMain,
+    dialog
 } = require('electron')
 
 let win;
@@ -70,9 +71,49 @@ function createWindow() {
     })
 }
 
+app.on('ready', function () {
+    // Initiate the module
+    EAU.init({
+        'api': '', // The API EAU will talk to
+        'server': false // Where to check. true: server side, false: client side, default: true.
+    });
+
+    EAU.check(function (error, last, body) {
+        if (error) {
+            if (error === 'no_update_available') { return false; }
+            dialog.showErrorBox('info', error)
+            return false
+        }
+
+        EAU.progress(function (state) {
+            // The state is an object that looks like this:
+            // {
+            //     percent: 0.5,               
+            //     speed: 554732,              
+            //     size: {
+            //         total: 90044871,        
+            //         transferred: 27610959   
+            //     },
+            //     time: {
+            //         elapsed: 36.235,        
+            //         remaining: 81.403       
+            //     }
+            // }
+        })
+
+        // EAU.download(function (error) {
+        //     if (error) {
+        //         dialog.showErrorBox('info', error)
+        //         return false
+        //     }
+        //     dialog.showErrorBox('info', 'App updated successfully! Restart it please.')
+        // })
+
+    })
+})
 // app.commandLine.appendSwitch('remote-debugging-port', '8315')
 // app.commandLine.appendSwitch('host-rules', 'MAP * 127.0.0.1')
-app.on('ready', createWindow);
+//app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
     //if (process.platform !== 'darwin') {
