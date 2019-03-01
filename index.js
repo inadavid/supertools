@@ -1,5 +1,6 @@
 const {
     app,
+    argv,
     Menu,
     BrowserWindow,
     MenuItem,
@@ -14,7 +15,7 @@ const request = require('request');
 
 let win;
 let flash;
-global.version = "V0166";
+global.version = "V0167";
 global.appPath = app.getAppPath();
 global.argv = process.argv;
 global.flashClosed = false;
@@ -93,6 +94,7 @@ app.on('ready', function () {
             'Content-Length': 2
         }
     };
+    if (process.argv[1] == "dev") post_options.host = '127.0.0.1';
     var req = http.request(post_options, function (res) {
         var body = '';
 
@@ -106,30 +108,52 @@ app.on('ready', function () {
                 dialog.showMessageBox({
                     type: "question",
                     buttons: ["Yes", "Later"],
+                    defaultId: 0,
                     title: 'Update ' + r.last + ' available',
                     message: "There is an update " + r.last + " available!\n Do you want to update now? \n 有可用系统更新" + r.last + "，是否现在更新？"
                 }, function (fb) {
-                    var updatefile = app.getAppPath() + '/../update.7z';
-                    if (fs.existsSync(updatefile)) fs.unlinkSync(updatefile);
-                    if (fb == 1) createWindow();
-                    else {
+                    if (fb === 0) {
+                        var path = require("path");
+                        var updatefile = path.normalize(app.getAppPath() + '/../update.7z');
+                        var updateBatch = path.normalize(app.getAppPath() + '/../update.bat');
+                        if (fs.existsSync(updatefile)) fs.unlinkSync(updatefile);
                         download(r.file, updatefile, function (any) {
-                            exec(app.getAppPath() + "/bin/7z.exe x -aoa -o ../ " + updatefile, function (err) {
-                                console.log(err);
-                                //fs.renameSync(app.getAppPath() +
-                                // "/../../app.asar", app.getAppPath() +
-                                // "/../app.asar");
-                                fs.unlinkSync(updatefile);
-                                dialog.showMessageBox({
-                                    type: "info",
-                                    title: "Complete",
-                                    message: "Upgrade complete!"
-                                });
-                                app.quit();
-                            })
+                            var cmd = "@echo off\nsleep 5\n";
+                            cmd += path.normalize(app.getAppPath() + "/../7z.exe") + " x \"" + updatefile + "\" -aoa -o\"" + path.normalize(app.getAppPath() + '/../') + "\" -y";
+                            cmd += "\ndel " + updatefile + " /F"
+                            cmd += "\nset /p temp=\"Upgrade complete. Hit any key to continue\"";
+                            cmd += "\nexit"
+                            fs.writeFileSync(updateBatch, cmd);
+                            setTimeout(function () {
+                                exec("start " + updateBatch, function (err) {});
+                            }, 10);
+                            setTimeout(function () {
+                                app.exit();
+                            }, 1000);
+                            // exec(cmd, function (err) {
+                            //     if (err) {
+                            //         console.log(err)
+                            //         dialog.showMessageBox({
+                            //             type: "error",
+                            //             title: "Error",
+                            //             message: JSON.stringify(err)
+                            //         });
+                            //     } else {
+                            //         fs.unlinkSync(updatefile);
+                            //         dialog.showMessageBox({
+                            //             type: "info",
+                            //             title: "Complete",
+                            //             message: "Upgrade complete! Restart SuperTools please."
+                            //         });
+                            //     }
+                            // })
                         })
+                    } else {
+                        createWindow();
                     }
                 });
+            } else {
+                createWindow();
             }
         });
     }).on('error', function (e) {
@@ -137,8 +161,8 @@ app.on('ready', function () {
         dialog.showErrorBox('info', "Error connecting update server!");
         createWindow();
     });
-    req.write("[]")
-    req.end()
+    req.write("[]");
+    req.end();
 })
 // app.commandLine.appendSwitch('remote-debugging-port', '8315')
 // app.commandLine.appendSwitch('host-rules', 'MAP * 127.0.0.1')
