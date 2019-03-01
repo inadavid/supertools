@@ -15,7 +15,7 @@ const request = require('request');
 
 let win;
 let flash;
-global.version = "V0167";
+global.version = "V0170";
 global.appPath = app.getAppPath();
 global.argv = process.argv;
 global.flashClosed = false;
@@ -107,10 +107,10 @@ app.on('ready', function () {
             if (r.last != global.version) {
                 dialog.showMessageBox({
                     type: "question",
-                    buttons: ["Yes", "Later"],
+                    buttons: ["Yes 是", "Later 稍后"],
                     defaultId: 0,
                     title: 'Update ' + r.last + ' available',
-                    message: "There is an update " + r.last + " available!\n Do you want to update now? \n 有可用系统更新" + r.last + "，是否现在更新？"
+                    message: "There is an update version:" + r.last + " available!\nCurrent version:" + global.version + "\nDo you want to update now? \n有可用系统更新" + r.last + "\n当前版本" + global.version + "\n是否现在更新？"
                 }, function (fb) {
                     if (fb === 0) {
                         var path = require("path");
@@ -118,14 +118,14 @@ app.on('ready', function () {
                         var updateBatch = path.normalize(app.getAppPath() + '/../update.bat');
                         if (fs.existsSync(updatefile)) fs.unlinkSync(updatefile);
                         download(r.file, updatefile, function (any) {
-                            var cmd = "@echo off\nsleep 5\n";
+                            var cmd = "@echo off\necho Upgrading " + r.last + ", please wait....\nping -n 5 127.0.0.1 >nul\n";
                             cmd += path.normalize(app.getAppPath() + "/../7z.exe") + " x \"" + updatefile + "\" -aoa -o\"" + path.normalize(app.getAppPath() + '/../') + "\" -y";
                             cmd += "\ndel " + updatefile + " /F"
                             cmd += "\nset /p temp=\"Upgrade complete. Hit any key to continue\"";
                             cmd += "\nexit"
                             fs.writeFileSync(updateBatch, cmd);
                             setTimeout(function () {
-                                exec("start " + updateBatch, function (err) {});
+                                exec("start " + updateBatch, function (err) { });
                             }, 10);
                             setTimeout(function () {
                                 app.exit();

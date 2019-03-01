@@ -280,19 +280,25 @@ function searchChildren(code) {
                         if (ECOList[i].action == "deletion") { // delete bom item. 2 steps.
                             //1, insert the change into st_bomeco_children
                             sqltext = "insert into st_bomeco_children (ecosn, goodsid, elemgid,[type],itemno,quanlity,ptype,bomsn) values ( " + ecosn + ", '" + code + "', '" + ECOList[i].data.code + "', 0, " + ECOList[i].data.order + ", " + ECOList[i].data.qty + ", '" + ECOList[i].data.ptype + "', " + ECOList[i].sn + ");";
+                            var log = sqltext;
                             yield request.query(sqltext);
                             //2, mark the item in st_goodsbom endDate as yesterday.
                             sqltext = "update st_goodsbom set endDate = dateadd(day,-1, cast(getdate() as date)) where sn = " + ECOList[i].sn;
+                            log += "|" + sqltext;
                             yield request.query(sqltext);
+                            loglog("CreatECO_subsql", "ECO-sn:" + ecosn + "|" + log);
                         }
                         if (ECOList[i].action == "addition") { // add bom item. 2 steps.
                             //1, insert the new bom item into st_goodsbom
                             sqltext = "insert into st_goodsbom (goodsid, elemgid, quantity, mnfqty, masterqty, usetime, wasterate, memo,  state, pretime, itemno, ptype,pfep, opid, checkorid, startDate, endDate) values ('" + code + "', '" + ECOList[i].data.code + "', " + ECOList[i].data.qty + "," + ECOList[i].data.qty + ", 1, 1, 0, NULL,  1, 0,  " + ECOList[i].data.order + ", '" + ECOList[i].data.ptype + "', '', " + user.id + ", " + user.id + ", cast(getdate() as date), '2099-01-01'); SELECT SCOPE_IDENTITY() as sn;";
+                            var log = sqltext;
                             var recordset = yield request.query(sqltext);
                             console.log("addtion child:", recordset)
                             //2, insert the change item into st_bomeco_children.
                             sqltext = "insert into st_bomeco_children (ecosn, goodsid, elemgid,[type],itemno,quanlity,ptype,bomsn) values ( " + ecosn + ", '" + code + "', '" + ECOList[i].data.code + "', 1, " + ECOList[i].data.order + ", " + ECOList[i].data.qty + ", '" + ECOList[i].data.ptype + "', " + recordset[0].sn + ");";
                             yield request.query(sqltext);
+                            log += "|" + sqltext;
+                            loglog("CreatECO_subsql", "ECO-sn:" + ecosn + "|" + log);
 
                         }
                     }

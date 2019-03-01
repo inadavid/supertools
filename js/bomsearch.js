@@ -2,9 +2,11 @@ var displayBOM = [];
 var appliedDate = '2019-02-01';
 var searchHistory = [];
 var historyLength = 5;
+var completeBomTop;
 $(function () {
     var moment = require('moment');
-    appliedDate = moment().format("YYYY-MM-DD");
+    appliedDate = moment(new Date()).format("YYYY-MM-DD");
+    $('input[name="appliedDate"]').val(appliedDate);
     config = ini.parse(fs.readFileSync(configFile, 'utf-8'));
     searchHistory = JSON.parse(Base64.decode(config.bomsearchhistory));
     if (searchHistory.length > 0) {
@@ -16,7 +18,6 @@ $(function () {
         $('div[bid="searchHistory"]').hide();
     }
 
-    $('input[name="appliedDate"]').val(appliedDate);
     var sqltext = "select goodsid from st_bomtop;";
     new sql.Request().query(sqltext, (err, result) => {
         if (err) {
@@ -30,7 +31,7 @@ $(function () {
                 value: result.recordset[m].goodsid
             })
         }
-        new Awesomplete("input[bid=bomtop]", {
+        completeBomTop = new Awesomplete("input[bid=bomtop]", {
             list: allcodesHint,
             minChars: 4,
             maxItems: 15,
@@ -52,21 +53,28 @@ $(function () {
     });
 })
 
-$("input[bid=bomtop]").on("keypress", function (event) {
-    if (event.which == 13) $("button[bid=bomSearch]").trigger("click");
-
-})
-
-$("button[bid=bomSearch]").on("click", function () {
+$("input[bid=bomtop]").on("keyup", function (event) {
+    //if (event.which == 13) $("button[bid=bomSearch]").trigger("click");
     var val = $("input[bid=bomtop]").val().trim();
     var spec = $("span[bid=codespec]");
-
     spec.css("margin-left", "50px").css("margin-right", "50px")
     if (codesList.indexOf(val) == -1) {
         spec.text("");
         return;
     } else {
         spec.text(codesInfo[val].name + " | " + codesInfo[val].spec);
+        $("button[bid=bomSearch]").trigger("click");
+    }
+})
+
+$("button[bid=bomSearch]").on("click", function () {
+    var val = $("input[bid=bomtop]").val().trim();
+    var spec = $("span[bid=codespec]");
+
+    if (codesList.indexOf(val) == -1) {
+        alert("wrong code")
+    } else {
+        if (completeBomTop) completeBomTop.close();
         var d = $('input[name="appliedDate"]').val().trim();
         if (d.length < 10) {
             popup("AppliedDate not valid.", "danger");
@@ -258,6 +266,7 @@ function showBOM(dbom) {
         else getPicklist(top, 0);
     });
 
+    if (completeBomTop) completeBomTop.close();
 
 }
 
@@ -267,7 +276,6 @@ function searchBOM(code) {
     displayBOM = [];
     $("div[bid=bomcard]").html("<h5>Searching BOM, please wait...</h5>");
     sqltext = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.quantity*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid where b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT a.*, (select max(b.version) from st_drawings as b where b.code = a.elemgid and b.filetype=0) as dversion  FROM CTE as a order by pid asc,itemno asc;";
-
     new sql.Request().query(sqltext, (err, result) => {
         // ... error checks
         if (result.recordset.length > 0) {
