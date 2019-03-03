@@ -81,6 +81,7 @@ $("button[type=submit][step=2]").on("click", (e) => {
                 //     //return;
                 // }
                 // var id = 
+                if (bom === false) return false;
                 generateSQL(bom);
                 // if (!id) popup("本地数据保存失败", "danger");
                 // else savegoback(id);
@@ -121,7 +122,13 @@ function formatBOM(bom_top) {
     if (argv[2] == "dev") console.log("this bom has " + bomexcel_arr.length + " lines.")
     countNode = 1;
     bomtopArr = [];
-    var bom = gFormatBOM(bom_top, setup).data;
+    var tmpData = gFormatBOM(bom_top, setup);
+    if (tmpData === false) {
+        popup("Upload BOM Failed.", "danger");
+        addResultText("<div class='alert alert-primary' role='alert'>整理层级时发现致命错误。</div>");
+        return false;
+    }
+    var bom = tmpData.data;
     //var bom = _.sortBy(gFormatBOM(bom_top, setup, level), "item");
     if (argv[2] == "dev") console.log("bom after generation: ", bom)
     addResultText("<div class='alert alert-primary' role='alert'>整理BOM上级件</div>");
@@ -129,18 +136,43 @@ function formatBOM(bom_top) {
 }
 
 
-function gFormatBOM(bom_top, setup, index = 0) {
+function gFormatBOM(bom_top, setup, index = 0, top = false) {
     var i = index
     var rtnArr = [];
     var rtnCount = 0;
     var levelnode = 1;
     var level = bomexcel_arr[i][setup.level];
+    if (top === false) top = {
+        "code": bom_top,
+        "parent": false,
+        "qty": 0,
+        "item": false,
+        "procumenttype": false,
+        "pfep": false,
+        "level": 0,
+        "pid": false
+    }
     while (true) {
         if (i >= bomexcel_arr.length) break;
         if (bomexcel_arr[i][setup.level] == level) {
-            if (bomtopArr.indexOf(bomexcel_arr[i][setup.code]) != -1) {
-                i++;
-                continue;
+            //console.log("parsing " + bomexcel_arr[i][setup.code] + " in same level, ready to add to return array;")
+            //check if code try to add itself into a loop;
+            if (top.pid !== false && (top.pid.indexOf(bomexcel_arr[i][setup.code]) != -1 || bomexcel_arr[i][setup.code] == bom_top)) {
+                alert("BOM Data error: code " + bomexcel_arr[i][setup.code] + " tried to add into a loop.\nLevel chain is:" + top.pid + "." + bom_top);
+                return false;
+            }
+            //check the logic of procumenttype
+            if (top.procumenttype !== false && (top.procumenttype.toUpperCase() == "A" || top.procumenttype.toUpperCase() == "M") && bomexcel_arr[i][setup.pt].toUpperCase() != "B" && bomexcel_arr[i][setup.pt].toUpperCase() != "A" && bomexcel_arr[i][setup.pt].toUpperCase() != "V" && bomexcel_arr[i][setup.pt].toUpperCase() != "M" && bomexcel_arr[i][setup.pt].toUpperCase() != "C") {
+                alert("BOM PType error: line[" + (i + 1) + "], code " + bomexcel_arr[i][setup.code] + " have wrong ptype " + bomexcel_arr[i][setup.pt] + " as sub-material for \"" + top.procumenttype.toUpperCase() + "\".\nLevel chain is:" + top.pid + "." + bom_top);
+                return false;
+            }
+            if (top.procumenttype !== false && top.procumenttype.toUpperCase() == "B" && bomexcel_arr[i][setup.pt].toUpperCase() != "P" && bomexcel_arr[i][setup.pt].toUpperCase() != "N" && bomexcel_arr[i][setup.pt].toUpperCase() != "F" && bomexcel_arr[i][setup.pt].toUpperCase() != "V") {
+                alert("BOM PType error: line[" + (i + 1) + "], code" + bomexcel_arr[i][setup.code] + " have wrong ptype " + bomexcel_arr[i][setup.pt] + " as sub-material for \"B\".\nLevel chain is:" + top.pid + "." + bom_top);
+                return false;
+            }
+            if (top.procumenttype !== false && top.procumenttype.toUpperCase() == "P" && bomexcel_arr[i][setup.pt].toUpperCase() != "N" && bomexcel_arr[i][setup.pt].toUpperCase() != "F" && bomexcel_arr[i][setup.pt].toUpperCase() != "V") {
+                alert("BOM PType error: line[" + (i + 1) + "], code " + bomexcel_arr[i][setup.code] + " have wrong ptype " + bomexcel_arr[i][setup.pt] + " as sub-material for \"P\".\nLevel chain is:" + top.pid + "." + bom_top);
+                return false;
             }
             rtnArr.push({
                 "code": bomexcel_arr[i][setup.code],
@@ -149,25 +181,31 @@ function gFormatBOM(bom_top, setup, index = 0) {
                 "item": levelnode++,
                 "procumenttype": setup.pt == -1 ? "" : bomexcel_arr[i][setup.pt],
                 "pfep": setup.pfep == -1 ? "" : bomexcel_arr[i][setup.pfep],
-                "level": level
+                "level": level,
+                "pid": top.pid === false ? bom_top : top.pid + "." + bom_top
             });
             countNode++;
             rtnCount++;
         } else if (bomexcel_arr[i][setup.level] > level) {
-            var curParent = bomexcel_arr[i - 1][setup.code];
-            bomtopArr.push(curParent);
-            var subArr = gFormatBOM(curParent, setup, i);
+            //console.log("parsing " + bomexcel_arr[i][setup.code] + " in lower level, ready to make a recursion;")
+            var curParent = rtnArr[rtnArr.length - 1];
+            bomtopArr.push(curParent.code);
+            var subArr = gFormatBOM(curParent.code, setup, i, curParent);
+            if (subArr === false) {
+                return false;
+            }
             i += subArr.count;
             rtnCount += subArr.count;
-            if (parents.indexOf(curParent) == -1) {
+            if (parents.indexOf(curParent.code) == -1) {
                 rtnArr = rtnArr.concat(JSON.parse(JSON.stringify(subArr.data)));
-                parents.push(curParent);
+                parents.push(curParent.code);
             } else {
-                if (argv[2] == "dev") console.log("found an existed bom level for top:" + curParent)
+                if (argv[2] == "dev") console.log("found an existed bom level for top:" + curParent.code)
             }
             bomtopArr.pop();
             continue;
         } else {
+            //console.log("parsing " + bomexcel_arr[i][setup.code] + " back in upper level, ready to return;")
             return {
                 data: JSON.parse(JSON.stringify(rtnArr)),
                 count: rtnCount
@@ -185,10 +223,10 @@ function gFormatBOM(bom_top, setup, index = 0) {
 }
 
 function generateSQL(bom) {
-    var sql_insert = "insert into dbo.st_goodsbom (goodsid, elemgid, quantity, itemno, ptype,pfep, opid, checkorid, startDate, endDate) values ";
+    var sql_insert = "insert into dbo.st_goodsbom (goodsid, elemgid, quantity, itemno, ptype,pfep, opid, startDate, endDate) values ";
     var sql_delete = "delete from dbo.st_goodsbom where "
     for (var i = 0; i < bom.length; i++) {
-        sql_insert += "('" + bom[i].parent + "','" + bom[i].code + "'," + bom[i].qty + "," + bom[i].item + ",'" + bom[i].procumenttype + "','" + bom[i].pfep + "', " + user.id + ", " + user.id + ", dateadd(day,-1, cast(getdate() as date)), '2099-01-01')";
+        sql_insert += "('" + bom[i].parent + "','" + bom[i].code + "'," + bom[i].qty + "," + bom[i].item + ",'" + bom[i].procumenttype + "','" + bom[i].pfep + "', " + user.id + ", dateadd(day,-1, cast(getdate() as date)), '2099-01-01')";
         sql_delete += "(goodsid = '" + bom[i].parent + "' and elemgid='" + bom[i].code + "')";
         if (i != bom.length - 1) {
             sql_insert += ", ";
