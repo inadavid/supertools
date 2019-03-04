@@ -8,7 +8,7 @@ app.use(bodyParser.urlencoded({
 	extended: false
 }));
 
-var version = 'V01701';
+var version = 'V01702';
 var filepath = '/home/update/update.01702.7z' // or ../update.zip
 var fileurl = 'http://192.168.16.12:8082/update.7z';
 

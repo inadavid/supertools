@@ -63,7 +63,7 @@ $("input[bid=bomtop]").on("keyup", function (event) {
         return;
     } else {
         spec.text(codesInfo[val].name + " | " + codesInfo[val].spec);
-        $("button[bid=bomSearch]").trigger("click");
+        //$("button[bid=bomSearch]").trigger("click");
     }
 })
 
@@ -72,7 +72,9 @@ $("button[bid=bomSearch]").on("click", function () {
     var spec = $("span[bid=codespec]");
 
     if (codesList.indexOf(val) == -1) {
-        alert("wrong code")
+        //alert("wrong code")
+        spec.text("");
+        return;
     } else {
         if (completeBomTop) completeBomTop.close();
         var d = $('input[name="appliedDate"]').val().trim();
