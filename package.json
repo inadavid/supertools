@@ -1,6 +1,6 @@
 {
     "name": "supertools",
-    "version": "1.6.9",
+    "version": "1.7.01",
     "description": "SuperData addon tools",
     "main": "index.js",
     "scripts": {
