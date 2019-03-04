@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 var version = 'V01701';
-var filepath = '/home/update/update.01701.7z' // or ../update.zip
+var filepath = '/home/update/update.01702.7z' // or ../update.zip
 var fileurl = 'http://192.168.16.12:8082/update.7z';
 
 if (process.argv[2] == "dev") {

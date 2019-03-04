@@ -15,7 +15,7 @@ const request = require('request');
 
 let win;
 let flash;
-global.version = "V01701";
+global.version = "V01702";
 global.appPath = app.getAppPath();
 global.argv = process.argv;
 global.flashClosed = false;
@@ -125,7 +125,7 @@ app.on('ready', function () {
                             cmd += "\nexit"
                             fs.writeFileSync(updateBatch, cmd);
                             setTimeout(function () {
-                                exec("start " + updateBatch, function (err) {});
+                                exec("start " + updateBatch, function (err) { });
                             }, 10);
                             setTimeout(function () {
                                 app.exit();
