@@ -54,7 +54,7 @@ $(function () {
 })
 
 $("input[bid=bomtop]").on("keyup", function (event) {
-    //if (event.which == 13) $("button[bid=bomSearch]").trigger("click");
+    if (event.which == 13) $("button[bid=bomSearch]").trigger("click");
     var val = $("input[bid=bomtop]").val().trim();
     var spec = $("span[bid=codespec]");
     spec.css("margin-left", "50px").css("margin-right", "50px")
