@@ -89,6 +89,7 @@ $("button[type=submit][step=2]").on("click", (e) => {
         } else if (rtn.err == 1) {
             var text = "<h5 color='red'><strong>发生错误：以下物料号在系统中不存在！请检查 </strong></h5> <textarea class='alert alert-danger' role='alert' style='width:100%;height:100px'>";
             for (var i in rtn.data) text += rtn.data[i] + "\n";
+            d
             text += "</textarea>";
             addResultText(text);
             $("textarea.alert").on("focus", (e) => {
@@ -223,26 +224,31 @@ function gFormatBOM(bom_top, setup, index = 0, top = false) {
 }
 
 function generateSQL(bom) {
-    var sql_insert = "insert into dbo.st_goodsbom (goodsid, elemgid, quantity, itemno, ptype,pfep, opid, startDate, endDate) values ";
-    var sql_delete = "delete from dbo.st_goodsbom where "
-    for (var i = 0; i < bom.length; i++) {
-        sql_insert += "('" + bom[i].parent + "','" + bom[i].code + "'," + bom[i].qty + "," + bom[i].item + ",'" + bom[i].procumenttype + "','" + bom[i].pfep + "', " + user.id + ", dateadd(day,-1, cast(getdate() as date)), '2099-01-01')";
-        sql_delete += "(goodsid = '" + bom[i].parent + "' and elemgid='" + bom[i].code + "')";
-        if (i != bom.length - 1) {
-            sql_insert += ", ";
-            sql_delete += " or ";
+    var st = "insert into st_goodsbom_stat (bomtop, date, opid) values ('" + bom_top + "', GETDATE(), " + user.id + "); SELECT SCOPE_IDENTITY() as sn;";
+    new sql.Request().query(st, (err, result) => {
+        if (err) {
+            alert("Error happened: \n" + JSON.stringify(err));
+            return;
         }
-    }
-    if (veryTop) {
-        sql_insert += "; insert into st_bomtop (goodsid) values ( '" + bom_top + "') ";
-        sql_delete += "; delete from st_bomtop where goodsid='" + bom_top + "' ";
-    }
-    sql_insert += "; insert into st_picklists (code, date, opid,type) values ('" + bom_top + "', GETDATE(), " + user.id + ", 0); insert into st_bomeco (parentgid, comments, date, data, userid, status) values ( '" + bom_top + "', '" + Base64.encode("New BOM upload") + "', GETDATE(), '" + Base64.encode(JSON.stringify([])) + "', " + user.id + " ,1 );";
-    sql_delete += "; delete from st_picklists where code = '" + bom_top + "';";
-    addResultText("<div class='alert alert-success' role='alert'>数据库语句已经生成。执行数据导入中……</div>");
+        var statsn = result.recordset[0].sn;
 
-    new sql.Request().query(sql_insert, (err, result) => {
-        addResultText("<div class='alert alert-success' role='alert'>数据库语句已经导入！</div>");
-        loglog("GenerateBOMsql", sql_insert + " | " + sql_delete);
+        var sql_insert = "insert into dbo.st_goodsbom (goodsid, elemgid, quantity, itemno, ptype,pfep, opid, startDate, endDate, mark) values ";
+        for (var i = 0; i < bom.length; i++) {
+            sql_insert += "('" + bom[i].parent + "','" + bom[i].code + "'," + bom[i].qty + "," + bom[i].item + ",'" + bom[i].procumenttype + "','" + bom[i].pfep + "', " + user.id + ", dateadd(day,-1, cast(getdate() as date)), '2099-01-01', " + statsn + ")";
+            if (i != bom.length - 1) {
+                sql_insert += ", ";
+            }
+        }
+        if (veryTop) {
+            sql_insert += "; insert into st_bomtop (goodsid) values ( '" + bom_top + "') ";
+        }
+        sql_insert += "; insert into st_picklists (code, date, opid,type) values ('" + bom_top + "', GETDATE(), " + user.id + ", 0); insert into st_bomeco (parentgid, comments, date, data, userid, status) values ( '" + bom_top + "', '" + Base64.encode("New BOM upload") + "', GETDATE(), '" + Base64.encode(JSON.stringify([])) + "', " + user.id + " ,1 );";
+        addResultText("<div class='alert alert-success' role='alert'>数据库语句已经生成。执行数据导入中……</div>");
+        // console.log(sql_insert);
+        new sql.Request().query(sql_insert, (err, result) => {
+            addResultText("<div class='alert alert-success' role='alert'>数据库语句已经导入！</div>");
+            loglog("UploadBOMsql", sql_insert);
+        });
     });
+
 }
