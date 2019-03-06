@@ -572,22 +572,20 @@ function downloadDrawing(code, version = false, path = false, cb = false) {
         connection.connect();
         query = "select data from st_drawings where dsn=" + result.recordset[0].sn;
         var p = require("path");
+        var sanitize = require("sanitize-filename");
         if (path === false) {
             var tmppath = app.getPath("temp") + "/SuperTools";
             if (!fs.existsSync(tmppath)) fs.mkdirSync(tmppath);
             //change file name to a standard type for 0 and 1 type file
             if (result.recordset[0].filetype == 0 || result.recordset[0].filetype == 1) {
-                filepath = tmppath + "/" + result.recordset[0].code + "_V" + result.recordset[0].version + "_" + result.recordset[0].size + "_" + codesInfo[result.recordset[0].code].name + "_" + codesInfo[result.recordset[0].code].spec + p.extname(result.recordset[0].filename).toLowerCase();
-            }
-            else filepath = tmppath + "/" + result.recordset[0].filename.toLowerCase();
+                filepath = tmppath + "/" + sanitize(result.recordset[0].code + "_V" + result.recordset[0].version + "_" + result.recordset[0].size + "_" + codesInfo[result.recordset[0].code].name + "_" + codesInfo[result.recordset[0].code].spec + p.extname(result.recordset[0].filename).toLowerCase());
+            } else filepath = tmppath + "/" + result.recordset[0].filename.toLowerCase();
         } else if (fs.lstatSync(path).isDirectory()) {
             //change file name to a standard type for 0 and 1 type file
             if (result.recordset[0].filetype == 0 || result.recordset[0].filetype == 1) {
-                filepath = path + "/" + result.recordset[0].code + "_V" + result.recordset[0].version + "_" + result.recordset[0].size + "_" + codesInfo[result.recordset[0].code].name + "_" + codesInfo[result.recordset[0].code].spec + p.extname(result.recordset[0].filename).toLowerCase();
-            }
-            else filepath = tmppath + "/" + result.recordset[0].filename.toLowerCase();
-        }
-        else {
+                filepath = path + "/" + sanitize(result.recordset[0].code + "_V" + result.recordset[0].version + "_" + result.recordset[0].size + "_" + codesInfo[result.recordset[0].code].name + "_" + codesInfo[result.recordset[0].code].spec + p.extname(result.recordset[0].filename).toLowerCase());
+            } else filepath = tmppath + "/" + result.recordset[0].filename.toLowerCase();
+        } else {
             filepath = path;
         }
         connection.query(query, function (error, results, fields) {
