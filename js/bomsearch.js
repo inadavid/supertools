@@ -264,7 +264,7 @@ function showBOM(dbom) {
 
     $("button[bid=exportPL]").click(function () {
         var top = $("input[bid=bomtop]").val().trim();
-        console.log(shifted)
+        if (argv[2] == "dev") console.log(shifted)
         if (shifted) getPicklist(top, 1);
         else getPicklist(top, 0);
     });
@@ -274,21 +274,26 @@ function showBOM(dbom) {
             properties: ['openDirectory']
         })
         if (!dfp) return;
-        var downCount = $('div[bid=bomcard] table').find("tr span[bid='dopen']").length;
-        var downQty = 0;
-        var progressDiv = $("<div class='alert alert-primary' role='alert' style='margin-top:10px;'>Downloading " + downCount + " drawings:<br>");
-        progressDiv.append('<div class="progress"> <div class="progress-bar" bid="download" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"> 0% </div> </div>');
-        $('div[bid=bomcard] div[bid=downProgress]').html("").append(progressDiv);
 
         var downArray = [];
         $('div[bid=bomcard] table').find("tr span[bid='dopen']").each(function () {
             var code = $(this).attr("code");
             var version = $(this).attr("version");
-            downArray.push({
+            var tObj = {
                 code: code,
                 version: version
-            })
+            }
+            if (_.find(downArray, function (obj) { return obj.code == code }) == undefined) downArray.push(tObj);
         });
+        var downCount = downArray.length;
+        if (downCount == 0) {
+            popup("No drawing to download.", "danger");
+            return;
+        }
+        var downQty = 0;
+        var progressDiv = $("<div class='alert alert-primary' role='alert' style='margin-top:10px;'>Downloading " + downCount + " drawings:<br>");
+        progressDiv.append('<div class="progress"> <div class="progress-bar" bid="download" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"> 0% </div> </div>');
+        $('div[bid=bomcard] div[bid=downProgress]').html("").append(progressDiv);
 
         function tmpDown(downArray) {
             var data = downArray.pop();
@@ -298,7 +303,7 @@ function showBOM(dbom) {
                     alert("Error:" + rtn.err + "\nDrawing downloaded:" + downQty);
                     $('div[bid=bomcard] div[bid=downProgress]').html("");
                 } else {
-                    console.log(rtn + " downloaded.")
+                    if (argv[2] == "dev") console.log(rtn + " downloaded.")
                     var rate = (++downQty / downCount * 100).toFixed(2);
                     $('div[bid=bomcard] div[bid=downProgress] div[bid=download]').css("width", rate + "%").attr("aria-valuenow", rate).text(downQty + " Drawings, " + rate + "%");
                     if (downQty == downCount) {
