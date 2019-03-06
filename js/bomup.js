@@ -69,6 +69,10 @@ $("button[type=submit][step=2]").on("click", (e) => {
                 for (var i in result.recordset) {
                     parents.push(result.recordset[i].goodsid);
                 }
+                if (parents.indexOf(bom_top) != -1) {
+                    addResultText("<div class='alert alert-danger' role='alert'>This bom has been uploaded before!</div>");
+                    return;
+                }
                 bomtopArr = [bom_top];
                 bom = formatBOM(bom_top);
                 // if (argv[2] == "dev") { //export a temp file for check
@@ -89,7 +93,6 @@ $("button[type=submit][step=2]").on("click", (e) => {
         } else if (rtn.err == 1) {
             var text = "<h5 color='red'><strong>发生错误：以下物料号在系统中不存在！请检查 </strong></h5> <textarea class='alert alert-danger' role='alert' style='width:100%;height:100px'>";
             for (var i in rtn.data) text += rtn.data[i] + "\n";
-            d
             text += "</textarea>";
             addResultText(text);
             $("textarea.alert").on("focus", (e) => {
