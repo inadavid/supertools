@@ -54,7 +54,7 @@ $(function () {
 })
 
 $("input[bid=bomtop]").on("keyup", function (event) {
-    //if (event.which == 13) $("button[bid=bomSearch]").trigger("click");
+    if (event.which == 13) $("button[bid=bomSearch]").trigger("click");
     var val = $("input[bid=bomtop]").val().trim();
     var spec = $("span[bid=codespec]");
     spec.css("margin-left", "50px").css("margin-right", "50px")
@@ -173,7 +173,7 @@ function showBOM(dbom) {
             .append("<td>" + dbom[i].ProchasingType + "</td>")
             .append("<td><input did='Name' value='" + dbom[i].Name + "' readonly></td>")
             .append("<td><input did='Spec' value='" + dbom[i].Spec + "' readonly></td>")
-            .append("<td>" + (dbom[i].dversion !== null && user.perm.indexOf(6) != -1 ? "<span class='iconfont icon-drawing' bid='drawing' code='" + dbom[i].Code + "'></span> <span class='iconfont icon-open' bid='dopen' code='" + dbom[i].Code + "''></span> <span>V" + dbom[i].dversion + "</span>" : "-") + "</td>");
+            .append("<td>" + (dbom[i].dversion !== null && user.perm.indexOf(6) != -1 ? "<span class='iconfont icon-drawing' bid='drawing' code='" + dbom[i].Code + "'></span> <span class='iconfont icon-open' bid='dopen' code='" + dbom[i].Code + "' version='" + dbom[i].dversion + "'></span> <span>V" + dbom[i].dversion + "</span>" : "-") + "</td>");
         tbody.append(tr);
     }
     table.append(tbody);
@@ -188,13 +188,14 @@ function showBOM(dbom) {
         var btn = $(this);
         btn.hide();
 
-        var code = $(this).attr("code");
-        displayDrawing(code, false, function (rtn) {
-            console.log(rtn);
-            btn.show();
+        var code = btn.attr("code");
+        var version = parseInt(btn.attr("version"))
+        displayDrawing(code, version, function (rtn) {
+            if (!rtn.err) btn.show();
+            else alert(rtn.err)
         });
     });
-    $("div[bid=bomcard]").html("<h5><strong>" + $("input[bid=bomtop]").val() + "</strong> BOM Tree View &nbsp; &nbsp; &nbsp; <button class='btn btn-form btn-warning btn-sm' bid='exportBOM'>Export BOM</button> <button class='btn btn-form btn-primary btn-sm' bid='exportPL'>Export Picklist</button></h5>").append(table);
+    $("div[bid=bomcard]").html("<h5><strong>" + $("input[bid=bomtop]").val() + "</strong> BOM Tree View &nbsp; &nbsp; &nbsp; <button class='btn btn-form btn-warning btn-sm' bid='exportBOM'>Export BOM</button> <button class='btn btn-form btn-primary btn-sm' bid='exportPL'>Export Picklist</button> " + (user.perm.indexOf(6) != -1 ? "<button class='btn btn-form btn-success btn-sm' bid='dlAllDrawings'>Download drawings(pdf)</button><div bid='downProgress'></div> " : "") + "</h5>").append(table);
 
     var jstt = com_github_culmat_jsTreeTable;
     // $("div[bid=bomcard] table").treetable({
@@ -268,6 +269,49 @@ function showBOM(dbom) {
         else getPicklist(top, 0);
     });
 
+    $("button[bid='dlAllDrawings']").click(function () {
+        var dfp = dialog.showOpenDialog(win, {
+            properties: ['openDirectory']
+        })
+        if (!dfp) return;
+        var downCount = $('div[bid=bomcard] table').find("tr span[bid='dopen']").length;
+        var downQty = 0;
+        var progressDiv = $("<div class='alert alert-primary' role='alert' style='margin-top:10px;'>Downloading " + downCount + " drawings:<br>");
+        progressDiv.append('<div class="progress"> <div class="progress-bar" bid="download" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"> 0% </div> </div>');
+        $('div[bid=bomcard] div[bid=downProgress]').html("").append(progressDiv);
+
+        var downArray = [];
+        $('div[bid=bomcard] table').find("tr span[bid='dopen']").each(function () {
+            var code = $(this).attr("code");
+            var version = $(this).attr("version");
+            downArray.push({
+                code: code,
+                version: version
+            })
+        });
+
+        function tmpDown(downArray) {
+            var data = downArray.pop();
+            if (!data) return false;
+            downloadDrawing(data.code, data.version, dfp[0], function (rtn) {
+                if (rtn.err) {
+                    alert("Error:" + rtn.err + "\nDrawing downloaded:" + downQty);
+                    $('div[bid=bomcard] div[bid=downProgress]').html("");
+                } else {
+                    console.log(rtn + " downloaded.")
+                    var rate = (++downQty / downCount * 100).toFixed(2);
+                    $('div[bid=bomcard] div[bid=downProgress] div[bid=download]').css("width", rate + "%").attr("aria-valuenow", rate).text(downQty + " Drawings, " + rate + "%");
+                    if (downQty == downCount) {
+                        popup("All drawings have been downloaded!", "success");
+                        $('div[bid=bomcard] div[bid=downProgress]').html("");
+                    } else {
+                        tmpDown(downArray);
+                    }
+                }
+            })
+        }
+        tmpDown(downArray);
+    })
     if (completeBomTop) completeBomTop.close();
 
 }
@@ -277,7 +321,7 @@ function searchBOM(code) {
 
     displayBOM = [];
     $("div[bid=bomcard]").html("<h5>Searching BOM, please wait...</h5>");
-    sqltext = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.quantity*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid where b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT a.*, (select max(b.version) from st_drawings as b where b.code = a.elemgid and b.filetype=0) as dversion  FROM CTE as a order by pid asc,itemno asc;";
+    sqltext = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.quantity*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid where b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT a.*, (select max(b.version) from st_drawings as b where b.code = a.elemgid and b.filetype=0 and b.stat=1) as dversion  FROM CTE as a order by pid asc,itemno asc;";
     new sql.Request().query(sqltext, (err, result) => {
         // ... error checks
         if (result.recordset.length > 0) {

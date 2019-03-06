@@ -536,12 +536,16 @@ function getPicklist(code, type = 0) {
 
 function displayDrawing(code, version = false, cb = false) {
     downloadDrawing(code, version, false, function (filepath) {
-        const {
-            shell
-        } = require('electron');
-        // Open a local file in the default app
-        shell.openItem(filepath);
-        if (typeof (cb) == "function") cb(filepath);
+        if (filepath.err) {
+            if (typeof (cb) == "function") return cb(filepath);
+        } else {
+            const {
+                shell
+            } = require('electron');
+            // Open a local file in the default app
+            shell.openItem(filepath);
+            if (typeof (cb) == "function") cb(filepath);
+        }
     })
 }
 
@@ -551,6 +555,12 @@ function downloadDrawing(code, version = false, path = false, cb = false) {
             console.error(err);
             alert("An error occur when open drawing.\n" + JSON.stringify(err));
             return;
+        }
+        if (result.rowsAffected != 1) {
+            if (typeof (cb) == "function") cb({
+                err: "drawing does not exist"
+            });
+            return false;
         }
         var mysql = require('mysql');
         var connection = mysql.createConnection({
@@ -566,7 +576,7 @@ function downloadDrawing(code, version = false, path = false, cb = false) {
             if (!fs.existsSync(tmppath)) fs.mkdirSync(tmppath);
             filepath = tmppath + "/" + result.recordset[0].filename;
         } else {
-            filepath = path;
+            filepath = path + "/" + result.recordset[0].filename;;
         }
         connection.query(query, function (error, results, fields) {
             fs.writeFileSync(filepath, results[0].data);
