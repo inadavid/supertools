@@ -225,6 +225,7 @@ function showBOM(dbom) {
             Level: "-",
             Order: "-",
             Code: top,
+            "PDF.Ver": "-",
             Qty: "-",
             Unit: "-",
             PT: "-",
@@ -239,6 +240,7 @@ function showBOM(dbom) {
             obj.Level = cloneArr[i].Level;
             obj.Order = cloneArr[i].Order;
             obj.Code = cloneArr[i].Code;
+            obj["PDF.Ver"] = cloneArr[i].dversion != null ? "V" + cloneArr[i].dversion : "";
             obj.Qty = cloneArr[i].Qty;
             obj.Unit = cloneArr[i].Unit;
             obj.PT = cloneArr[i].ProchasingType;
