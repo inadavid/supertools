@@ -484,7 +484,7 @@ function getPicklist(code, type = 0) {
             dbom = _.sortBy(dbom, 'Code')
             var count = 1;
             for (var i in dbom) {
-                if (type == 0 && dbom[i].ProchasingType != "B" && dbom[i].ProchasingType != "b") continue;
+                if (type == 0 && dbom[i].ProchasingType != "B" && dbom[i].ProchasingType != "b" && dbom[i].ProchasingType != "C" && dbom[i].ProchasingType != "c") continue;
                 if (type == 1 && dbom[i].ProchasingType != "P" && dbom[i].ProchasingType != "p") continue;
                 if (dbom[i].Qty == 0) continue;
                 var oobj = _.find(rdata, function (obj) {
