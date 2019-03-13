@@ -19,7 +19,7 @@ $(function () {
     }
 
     var sqltext = "select goodsid from st_bomtop;";
-    new sql.Request().query(sqltext, (err, result) => {
+    executeMsSql(sqltext, (err, result) => {
         if (err) {
             console.error(err);
             return;
@@ -329,7 +329,7 @@ function searchBOM(code) {
     displayBOM = [];
     $("div[bid=bomcard]").html("<h5>Searching BOM, please wait...</h5>");
     sqltext = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.quantity*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid where b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT a.*, (select max(b.version) from st_drawings as b where b.code = a.elemgid and b.filetype=0 and b.stat=1) as dversion  FROM CTE as a order by pid asc,itemno asc;";
-    new sql.Request().query(sqltext, (err, result) => {
+    executeMsSql(sqltext, (err, result) => {
         // ... error checks
         if (result.recordset.length > 0) {
             for (var i in result.recordset) {
@@ -351,7 +351,7 @@ function searchBOM(code) {
             }
             displayBOM = reOrderBOM(displayBOM, code);
         }
-        new sql.Request().query("select top 1 b.version from st_drawings as b where b.code = '" + code + "' order by b.version desc;", (err, result) => {
+        executeMsSql("select top 1 b.version from st_drawings as b where b.code = '" + code + "' order by b.version desc;", (err, result) => {
             displayBOM.splice(0, 0, {
                 Level: 0,
                 Order: 1,
@@ -379,7 +379,7 @@ function searchParent(code) {
     var sqltxt = "select goodsid from st_goodsbom where elemgid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' group by goodsid";
     var parentsList = [];
     $("div[bid=parentcard]").html("<h5>Searching parents, please wait...</h5>")
-    new sql.Request().query(sqltxt, (err, result) => {
+    executeMsSql(sqltxt, (err, result) => {
         // ... error checks
 
         if (result.rowsAffected == 0) {
@@ -430,7 +430,7 @@ function searchFG(code) {
     $("div[bid=fgcard]").html("<h5>Searching applied Finish Goods, please wait...</h5>");
     var fglist = [];
     var sqltxt = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1 FROM dbo.st_goodsbom as b WHERE elemgid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1 FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON c.goodsid=b.elemgid where  b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT e.goodsid FROM CTE as e inner join st_bomtop as d on d.goodsid=e.goodsid group by e.goodsid;";
-    new sql.Request().query(sqltxt, (err, result) => {
+    executeMsSql(sqltxt, (err, result) => {
         // ... error checks
 
         if (result.rowsAffected == 0) {

@@ -1,7 +1,7 @@
 var picklists = [];
 today = moment().format("YYYY-MM-DD")
 $(function () {
-    new sql.Request().query("select * from st_picklists order by code asc;", (err, result) => {
+    executeMsSql("select * from st_picklists order by code asc;", (err, result) => {
 
         if (result.rowsAffected != 0) {
             for (var i in result.recordset) {
@@ -55,11 +55,11 @@ $("button[bid=newpl]").click(function () {
         plcode.prop("disabled", false);
         return;
     }
-    new sql.Request().query("select count(*) as [count] from st_goodsbom where goodsid='" + plcode.val().trim() + "' and startDate <= getdate() and endDate >= getdate();", (err, result) => {
+    executeMsSql("select count(*) as [count] from st_goodsbom where goodsid='" + plcode.val().trim() + "' and startDate <= getdate() and endDate >= getdate();", (err, result) => {
         var count = result.recordset[0].count;
         if (count > 0) {
             //add to list
-            new sql.Request().query("insert into st_picklists (code, date, opid,type) values ('" + plcode.val().trim() + "', GETDATE(), " + user.id + ", " + type + "); SELECT SCOPE_IDENTITY() as sn;", (err, result) => {
+            executeMsSql("insert into st_picklists (code, date, opid,type) values ('" + plcode.val().trim() + "', GETDATE(), " + user.id + ", " + type + "); SELECT SCOPE_IDENTITY() as sn;", (err, result) => {
                 picklists.push({
                     sn: result.recordset[0].sn,
                     code: plcode.val().trim(),
@@ -90,7 +90,7 @@ $("button[bid=delpl]").click(function () {
     });
     if (!confirm("Are you sure you want to delete code " + item.code + " from plicklist generation list?")) return;
 
-    new sql.Request().query("delete from st_picklists where sn = " + sn + "; ", (err) => {
+    executeMsSql("delete from st_picklists where sn = " + sn + "; ", (err) => {
         loglog("PicklistDelete", "sn:" + sn + "; code:" + item.code);
         picklists.splice(picklists.indexOf(item), 1);
         $("button[bid=delpl]").prop("disabled", true);

@@ -2,17 +2,11 @@ $(function () {
     if (drawingCode == 0) {
         alert("No drawing specified");
     }
-    var dtype = [
-        "2D PDF drawings(.pdf)",
-        "2D Solidworks drawings(.slddrw)",
-        "3D eDrawings drawings(.igs, .easm, .eprt)",
-        "3D Solidworks drawings(.sldasm, .sldprt)"
-    ];
 
     var bCreateNewVersion = true;
     var maxVersion = 0;
 
-    new sql.Request().query("select a.*,b.opname from st_drawings as a inner join m_operator as b on a.opid = b.opid where code = '" + drawingCode + "' order by a.version desc, a.filetype asc;", (err, result) => {
+    executeMsSql("select a.*,b.opname from st_drawings as a inner join m_operator as b on a.opid = b.opid where code = '" + drawingCode + "' order by a.version desc, a.filetype asc;", (err, result) => {
         if (err) {
             console.error(err);
             alert("An error occur when fetching drawing information.\n" + JSON.stringify(err));
@@ -46,13 +40,13 @@ $(function () {
                 v = result.recordset[i].version;
                 tmptable.attr("version", v);
             }
-            var tr = $("<tr>").append($("<td>").text(dtype[result.recordset[i].filetype])).append($("<td>").text(result.recordset[i].filename)).append($("<td>").text(moment(result.recordset[i].date).utc().format("YYYY-MM-DD HH:mm:ss"))).append($("<td>").text(result.recordset[i].opname));
+            var tr = $("<tr>").append($("<td>").text(drawingType[result.recordset[i].filetype].name)).append($("<td>").text(result.recordset[i].filename)).append($("<td>").text(moment(result.recordset[i].date).utc().format("YYYY-MM-DD HH:mm:ss"))).append($("<td>").text(result.recordset[i].opname));
             tr.attr("sn", result.recordset[i].sn).attr("stat", result.recordset[i].stat).attr("opid", result.recordset[i].opid);
             if (result.recordset[i].stat == 0) {
-                if (result.recordset[i].opid == user.id) tr.append($("<td>").html("<span class='iconfont icon-shanchu' bid='ddel' code='" + result.recordset[i].code + "' version='" + result.recordset[i].version + "'></span> <span class='iconfont icon-open' bid='dopen' code='" + result.recordset[i].code + "' version='" + result.recordset[i].version + "'></span>"))
+                if (result.recordset[i].opid == user.id) tr.append($("<td>").html("<span class='iconfont icon-shanchu' bid='ddel' code='" + result.recordset[i].code + "' version='" + result.recordset[i].version + "'></span> <span class='iconfont icon-open' bid='dopen' code='" + result.recordset[i].code + "' version='" + result.recordset[i].version + "' filetype='" + result.recordset[i].filetype + "'></span>"))
                 else tr.append($("<td>").html("Being modified"));
             } else if (result.recordset[i].stat == 1) {
-                tr.append($("<td>").html("<span class='iconfont icon-open' bid='dopen' code='" + result.recordset[i].code + "' version='" + result.recordset[i].version + "'></span>"))
+                tr.append($("<td>").html("<span class='iconfont icon-open' bid='dopen' code='" + result.recordset[i].code + "' version='" + result.recordset[i].version + "' filetype='" + result.recordset[i].filetype + "'></span>"))
             }
             tmptable.find("tbody").append(tr);
         }
@@ -72,12 +66,13 @@ $(function () {
         pdiv.find("span[bid=dopen]").css("cursor", "pointer").click(function () {
             var code = $(this).attr("code");
             var version = $(this).attr("version");
+            var filetype = $(this).attr("filetype");
             var btn = $(this);
             btn.hide();
             displayDrawing(code, version, function (rtn) {
                 if (!rtn.err) btn.show();
                 else alert(rtn.err)
-            });
+            }, parseInt(filetype));
         });
     });
 })

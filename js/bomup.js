@@ -228,30 +228,38 @@ function gFormatBOM(bom_top, setup, index = 0, top = false) {
 
 function generateSQL(bom) {
     var st = "insert into st_goodsbom_stat (bomtop, date, opid) values ('" + bom_top + "', GETDATE(), " + user.id + "); SELECT SCOPE_IDENTITY() as sn;";
-    new sql.Request().query(st, (err, result) => {
+    executeMsSql(st, (err, result) => {
         if (err) {
             alert("Error happened: \n" + JSON.stringify(err));
             return;
         }
         var statsn = result.recordset[0].sn;
 
-        var sql_insert = "insert into dbo.st_goodsbom (goodsid, elemgid, quantity, itemno, ptype,pfep, opid, startDate, endDate, mark) values ";
+        var sql_insert = [];
+        var sql_temp = "insert into dbo.st_goodsbom (goodsid, elemgid, quantity, itemno, ptype,pfep, opid, startDate, endDate, mark) values ";
+        var sql_i = sql_temp;
         for (var i = 0; i < bom.length; i++) {
-            sql_insert += "('" + bom[i].parent + "','" + bom[i].code + "'," + bom[i].qty + "," + bom[i].item + ",'" + bom[i].procumenttype + "','" + bom[i].pfep + "', " + user.id + ", dateadd(day,-1, cast(getdate() as date)), '2099-01-01', " + statsn + ")";
-            if (i != bom.length - 1) {
-                sql_insert += ", ";
+            sql_i += "('" + bom[i].parent + "','" + bom[i].code + "'," + bom[i].qty + "," + bom[i].item + ",'" + bom[i].procumenttype + "','" + bom[i].pfep + "', " + user.id + ", dateadd(day,-1, cast(getdate() as date)), '2099-01-01', " + statsn + ")";
+            if (i != bom.length - 1 && (i + 1) % 200 != 0) {
+                sql_i += ", ";
+            }
+            else {
+                sql_i += "; ";
+                sql_insert.push(sql_i);
+                if (i != bom.length - 1) sql_i = sql_temp;
             }
         }
         if (veryTop) {
-            sql_insert += "; insert into st_bomtop (goodsid) values ( '" + bom_top + "') ";
+            sql_i += "insert into st_bomtop (goodsid) values ( '" + bom_top + "'); ";
         }
-        sql_insert += "; insert into st_picklists (code, date, opid,type) values ('" + bom_top + "', GETDATE(), " + user.id + ", 0); insert into st_bomeco (parentgid, comments, date, data, userid, status) values ( '" + bom_top + "', '" + Base64.encode("New BOM upload") + "', GETDATE(), '" + Base64.encode(JSON.stringify([])) + "', " + user.id + " ,1 );";
+        sql_i += "insert into st_picklists (code, date, opid,type) values ('" + bom_top + "', GETDATE(), " + user.id + ", 0); insert into st_bomeco (parentgid, comments, date, data, userid, status) values ( '" + bom_top + "', '" + Base64.encode("New BOM upload") + "', GETDATE(), '" + Base64.encode(JSON.stringify([])) + "', " + user.id + " ,1 );";
+        sql_insert.push(sql_i);
         addResultText("<div class='alert alert-success' role='alert'>数据库语句已经生成。执行数据导入中……</div>");
-        // console.log(sql_insert);
-        new sql.Request().query(sql_insert, (err, result) => {
+        executeMsSql(sql_insert, (err, result) => {
             addResultText("<div class='alert alert-success' role='alert'>数据库语句已经导入！</div>");
-            loglog("UploadBOMsql", sql_insert);
+            loglog("UploadBOMsql", JSON.stringify({ bomMark: statsn }));
         });
     });
 
 }
+

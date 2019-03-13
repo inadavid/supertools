@@ -45,6 +45,13 @@ var allcodesHint = [];
 var shifted = false;
 var drawingCode = 0;
 
+var drawingType = [
+    { name: "2D Viewable drawing(.pdf, .zip)", ext: ["pdf", "zip"] },
+    { name: "2D Source drawing(.slddrw, .dwg, .dxf, .exb)", ext: ["slddrw", "dwg", "dxf", "exb"] },
+    { name: "3D Viewable drawing(.igs, .easm, .eprt)", ext: ["igs", "easm", "eprt"] },
+    { name: "3D Solidworks drawing(.sldasm, .sldprt)", ext: ["sldasm", "sldprt"] }
+];
+
 function updateUserinfo() {
     $("a[bid=userinfo]").text("User:" + user.name + "; UID:" + user.id)
 }
@@ -534,7 +541,7 @@ function getPicklist(code, type = 0) {
     return data;
 }
 
-function displayDrawing(code, version = false, cb = false) {
+function displayDrawing(code, version = false, cb = false, filetype = 0) {
     downloadDrawing(code, version, false, function (filepath) {
         if (filepath.err) {
             if (typeof (cb) == "function") return cb(filepath);
@@ -546,52 +553,107 @@ function displayDrawing(code, version = false, cb = false) {
             shell.openItem(filepath);
             if (typeof (cb) == "function") cb(filepath);
         }
-    })
+    }, filetype)
 }
 
-function downloadDrawing(code, version = false, path = false, cb = false) {
-    new sql.Request().query("select top 1 * from st_drawings where code = '" + code + "' " + (version === false ? "" : " and version =" + version) + " order by version desc;", (err, result) => {
-        if (err) {
-            console.error(err);
-            alert("An error occur when open drawing.\n" + JSON.stringify(err));
-            return;
-        }
-        if (result.rowsAffected != 1) {
-            if (typeof (cb) == "function") cb({
-                err: "drawing does not exist"
-            });
-            return false;
-        }
-        var mysql = require('mysql');
-        var connection = mysql.createConnection({
-            host: config.mysqlServer,
-            user: config.serverconfig.user,
-            password: config.serverconfig.password,
-            database: config.serverconfig.user
-        });
-        connection.connect();
-        query = "select data from st_drawings where dsn=" + result.recordset[0].sn;
-        var p = require("path");
-        var sanitize = require("sanitize-filename");
-        if (path === false) {
-            var tmppath = app.getPath("temp") + "/SuperTools";
-            if (!fs.existsSync(tmppath)) fs.mkdirSync(tmppath);
-            //change file name to a standard type for 0 and 1 type file
-            if (result.recordset[0].filetype == 0 || result.recordset[0].filetype == 1) {
-                filepath = tmppath + "/" + sanitize(result.recordset[0].code + "_V" + result.recordset[0].version + "_" + result.recordset[0].size + "_" + codesInfo[result.recordset[0].code].name + "_" + codesInfo[result.recordset[0].code].spec + p.extname(result.recordset[0].filename).toLowerCase());
-            } else filepath = tmppath + "/" + result.recordset[0].filename.toLowerCase();
-        } else if (fs.lstatSync(path).isDirectory()) {
-            //change file name to a standard type for 0 and 1 type file
-            if (result.recordset[0].filetype == 0 || result.recordset[0].filetype == 1) {
-                filepath = path + "/" + sanitize(result.recordset[0].code + "_V" + result.recordset[0].version + "_" + result.recordset[0].size + "_" + codesInfo[result.recordset[0].code].name + "_" + codesInfo[result.recordset[0].code].spec + p.extname(result.recordset[0].filename).toLowerCase());
-            } else filepath = tmppath + "/" + result.recordset[0].filename.toLowerCase();
-        } else {
-            filepath = path;
-        }
-        connection.query(query, function (error, results, fields) {
-            fs.writeFileSync(filepath, results[0].data);
-            if (typeof (cb) == "function") cb(filepath);
-        });
-        connection.end();
+function downloadDrawing(code, version = false, path = false, cb = false, filetype = 0) {
+
+    var mysql = require('mysql');
+    var connection = mysql.createConnection({
+        host: config.mysqlServer,
+        user: config.serverconfig.user,
+        password: config.serverconfig.password,
+        database: config.serverconfig.user
     });
+    connection.connect();
+
+    if (filetype == 0) {
+        executeMsSql("select top 1 * from st_drawings where code = '" + code + "' " + (version === false ? "" : " and version =" + version) + " and filetype = 0 order by version desc;", (err, result) => {
+            if (err) {
+                console.error(err);
+                alert("An error occur when open drawing.\n" + JSON.stringify(err));
+                return;
+            }
+            if (result.rowsAffected != 1) {
+                if (typeof (cb) == "function") cb({
+                    err: "drawing does not exist"
+                });
+                return false;
+            }
+            query = "select data from st_drawings where dsn=" + result.recordset[0].sn;
+            var p = require("path");
+            var sanitize = require("sanitize-filename");
+            if (path === false) {
+                var tmppath = app.getPath("temp") + "/SuperTools";
+                if (!fs.existsSync(tmppath)) fs.mkdirSync(tmppath);
+                //change file name to a standard type for 0 and 1 type file
+                if (result.recordset[0].filetype == 0 || result.recordset[0].filetype == 1) {
+                    filepath = tmppath + "/" + sanitize(result.recordset[0].code + "_V" + result.recordset[0].version + "_" + result.recordset[0].size + "_" + codesInfo[result.recordset[0].code].name + "_" + codesInfo[result.recordset[0].code].spec + p.extname(result.recordset[0].filename).toLowerCase());
+                } else filepath = tmppath + "/" + result.recordset[0].filename.toLowerCase();
+            } else if (fs.lstatSync(path).isDirectory()) {
+                //change file name to a standard type for 0 and 1 type file
+                if (result.recordset[0].filetype == 0 || result.recordset[0].filetype == 1) {
+                    filepath = path + "/" + sanitize(result.recordset[0].code + "_V" + result.recordset[0].version + "_" + result.recordset[0].size + "_" + codesInfo[result.recordset[0].code].name + "_" + codesInfo[result.recordset[0].code].spec + p.extname(result.recordset[0].filename).toLowerCase());
+                } else filepath = tmppath + "/" + result.recordset[0].filename.toLowerCase();
+            } else {
+                filepath = path;
+            }
+            connection.query(query, function (error, results, fields) {
+                fs.writeFileSync(filepath, results[0].data);
+                if (typeof (cb) == "function") cb(filepath);
+            });
+            connection.end();
+        });
+    }
+    if (filetype == 1) {
+        if (typeof (cb) == "function") cb(null);
+
+    }
+    if (filetype == 2) {
+        if (typeof (cb) == "function") cb(null);
+
+    }
+    if (filetype == 3) {
+        if (typeof (cb) == "function") cb(null);
+    }
+
+}
+
+function executeMsSql(sqlArr, cb = false, rlt = false) {
+    if (!Array.isArray(sqlArr) && typeof (sqlArr) == "string") {
+        new sql.Request().query(sqlArr, (err, result) => {
+            if (cb && typeof (cb) == "function") cb(err, result);
+        });
+    }
+    else if (Array.isArray(sqlArr)) {
+        //var sqltext = sqlArr.splice(sqlArr.length - 1, 1);
+        var sqltext = sqlArr.pop();
+        console.log("current sql:", sqltext)
+        if (typeof (sqltext) == "string") {
+            console.log("current sql:", sqltext)
+            new sql.Request().query(sqltext, (err, result) => {
+                console.log("returned result", result)
+                if (err) {
+                    if (cb && typeof (cb) == "function") cb(err, rlt);
+                } else {
+                    if (rlt === false) rlt = {
+                        recordset: result.recordset,
+                        rowsAffected: parseInt(result.rowsAffected)
+                    }
+                    else {
+                        rlt.rowsAffected += parseInt(result.rowsAffected);
+                        if (result.recordsets.length > 0) {
+                            if (Array.isArray(rlt.recordset)) rlt.recordset.concat(result.recordset);
+                            else rlt.recordset = result.recordset;
+                        }
+                    }
+                    if (sqlArr.length == 0) return cb(err, rlt);
+                    else return executeMsSql(sqlArr, cb, rlt);
+                }
+            });
+        }
+        else {
+            return cb(false, rlt);
+        }
+    }
 }

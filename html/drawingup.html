@@ -8,14 +8,10 @@
             <h5>Drawing filename and code info</h5>
             <input type="radio" name="importType" value="0" checked> <span> Guess from file name
                 ({ERP-Code}_V{version}_{Size}_Name.xxx)</span> <br>
+            <select bid="dtype" class="form-control" style="width:300px">
+            </select>
             <input type="radio" name="importType" value="1"> <span> Read from below area:</span>
             <textarea class="form-control" rows="10" bid="dinfo" disabled></textarea>
-            <select bid="dtype" class="form-control" style="width:300px">
-                <option value='0' ext='["pdf"]'>2D PDF drawings(.pdf)</option>
-                <option value='1' ext='["slddrw"]'>2D Solidworks drawings(.slddrw)</option>
-                <option value='2' ext='["igs", "easm", "eprt"]]'>3D eDrawings drawings(.igs, .easm, .eprt)</option>
-                <option value='3' ext='["sldasm", "sldprt"]'>3D Solidworks drawings(.sldasm, .sldprt)</option>
-            </select>
 
             <button class="btn btn-form btn-primary" bid="submit">Submit</button>
             <br>
@@ -24,10 +20,45 @@
 
     <div class="card-body" step="2">
         <h5>Match information</h5>
-
+        <table class="table table-sm table-hover">
+            <tbody>
+                <tr class="category-row">
+                    <td style="width: 300px;">
+                        ERP Code#
+                    </td>
+                    <td>
+                        <select class="form-control form-control-sm" bid="drawing.code"></select>
+                    </td>
+                </tr>
+                <tr class="category-row">
+                    <td style="width: 300px;">
+                        Version
+                    </td>
+                    <td>
+                        <select class="form-control form-control-sm" bid="drawing.version"></select>
+                    </td>
+                </tr>
+                <tr class="category-row">
+                    <td style="width: 300px;">
+                        Size
+                    </td>
+                    <td>
+                        <select class="form-control form-control-sm" bid="drawing.size"></select>
+                    </td>
+                </tr>
+                <tr class="category-row">
+                    <td style="width: 300px;">
+                        Filename
+                    </td>
+                    <td>
+                        <select class="form-control form-control-sm" bid="drawing.filename"></select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
         <div class="form-group">
-            <button type="submit" class="btn btn-form btn-primary btn-sm" step="2">下一步</button>
+            <button type="submit" class="btn btn-form btn-primary" step="2">Next</button>
         </div>
     </div>
 
