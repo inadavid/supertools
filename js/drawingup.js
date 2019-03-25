@@ -47,19 +47,35 @@ $('button[bid="submit"]').click(function () {
                 var ext = ele.substr(lastd + 1, ele.length - lastd - 1).toLowerCase();
                 if (fileExt.indexOf(ext) == -1) return false;
                 var code = ele.substr(0, ele.indexOf("_"));
-                var ver = ele.substr(ele.indexOf("_V") + 2, ele.indexOf("_", ele.indexOf("_V") + 1) - ele.indexOf("_V") - 2)
-                var size = ele.substr(ele.indexOf("_", ele.indexOf("_V" + ver) + 2) + 1, 2)
-                uplist.push({
-                    code: code,
-                    version: ver,
-                    size: size,
-                    filename: ele,
-                    filesize: info.size,
-                    filetype: importType
-                })
+                var ver = 0
+                if (ele.indexOf("_V") != -1) ver = ele.substr(ele.indexOf("_V") + 2, ele.indexOf("_", ele.indexOf("_V") + 1) - ele.indexOf("_V") - 2);
+                else if (ele.indexOf("_S_") != -1) ver = 0;
+                else if (ele.indexOf("_S") != -1) ver = ele.substr(ele.indexOf("_S") + 2, ele.indexOf("_", ele.indexOf("_S") + 1) - ele.indexOf("_S") - 2);
+
+                var size = ele.indexOf("_V") == -1 ? ele.substr(ele.indexOf("_", ele.indexOf("_S") + 2) + 1, 2) : ele.substr(ele.indexOf("_", ele.indexOf("_V") + 2) + 1, 2);
+
+                if (ver >= 0 && ver <= 100 && size.length < 3)
+                    uplist.push({
+                        code: code,
+                        version: ver,
+                        size: size,
+                        filename: ele,
+                        filesize: info.size,
+                        filetype: importType
+                    })
             }
         })
-        $('div[step="3"]').show().find("div[bid=filelist]").html("").append(selectDrawingList(uplist));
+        $('div[step="3"]').show().find("div[bid=filelist]").html("").append(selectDrawingList(uplist)).append("<button bid='sall' class='btn btn-form btn-primary'>Select All</button><button bid='snone' class='btn btn-form btn-primary'>Select None</button><button bid='ddup' class='btn btn-form btn-primary'>Deselect duplicated</button>");
+
+        $("div[bid=filelist] button[bid=sall]").click(function () {
+            $("div[bid=filelist] table tbody tr input[bid='upload']").prop("checked", true);
+        })
+        $("div[bid=filelist] button[bid=snone]").click(function () {
+            $("div[bid=filelist] table tbody tr input[bid='upload']").prop("checked", false);
+        })
+        $("div[bid=filelist] button[bid=ddup]").click(function () {
+            $("div[bid=filelist] table tbody tr.deletion input[bid='upload']").prop("checked", false);
+        })
         $([document.documentElement, document.body]).animate({
             scrollTop: $('div[step="3"]').offset().top
         }, 500);
@@ -128,14 +144,15 @@ $("button[step=2]").click(function () {
                 }
             }
             if (filetype == -1) return;
-            uplist.push({
-                code: codeInfo.code,
-                version: codeInfo.version,
-                size: codeInfo.size,
-                filename: ele,
-                filesize: info.size,
-                filetype: filetype
-            })
+            if (codeInfo.version >= 0 && codeInfo.version <= 100 && info.size.length < 10)
+                uplist.push({
+                    code: codeInfo.code,
+                    version: codeInfo.version,
+                    size: codeInfo.size,
+                    filename: ele,
+                    filesize: info.size,
+                    filetype: filetype
+                })
         }
     })
     $('div[step="3"]').show().find("div[bid=filelist]").html("").append(selectDrawingList(uplist));
@@ -152,7 +169,7 @@ $('button[step=3]').click(function () {
         uplist.push(JSON.parse($(this).attr("data")))
     });
     var sqlinsert = "insert into st_drawings (code, version, filename, filetype, filesize, date, opid, size, stat) OUTPUT inserted.sn,inserted.filename   values ";
-    var sqlcheck = "select a.code, a.version, a.[date], b.opname from st_drawings as a inner join m_operator as b on a.opid=b.opid where ";
+    var sqlcheck = "select a.code, a.version, a.[date], b.opname,a.filetype from st_drawings as a inner join m_operator as b on a.opid=b.opid where ";
     var values = "";
     var condition = "";
     for (var i in uplist) {
@@ -175,6 +192,7 @@ $('button[step=3]').click(function () {
         for (var i in result.recordset) {
             $('div[step="3"] table').find("tr[code_version=" + result.recordset[i].code + "_" + result.recordset[i].version + "_" + result.recordset[i].filetype + "]").addClass("deletion");
         }
+        console.log(result)
         if (result.recordset.length > 0) {
             alert("Above red drawing/version/drawing type already existed in system.\nPlease check again.");
             $('button[step=3]').prop("disabled", false);
