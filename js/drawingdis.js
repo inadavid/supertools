@@ -41,12 +41,12 @@ $(function () {
                 tmptable.attr("version", v);
             }
             var tr = $("<tr>").append($("<td>").text(drawingType[result.recordset[i].filetype].name)).append($("<td>").text(result.recordset[i].filename)).append($("<td>").text(moment(result.recordset[i].date).utc().format("YYYY-MM-DD HH:mm:ss"))).append($("<td>").text(result.recordset[i].opname));
-            tr.attr("sn", result.recordset[i].sn).attr("stat", result.recordset[i].stat).attr("opid", result.recordset[i].opid);
+            tr.attr("sn", result.recordset[i].sn).attr("stat", result.recordset[i].stat).attr("opid", result.recordset[i].opid).attr("code", result.recordset[i].code).attr("filetype", result.recordset[i].filetype).attr("version", result.recordset[i].version).attr("filename", result.recordset[i].filename);
             if (result.recordset[i].stat == 0) {
-                if (result.recordset[i].opid == user.id) tr.append($("<td>").html("<span class='iconfont icon-shanchu' bid='ddel' code='" + result.recordset[i].code + "' version='" + result.recordset[i].version + "'></span> <span class='iconfont icon-open' bid='dopen' code='" + result.recordset[i].code + "' version='" + result.recordset[i].version + "' filetype='" + result.recordset[i].filetype + "'></span>"))
+                if (result.recordset[i].opid == user.id) tr.append($("<td>").html("<span class='iconfont icon-shanchu' bid='ddel' code='" + result.recordset[i].code + "' version='" + result.recordset[i].version + "'></span> <span class='iconfont icon-open' bid='dopen'></span>"))
                 else tr.append($("<td>").html("Being modified"));
             } else if (result.recordset[i].stat == 1) {
-                tr.append($("<td>").html("<span class='iconfont icon-open' bid='dopen' code='" + result.recordset[i].code + "' version='" + result.recordset[i].version + "' filetype='" + result.recordset[i].filetype + "'></span>"))
+                tr.append($("<td>").html("<span class='iconfont icon-open' bid='dopen'></span>"))
             }
             tmptable.find("tbody").append(tr);
         }
@@ -64,15 +64,61 @@ $(function () {
         }
 
         pdiv.find("span[bid=dopen]").css("cursor", "pointer").click(function () {
-            var code = $(this).attr("code");
-            var version = $(this).attr("version");
-            var filetype = $(this).attr("filetype");
+            var tbody = $(this).parents("tbody");
+            var code = $(this).parents("tr").attr("code");
+            var version = $(this).parents("tr").attr("version");
+            var filetype = $(this).parents("tr").attr("filetype");
+            var filename = $(this).parents("tr").attr("filename");
+            var stat = $(this).parents("tr").attr("stat");
+            var sn = $(this).parents("tr").attr("sn");
             var btn = $(this);
             btn.hide();
-            displayDrawing(code, version, function (rtn) {
-                if (!rtn.err) btn.show();
-                else alert(rtn.err)
-            }, parseInt(filetype));
+            if (parseInt(filetype) == 0) {
+                displayDrawing(code, version, function (rtn) {
+                    if (!rtn.err) btn.show();
+                    else alert(rtn.err)
+                }, 0);
+            } else if (parseInt(filetype) == 1) {
+                var ext = filename.split('.').pop().toLowerCase();
+                if (ext == "slddrw") { //incase of solidworks, 3D file needed.
+                    var tr = tbody.find("tr[filetype=3]");
+                    if (!tr) {
+                        alert("Cannot find any 3D sldasm or sldprt file for this 2D drawing.");
+                        return;
+                    }
+                    var dd = [{
+                        code: code,
+                        version: version,
+                        path: false,
+                        filetype: 1
+                    }, {
+                        code: code,
+                        version: version,
+                        path: false,
+                        filetype: 3
+                    }]
+                    downloadDrawingList(dd, function (fp) {
+                        console.log(fp)
+                        const {
+                            shell
+                        } = require('electron');
+                        // Open a local file in the default app
+                        shell.openItem(fp.drw.pop());
+                        btn.show();
+                    })
+
+                } else {
+                    downloadDrawing(code, version, false, function (fp) {
+                        const {
+                            shell
+                        } = require('electron');
+                        // Open a local file in the default app
+                        shell.openItem(fp);
+                        btn.show();
+                    }, 1);
+                }
+            }
+
         });
     });
 })
