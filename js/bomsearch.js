@@ -77,6 +77,7 @@ $("button[bid=bomSearch]").on("click", function () {
         return;
     } else {
         if (completeBomTop) completeBomTop.close();
+        $("button[bid=bomSearch]").prop("disabled", true);
         var d = $('input[name="appliedDate"]').val().trim();
         if (d.length < 10) {
             popup("AppliedDate not valid.", "danger");
@@ -370,6 +371,7 @@ function searchBOM(code) {
             })
 
             showBOM(displayBOM);
+            $("button[bid=bomSearch]").prop("disabled", false);
         })
 
     })

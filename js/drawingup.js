@@ -65,7 +65,7 @@ $('button[bid="submit"]').click(function () {
                     })
             }
         })
-        $('div[step="3"]').show().find("div[bid=filelist]").html("").append(selectDrawingList(uplist)).append("<button bid='sall' class='btn btn-form btn-primary'>Select All</button><button bid='snone' class='btn btn-form btn-primary'>Select None</button><button bid='ddup' class='btn btn-form btn-primary'>Deselect duplicated</button>");
+        $('div[step="3"]').show().find("div[bid=filelist]").html("").append(selectDrawingList(uplist)).append("<button bid='sall' class='btn btn-form btn-primary'>Select All</button> &nbsp; <button bid='snone' class='btn btn-form btn-primary'>Select None</button> &nbsp; <button bid='ddup' class='btn btn-form btn-primary'>Deselect duplicated</button><br>");
 
         $("div[bid=filelist] button[bid=sall]").click(function () {
             $("div[bid=filelist] table tbody tr input[bid='upload']").prop("checked", true);
