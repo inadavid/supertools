@@ -246,6 +246,7 @@ function generateSQL(bom) {
             else {
                 sql_i += "; ";
                 sql_insert.push(sql_i);
+                sql_i = "";
                 if (i != bom.length - 1) sql_i = sql_temp;
             }
         }
@@ -255,6 +256,7 @@ function generateSQL(bom) {
         sql_i += "insert into st_picklists (code, date, opid,type) values ('" + bom_top + "', GETDATE(), " + user.id + ", 0); insert into st_bomeco (parentgid, comments, date, data, userid, status) values ( '" + bom_top + "', '" + Base64.encode("New BOM upload") + "', GETDATE(), '" + Base64.encode(JSON.stringify([])) + "', " + user.id + " ,1 );";
         sql_insert.push(sql_i);
         addResultText("<div class='alert alert-success' role='alert'>数据库语句已经生成。执行数据导入中……</div>");
+        //console.log(sql_insert)
         executeMsSql(sql_insert, (err, result) => {
             addResultText("<div class='alert alert-success' role='alert'>数据库语句已经导入！</div>");
             loglog("UploadBOMsql", JSON.stringify({ bomMark: statsn }));

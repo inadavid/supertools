@@ -46,21 +46,21 @@ var shifted = false;
 var drawingCode = 0;
 
 var drawingType = [{
-        name: "2D Viewable drawing(.pdf, .zip)",
-        ext: ["pdf", "zip"]
-    },
-    {
-        name: "2D Source drawing(.slddrw, .dwg, .dxf, .exb)",
-        ext: ["slddrw", "dwg", "dxf", "exb"]
-    },
-    {
-        name: "3D Viewable drawing(.igs, .easm, .eprt)",
-        ext: ["igs", "easm", "eprt"]
-    },
-    {
-        name: "3D Solidworks drawing(.sldasm, .sldprt)",
-        ext: ["sldasm", "sldprt"]
-    }
+    name: "2D Viewable drawing(.pdf, .zip)",
+    ext: ["pdf", "zip"]
+},
+{
+    name: "2D Source drawing(.slddrw, .dwg, .dxf, .exb)",
+    ext: ["slddrw", "dwg", "dxf", "exb"]
+},
+{
+    name: "3D Viewable drawing(.igs, .easm, .eprt)",
+    ext: ["igs", "easm", "eprt"]
+},
+{
+    name: "3D Solidworks drawing(.sldasm, .sldprt)",
+    ext: ["sldasm", "sldprt"]
+}
 ];
 
 function updateUserinfo() {
@@ -663,7 +663,6 @@ function executeMsSql(sqlArr, cb = false, rlt = false) {
     } else if (Array.isArray(sqlArr)) {
         //var sqltext = sqlArr.splice(sqlArr.length - 1, 1);
         var sqltext = sqlArr.pop();
-        console.log("current sql:", sqltext)
         if (typeof (sqltext) == "string") {
             console.log("current sql:", sqltext)
             new sql.Request().query(sqltext, (err, result) => {
