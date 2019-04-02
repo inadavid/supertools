@@ -46,21 +46,21 @@ var shifted = false;
 var drawingCode = 0;
 
 var drawingType = [{
-    name: "2D Viewable drawing(.pdf, .zip)",
-    ext: ["pdf", "zip"]
-},
-{
-    name: "2D Source drawing(.slddrw, .dwg, .dxf, .exb)",
-    ext: ["slddrw", "dwg", "dxf", "exb"]
-},
-{
-    name: "3D Viewable drawing(.igs, .easm, .eprt)",
-    ext: ["igs", "easm", "eprt"]
-},
-{
-    name: "3D Solidworks drawing(.sldasm, .sldprt)",
-    ext: ["sldasm", "sldprt"]
-}
+        name: "2D Viewable drawing(.pdf, .zip)",
+        ext: ["pdf", "zip"]
+    },
+    {
+        name: "2D Source drawing(.slddrw, .dwg, .dxf, .exb)",
+        ext: ["slddrw", "dwg", "dxf", "exb"]
+    },
+    {
+        name: "3D Viewable drawing(.igs, .easm, .eprt)",
+        ext: ["igs", "easm", "eprt"]
+    },
+    {
+        name: "3D Solidworks drawing(.sldasm, .sldprt)",
+        ext: ["sldasm", "sldprt"]
+    }
 ];
 
 function updateUserinfo() {
@@ -181,6 +181,57 @@ if (argv[2] == "dev") $("a[bid='userinfo']").on("dblclick", function () {
     win.reload();
 })
 
+$("#quickNumberCheck input[bid='minfo']").keyup(function (e) {
+    if (e.which == 13) $("#quickNumberCheck button.btn-success").trigger("click");
+});
+$("#quickNumberCheck input[bid='minfo']").focus(function () {
+    $(this).select();
+})
+
+$("#quickNumberCheck button.btn-success").on("click", function () {
+    var kw = $("#quickNumberCheck input[bid='minfo']").val().trim();
+    if (kw.length == 0) return false;
+    var btn = $(this);
+    btn.prop("disabled", true);
+    $("#quickNumberCheck textarea").val("");
+    var result = [];
+    for (var i in codesInfo) {
+        if (codesInfo[i].code.indexOf(kw) != -1) result.push(i);
+        else if (codesInfo[i].name && codesInfo[i].name.indexOf(kw) != -1) result.push(i);
+        else if (codesInfo[i].spec && codesInfo[i].spec.indexOf(kw) != -1) result.push(i);
+        else if (codesInfo[i].warehouse && codesInfo[i].warehouse.indexOf(kw) != -1) result.push(i);
+    }
+    for (var m in result) {
+        var tv = $("#quickNumberCheck textarea").val();
+        //if (tv.length > 0) tv += "\n============================\n";
+        // tv += "Code: " + codesInfo[result[m]].code + "\t";
+        // tv += "Name: " + codesInfo[result[m]].name + "\t";
+        // tv += "Unit: " + codesInfo[result[m]].unit + "\t";
+        // tv += "Spec: " + codesInfo[result[m]].spec + "\t";
+        // tv += "Warehouse Pos: " + codesInfo[result[m]].warehouse + "\n";
+        tv += codesInfo[result[m]].code + " | ";
+        tv += codesInfo[result[m]].name + "\t|";
+        tv += codesInfo[result[m]].unit + "\t|";
+        tv += codesInfo[result[m]].spec + "\t|";
+        tv += codesInfo[result[m]].warehouse + "\n";
+        $("#quickNumberCheck textarea").val(tv);
+    }
+    btn.prop("disabled", false);
+})
+//connect with menu ========================================
+ipcRenderer.on('win-menu-toggle-sidebar', (event, arg) => {
+    $('div[bid="sidebar"]').toggle(500);
+})
+
+ipcRenderer.on('win-menu-quick-search', (event, arg) => {
+    $("#quickNumberCheck").modal({
+        escapeClose: true,
+        clickClose: true,
+        showClose: true
+    });
+    $("#quickNumberCheck input[bid='minfo']").focus();
+})
+//below are functions ======================================
 function loadPanel(pname) {
     action = pname;
     $("div[bid=main]").load(pname + ".html");
@@ -327,7 +378,7 @@ function fetchAllCodes() {
     }
 
     if (argv[2] != "dev" || flag) {
-        sqltxt = "select dbo.l_goods.goodsid,dbo.l_goods.code,dbo.l_goods.name,dbo.l_goods.specs,dbo.l_goodsunit.unitname from dbo.l_goods inner join l_goodsunit on l_goods.goodsid=l_goodsunit.goodsid and l_goods.unitid=l_goodsunit.unitid ;";
+        sqltxt = "select dbo.l_goods.goodsid,dbo.l_goods.code,dbo.l_goods.name,dbo.l_goods.specs,dbo.l_goodsunit.unitname, dbo.l_goods.guserdef1 as whpos from dbo.l_goods inner join l_goodsunit on l_goods.goodsid=l_goodsunit.goodsid and l_goods.unitid=l_goodsunit.unitid ;";
         var request = new sql.Request();
         request.query(sqltxt, function (err, recordset) {
             // ... error checks
@@ -335,10 +386,12 @@ function fetchAllCodes() {
             for (var i in rs) {
                 codesList.push(rs[i].code);
                 codesInfo[rs[i].code] = {
+                    code: rs[i].code,
                     goodsid: rs[i].goodsid,
                     name: rs[i].name,
                     spec: rs[i].specs,
                     unit: rs[i].unitname,
+                    warehouse: rs[i].whpos,
                 }
             }
             console.log(codesList.length)
@@ -406,9 +459,6 @@ function savedata(filepath, data, open = false) {
 
 }
 
-ipcRenderer.on('win-menu-toggle-sidebar', (event, arg) => {
-    $('div[bid="sidebar"]').toggle(500);
-})
 
 function ecoID(sn) {
     return sn < 10 ? "ECO-000" + sn : (sn < 100 ? "ECO-00" + sn : (sn < 1000 ? "ECO-0" + sn : "ECO-" + sn));
@@ -516,6 +566,7 @@ function getPicklist(code, type = 0) {
                     nobj.Unit = codesInfo[dbom[i].Code].unit;
                     nobj.Name = codesInfo[dbom[i].Code].name;
                     nobj.Spec = codesInfo[dbom[i].Code].spec;
+                    nobj.Warehouse = codesInfo[dbom[i].Code].warehouse;
                     rdata.push(nobj);
                 } else {
                     oobj.Qty += dbom[i].Qty;
@@ -528,6 +579,7 @@ function getPicklist(code, type = 0) {
                 Unit: "",
                 Name: "",
                 Spec: "",
+                Warehouse: ""
             });
             var path = require('path');
             var toLocalPath = path.resolve(app.getPath("documents"));
@@ -548,7 +600,6 @@ function getPicklist(code, type = 0) {
         }
     })();
 
-    console.log("about to return:", data)
     return data;
 }
 

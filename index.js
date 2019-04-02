@@ -15,7 +15,7 @@ const request = require('request');
 
 let win;
 let flash;
-global.version = "V01801";
+global.version = "V01802";
 global.appPath = app.getAppPath();
 global.argv = process.argv;
 global.flashClosed = false;
@@ -44,12 +44,18 @@ function createWindow() {
         win = null
     })
     var menu = new Menu()
-
     menu.append(new MenuItem({
-        label: 'Toggle Sidebar',
+        label: 'ToggleSidebar',
         accelerator: 'CmdOrCtrl+t',
         click: () => {
             win.webContents.send('win-menu-toggle-sidebar', 'nothing');
+        }
+    }))
+    menu.append(new MenuItem({
+        label: 'QuickSearch',
+        accelerator: 'CmdOrCtrl+f',
+        click: () => {
+            win.webContents.send('win-menu-quick-search', 'nothing');
         }
     }))
     win.setMenu(menu);
@@ -125,7 +131,7 @@ app.on('ready', function () {
                             cmd += "\nexit"
                             fs.writeFileSync(updateBatch, cmd);
                             setTimeout(function () {
-                                exec("start " + updateBatch, function (err) { });
+                                exec("start " + updateBatch, function (err) {});
                             }, 10);
                             setTimeout(function () {
                                 app.exit();

@@ -76,6 +76,7 @@ $("button[bid=bomSearch]").on("click", function () {
         spec.text("");
         return;
     } else {
+        spec.text(codesInfo[val].spec);
         if (completeBomTop) completeBomTop.close();
         $("button[bid=bomSearch]").prop("disabled", true);
         var d = $('input[name="appliedDate"]').val().trim();
@@ -158,6 +159,7 @@ function showBOM(dbom) {
         .append("<th style='width:10px'>PType</th>")
         .append("<th style='width:150px'>Name</th>")
         .append("<th style='width:150px'>Desc</th>")
+        .append("<th style='width:150px'>Warehouse</th>")
         .append("<th style='width:100px'>Drawing</th>")
     table.append(thead);
     var tbody = $("<tbody>");
@@ -174,6 +176,7 @@ function showBOM(dbom) {
             .append("<td>" + dbom[i].ProchasingType + "</td>")
             .append("<td><input did='Name' value='" + dbom[i].Name + "' readonly></td>")
             .append("<td><input did='Spec' value='" + dbom[i].Spec + "' readonly></td>")
+            .append("<td><input did='whpos' value='" + dbom[i].Warehouse + "' readonly></td>")
             .append("<td>" + (dbom[i].dversion !== null && user.perm.indexOf(6) != -1 ? "<span class='iconfont icon-drawing' bid='drawing' code='" + dbom[i].Code + "'></span> <span class='iconfont icon-open' bid='dopen' code='" + dbom[i].Code + "' version='" + dbom[i].dversion + "'></span> <span>V" + dbom[i].dversion + "</span>" : "-") + "</td>");
         tbody.append(tr);
     }
@@ -286,7 +289,9 @@ function showBOM(dbom) {
                 code: code,
                 version: version
             }
-            if (_.find(downArray, function (obj) { return obj.code == code }) == undefined) downArray.push(tObj);
+            if (_.find(downArray, function (obj) {
+                    return obj.code == code
+                }) == undefined) downArray.push(tObj);
         });
         var downCount = downArray.length;
         if (downCount == 0) {
@@ -343,6 +348,7 @@ function searchBOM(code) {
                     Qty: result.recordset[i].quantity,
                     Unit: codesInfo[result.recordset[i].elemgid].unit,
                     Spec: codesInfo[result.recordset[i].elemgid].spec,
+                    Warehouse: codesInfo[result.recordset[i].elemgid].warehouse && codesInfo[result.recordset[i].elemgid].warehouse.length > 0 ? codesInfo[result.recordset[i].elemgid].warehouse : "",
                     ProchasingType: result.recordset[i].ptype,
                     PFEP: result.recordset[i].pfep,
                     pid: result.recordset[i].pid,
@@ -362,6 +368,7 @@ function searchBOM(code) {
                 Qty: 0,
                 Unit: "",
                 Spec: codesInfo[code].spec,
+                Warehouse: codesInfo[code].warehouse && codesInfo[code].warehouse.length > 0 ? codesInfo[code].warehouse : "",
                 ProchasingType: "",
                 PFEP: "",
                 pid: "",
