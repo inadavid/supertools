@@ -537,70 +537,71 @@ function checkPicklistUpdate(eco = false) {
     })();
 }
 
-function getPicklist(code, type = 0) {
-    var data = co(function* () {
-        try {
-            var coConn = new cosql.Connection(config.serverconfig);
-            yield coConn.connect();
-            var appliedDate = moment().format("YYYY-MM-DD");
-            var request = new cosql.Request(coConn);
-
-            var rdata = [];
-            var sqltxt = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.rQty*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid where b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT ptype as ProchasingType, elemgid as Code, rQty as Qty  FROM CTE order by pid asc,itemno asc;";
-            console.log(sqltxt)
-            var dbom = yield request.query(sqltxt);
-            dbom = _.sortBy(dbom, 'Code')
-            var count = 1;
-            for (var i in dbom) {
-                if (type == 0 && dbom[i].ProchasingType != "B" && dbom[i].ProchasingType != "b" && dbom[i].ProchasingType != "C" && dbom[i].ProchasingType != "c") continue;
-                if (type == 1 && dbom[i].ProchasingType != "P" && dbom[i].ProchasingType != "p") continue;
-                if (dbom[i].Qty == 0) continue;
-                var oobj = _.find(rdata, function (obj) {
-                    return obj.Code == dbom[i].Code;
-                })
-                if (oobj == undefined) {
-                    var nobj = {};
-                    nobj.SN = count++;
-                    nobj.Code = dbom[i].Code;
-                    nobj.Qty = dbom[i].Qty;
-                    nobj.Unit = codesInfo[dbom[i].Code].unit;
-                    nobj.Name = codesInfo[dbom[i].Code].name;
-                    nobj.Spec = codesInfo[dbom[i].Code].spec;
-                    nobj.Warehouse = codesInfo[dbom[i].Code].warehouse;
-                    rdata.push(nobj);
-                } else {
-                    oobj.Qty += dbom[i].Qty;
-                }
-            }
-            rdata.push({
-                SN: "===============END OF PICKLIST " + code + "(" + (type == 0 ? "MAKE" : "BUY") + ")===============",
-                Code: "",
-                Qty: "",
-                Unit: "",
-                Name: "",
-                Spec: "",
-                Warehouse: ""
-            });
-            var path = require('path');
-            var toLocalPath = path.resolve(app.getPath("documents"));
-            var filepath = dialog.showSaveDialog({
-                defaultPath: toLocalPath,
-                title: 'Save exported Picklist for ' + code,
-                filters: [{
-                    name: 'CSV (Comma-Separated Values) for Excel',
-                    extensions: ['csv']
-                }]
-            });
-            if (filepath !== undefined) {
-                savedata(filepath, rdata, true);
-            }
-        } catch (ex) {
-            // ... error checks
-            console.error(ex)
+function getPicklistData(code, type = 0, cb) {
+    var appliedDate = moment().format("YYYY-MM-DD");
+    var rdata = [];
+    var sqltxt = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.rQty*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid where b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT ptype as ProchasingType, elemgid as Code, rQty as Qty  FROM CTE order by pid asc,itemno asc;";
+    executeMsSql(sqltxt, (err, result) => {
+        if (err) {
+            console.error(err);
+            alert("An error occur try to fetch the BOM.\n" + JSON.stringify(err));
+            return;
         }
-    })();
+        var dbom = JSON.parse(JSON.stringify(result.recordset));
+        dbom = _.sortBy(dbom, 'Code')
+        var count = 1;
+        for (var i in dbom) {
+            if (type == 0 && dbom[i].ProchasingType != "B" && dbom[i].ProchasingType != "b" && dbom[i].ProchasingType != "C" && dbom[i].ProchasingType != "c") continue;
+            if (type == 1 && dbom[i].ProchasingType != "P" && dbom[i].ProchasingType != "p") continue;
+            if (dbom[i].Qty == 0) continue;
+            var oobj = _.find(rdata, function (obj) {
+                return obj.Code == dbom[i].Code;
+            })
+            if (oobj == undefined) {
+                var nobj = {};
+                nobj.SN = count++;
+                nobj.Code = dbom[i].Code;
+                nobj.Qty = dbom[i].Qty;
+                nobj.Unit = codesInfo[dbom[i].Code].unit;
+                nobj.Name = codesInfo[dbom[i].Code].name;
+                nobj.Spec = codesInfo[dbom[i].Code].spec;
+                nobj.Warehouse = codesInfo[dbom[i].Code].warehouse;
+                rdata.push(nobj);
+            } else {
+                oobj.Qty += dbom[i].Qty;
+            }
+        }
+        if (typeof (cb) === "function") cb(rdata);
+    });
 
-    return data;
+}
+
+function getPicklist(code, type = 0) {
+    getPicklistData(code, type, function (rdata) {
+        rdata.push({
+            SN: "===============END OF PICKLIST " + code + "(" + (type == 0 ? "MAKE" : "BUY") + ")===============",
+            Code: "",
+            Qty: "",
+            Unit: "",
+            Name: "",
+            Spec: "",
+            Warehouse: ""
+        });
+        var path = require('path');
+        var toLocalPath = path.resolve(app.getPath("documents"));
+        var filepath = dialog.showSaveDialog({
+            defaultPath: toLocalPath,
+            title: 'Save exported Picklist for ' + code,
+            filters: [{
+                name: 'CSV (Comma-Separated Values) for Excel',
+                extensions: ['csv']
+            }]
+        });
+        if (filepath !== undefined) {
+            savedata(filepath, rdata, true);
+        }
+    });
+
 }
 
 function displayDrawing(code, version = false, cb = false, filetype = 0) {

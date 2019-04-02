@@ -290,7 +290,7 @@ function searchChildren(code) {
                         }
                         if (ECOList[i].action == "addition") { // add bom item. 2 steps.
                             //1, insert the new bom item into st_goodsbom
-                            sqltext = "insert into st_goodsbom (goodsid, elemgid, quantity, itemno, ptype,pfep, opid, startDate, endDate) values ('" + code + "', '" + ECOList[i].data.code + "', " + ECOList[i].data.qty + "," + ECOList[i].data.order + ", '" + ECOList[i].data.ptype + "', '', " + user.id + ", cast(getdate() as date), '2099-01-01'); SELECT SCOPE_IDENTITY() as sn;";
+                            sqltext = "insert into st_goodsbom (goodsid, elemgid, quantity, itemno, ptype, pfep, opid, startDate, endDate) values ('" + code + "', '" + ECOList[i].data.code + "', " + ECOList[i].data.qty + "," + ECOList[i].data.order + ", '" + ECOList[i].data.ptype + "', '', " + user.id + ", cast(getdate() as date), '2099-01-01'); SELECT SCOPE_IDENTITY() as sn;";
                             var log = sqltext;
                             var recordset = yield request.query(sqltext);
                             console.log("addtion child:", recordset)

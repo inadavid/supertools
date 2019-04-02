@@ -10,7 +10,7 @@ $("button[type=submit][step=1]").on("click", (e) => {
     $(e.currentTarget).prop("disabled", true);
 
     bom_top = $("input[meta=bomtop]").val();
-    veryTop = (parseInt($('input[type="checkbox"][meta="verytop"]').val()) == 1 ? 1 : 0);
+    veryTop = $('input[type="checkbox"][meta="verytop"]').prop("checked") ? 1 : 0;
     var bomexcel = $("textarea[meta=bomexcel]").val();
     if (bomexcel.length < 100) {
         alert("粘贴的数据过少，请检查后再试。");
@@ -236,14 +236,13 @@ function generateSQL(bom) {
         var statsn = result.recordset[0].sn;
 
         var sql_insert = [];
-        var sql_temp = "insert into dbo.st_goodsbom (goodsid, elemgid, quantity, itemno, ptype,pfep, opid, startDate, endDate, mark) values ";
+        var sql_temp = "insert into dbo.st_goodsbom (goodsid, elemgid, quantity, itemno, ptype, pfep, opid, startDate, endDate, mark) values ";
         var sql_i = sql_temp;
         for (var i = 0; i < bom.length; i++) {
             sql_i += "('" + bom[i].parent + "','" + bom[i].code + "'," + bom[i].qty + "," + bom[i].item + ",'" + bom[i].procumenttype + "','" + bom[i].pfep + "', " + user.id + ", dateadd(day,-1, cast(getdate() as date)), '2099-01-01', " + statsn + ")";
             if (i != bom.length - 1 && (i + 1) % 200 != 0) {
                 sql_i += ", ";
-            }
-            else {
+            } else {
                 sql_i += "; ";
                 sql_insert.push(sql_i);
                 sql_i = "";
@@ -259,9 +258,10 @@ function generateSQL(bom) {
         //console.log(sql_insert)
         executeMsSql(sql_insert, (err, result) => {
             addResultText("<div class='alert alert-success' role='alert'>数据库语句已经导入！</div>");
-            loglog("UploadBOMsql", JSON.stringify({ bomMark: statsn }));
+            loglog("UploadBOMsql", JSON.stringify({
+                bomMark: statsn
+            }));
         });
     });
 
 }
-

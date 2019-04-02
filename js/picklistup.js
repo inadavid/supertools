@@ -134,7 +134,7 @@ function generateSQL(bom) {
     var sql_delete = "delete from dbo.l_goodsbom where ";
     var sql_update = "";
     for (var i = 0; i < bom.length; i++) {
-        sql_insert += "('" + bom[i].parent + "','" + bom[i].code + "'," + bom[i].qty + "," + bom[i].qty + ", 1, 1, 0, NULL, '" + bom[i].order + "', 1, 0, " + bom[i].item + ",'" + bom[i].procumenttype + "','" + bom[i].pfep + "', 54, 54)";
+        sql_insert += "('" + bom[i].parent + "','" + bom[i].code + "'," + bom[i].qty + "," + bom[i].qty + ", 1, 1, 0, NULL, '" + bom[i].order + "', 1, 0, " + bom[i].item + ",'" + bom[i].procumenttype + "','" + bom[i].pfep + "', " + user.id + ",  " + user.id + ")";
         sql_delete += "(goodsid = '" + bom[i].parent + "' and elemgid='" + bom[i].code + "')";
         if (i != bom.length - 1) {
             sql_insert += ", ";

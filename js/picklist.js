@@ -49,8 +49,8 @@ $("button[bid=newpl]").click(function () {
         return;
     }
     if (_.find(picklists, function (obj) {
-        return obj.code == plcode.val().trim();
-    }) != undefined) {
+            return obj.code == plcode.val().trim();
+        }) != undefined) {
         alert("Code# " + plcode.val() + " already existed in picklist code list.");
         plcode.prop("disabled", false);
         return;
@@ -100,6 +100,12 @@ $("button[bid=delpl]").click(function () {
     });
 });
 
+$('select[name="picklists"]').change(function () {
+    var sel = $('select[name="picklists"]').find("option:selected:last");
+    $('select[name="picklists"] option').prop("selected", false);
+    sel.prop("selected", true);
+})
+
 $("button[bid=dlpl]").click(function () {
     var code = $('select[name="picklists"]').find("option:selected").attr("code");
     var type = parseInt($('select[name="picklists"]').find("option:selected").attr("type"));
@@ -107,6 +113,38 @@ $("button[bid=dlpl]").click(function () {
 });
 
 $("button[bid=rebuildpl]").click(function () {
-    alert("Under construction.")
+    if (!confirm("You are about to replace the PICKLIST in ERP\nwith a new one generated from BOM! Are you sure?\n您即将用BOM导出的PICKLIST替换ERP系统中的数据！\n此操作不可逆，原PICKLIST将被彻底删除！您确定么？")) return false;
+    var code = $('select[name="picklists"]').find("option:selected").attr("code");
+    var type = parseInt($('select[name="picklists"]').find("option:selected").attr("type"));
+    getPicklistData(code, type, function (bom) {
+        /* structure of rdata from parent function
+        nobj.SN = count++;
+        nobj.Code = dbom[i].Code;
+        nobj.Qty = dbom[i].Qty;
+        nobj.Unit = codesInfo[dbom[i].Code].unit;
+        nobj.Name = codesInfo[dbom[i].Code].name;
+        nobj.Spec = codesInfo[dbom[i].Code].spec;
+        nobj.Warehouse = codesInfo[dbom[i].Code].warehouse;
+        */
+        var sql_insert = [];
+        var sql_temp = "insert into dbo.l_goodsbom (goodsid, elemgid, quantity, mnfqty, masterqty, usetime, wasterate, memo, orderno, state, pretime, itemno, userdef1,userdef2, opid, checkorid) values ";
+        var sql_i = sql_temp;
+        var sql_delete = "delete from dbo.l_goodsbom where goodsid = " + codesInfo[code].goodsid + ";";
+        var sql_update = "update st_picklists set reflag = 0 where code = '" + code + "';";
+        for (var i = 0; i < bom.length; i++) {
+            sql_i += "('" + codesInfo[code].goodsid + "','" + codesInfo[bom[i].Code].goodsid + "'," + bom[i].Qty + "," + bom[i].Qty + ", 1, 1, 0, NULL, '" + (bom[i].SN < 10 ? "00" + (bom[i].SN * 10) : (bom[i].SN < 100 ? "0" + (bom[i].SN * 10) : "" + (bom[i].SN * 10))) + "', 1, 0, " + bom[i].SN + ",'" + bom[i].Warehouse + "','', " + user.id + ",  " + user.id + ")";
+            if (i != bom.length - 1 && (i + 1) % 200 != 0) {
+                sql_i += ", ";
+            } else {
+                sql_i += "; ";
+                sql_insert.push(sql_i);
+                sql_i = "";
+                if (i != bom.length - 1) sql_i = sql_temp;
+            }
+        }
+        sql_insert.splice(0, 0, sql_delete);
+        sql_insert.push(sql_update);
+        console.log(sql_insert)
+    })
 });
 //////////////////////old ///////////////////
