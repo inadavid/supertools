@@ -391,7 +391,7 @@ function fetchAllCodes() {
                     name: rs[i].name,
                     spec: rs[i].specs,
                     unit: rs[i].unitname,
-                    warehouse: rs[i].whpos,
+                    warehouse: /[a-zA-Z][0-9]+\-[a-zA-Z][0-9]+\-[a-zA-Z][0-9]+\-[0-9]+/g.test(rs[i].whpos) ? rs[i].whpos : "",
                 }
             }
             console.log(codesList.length)
