@@ -142,9 +142,18 @@ $("button[bid=rebuildpl]").click(function () {
                 if (i != bom.length - 1) sql_i = sql_temp;
             }
         }
-        sql_insert.splice(0, 0, sql_delete);
-        sql_insert.push(sql_update);
-        console.log(sql_insert)
+        loglog("UpdatePicklist", )
+        sql_insert.splice(0, 0, sql_update);
+        sql_insert.push(sql_delete);
+        executeMsSql(sql_insert, (err, result) => {
+            if (err) {
+                alert(JSON.stringify(err));
+                executeMsSql(sql_delete);
+                return;
+            }
+            popup("Picklist updated!", "success");
+            loadPanel("picklist");
+        })
     })
 });
 //////////////////////old ///////////////////
