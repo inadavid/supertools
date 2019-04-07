@@ -65,16 +65,29 @@ $('button[bid="submit"]').click(function () {
                     })
             }
         })
-        $('div[step="3"]').show().find("div[bid=filelist]").html("").append(selectDrawingList(uplist)).append("<button bid='sall' class='btn btn-form btn-primary'>Select All</button> &nbsp; <button bid='snone' class='btn btn-form btn-primary'>Select None</button> &nbsp; <button bid='ddup' class='btn btn-form btn-primary'>Deselect duplicated</button><br>");
+        $('div[step="3"]').show().find("div[bid=filelist]").html("").append(selectDrawingList(uplist)).append("<br><button bid='sall' class='btn btn-form btn-secondary'>(De)Select All</button> &nbsp; <button bid='ddup' class='btn btn-form btn-warning'>(De)Select Error</button><br><br>");
 
         $("div[bid=filelist] button[bid=sall]").click(function () {
-            $("div[bid=filelist] table tbody tr input[bid='upload']").prop("checked", true);
-        })
-        $("div[bid=filelist] button[bid=snone]").click(function () {
-            $("div[bid=filelist] table tbody tr input[bid='upload']").prop("checked", false);
+            var btn = $(this);
+            if (btn.attr("clicked") == "true") {
+                $("div[bid=filelist] table tbody tr input[bid='upload']").prop("checked", true);
+                btn.removeAttr("clicked");
+            } else {
+                $("div[bid=filelist] table tbody tr input[bid='upload']").prop("checked", false);
+                btn.attr("clicked", "true");
+            }
         })
         $("div[bid=filelist] button[bid=ddup]").click(function () {
-            $("div[bid=filelist] table tbody tr.deletion input[bid='upload']").prop("checked", false);
+            var btn = $(this);
+            if (btn.attr("clicked") == "true") {
+                $("div[bid=filelist] table tbody tr.deletion input[bid='upload']").prop("checked", true);
+                $("div[bid=filelist] table tbody tr.nonexisted input[bid='upload']").prop("checked", true);
+                btn.removeAttr("clicked");
+            } else {
+                $("div[bid=filelist] table tbody tr.deletion input[bid='upload']").prop("checked", false);
+                $("div[bid=filelist] table tbody tr.nonexisted input[bid='upload']").prop("checked", false);
+                btn.attr("clicked", "true");
+            }
         })
         $([document.documentElement, document.body]).animate({
             scrollTop: $('div[step="3"]').offset().top
@@ -133,7 +146,9 @@ $("button[step=2]").click(function () {
             // var size = ele.substr(ele.indexOf("_", ele.indexOf("_V" + ver) + 2) + 1, 2)
             var filename_noext = ele.substr(0, ele.lastIndexOf("."));
             console.log(filename_noext)
-            var codeInfo = _.find(drawingList, function (obj) { return obj.filename.trim() == filename_noext.trim() });
+            var codeInfo = _.find(drawingList, function (obj) {
+                return obj.filename.trim() == filename_noext.trim()
+            });
             if (codeInfo == undefined) return;
             var filetype = -1;
             var ext = ele.split('.').pop().toLowerCase();
@@ -172,16 +187,33 @@ $('button[step=3]').click(function () {
     var sqlcheck = "select a.code, a.version, a.[date], b.opname,a.filetype from st_drawings as a inner join m_operator as b on a.opid=b.opid where ";
     var values = "";
     var condition = "";
+    var flag_proceeed = true;
+    $('div[step="3"] table tr').removeClass("nonexisted").removeClass("wrongver")
     for (var i in uplist) {
         if (values != "") values += ", ";
         if (condition != "") condition += " or ";
         values += "('" + uplist[i].code + "', " + uplist[i].version + ", '" + uplist[i].filename + "', " + uplist[i].filetype + ", " + uplist[i].filesize + ", GETDATE() , " + user.id + ", '" + uplist[i].size + "',1)";
         condition += " (a.code = '" + uplist[i].code + "' and a.version=" + uplist[i].version + " and a.filetype=" + uplist[i].filetype + ") ";
+
+        var tr = $('div[step="3"] table').find("tr[code_version=" + uplist[i].code + "_" + uplist[i].version + "_" + uplist[i].filetype + "]");
+        if (codesList.indexOf(uplist[i].code) == -1) {
+            tr.addClass("nonexisted");
+            flag_proceeed = false;
+        }
+        if (isNaN(uplist[i].version)) {
+            tr.addClass("wrongver");
+            flag_proceeed = false;
+        }
     }
     sqlinsert += values;
     sqlcheck += condition;
-
+    if (!flag_proceeed) {
+        alert("Above yellow drawing/version/drawing has problem in file information.\nPlease check again.");
+        $('button[step=3]').prop("disabled", false);
+        return;
+    }
     executeMsSql(sqlcheck, (err, result) => {
+        var flag_proceeed = true;
         if (err) {
             console.error(err);
             alert("An error occur when inserting into DB.\n" + JSON.stringify(err));
@@ -192,8 +224,9 @@ $('button[step=3]').click(function () {
         for (var i in result.recordset) {
             $('div[step="3"] table').find("tr[code_version=" + result.recordset[i].code + "_" + result.recordset[i].version + "_" + result.recordset[i].filetype + "]").addClass("deletion");
         }
-        console.log(result)
-        if (result.recordset.length > 0) {
+        if (result.recordset.length > 0) flag_proceeed = false;
+
+        if (!flag_proceeed) {
             alert("Above red drawing/version/drawing type already existed in system.\nPlease check again.");
             $('button[step=3]').prop("disabled", false);
             return;
@@ -260,7 +293,12 @@ function selectDrawingList(uplist) {
         tr.append($("<td>").text((uplist[i].filesize / 1024 / 1024).toFixed(2) + "Mb"));
         tbody.append(tr);
         tr.click(function () {
-            $(this).find("input[type=checkbox]").click();
+            var cbox = $(this).find("input[type=checkbox]");
+            cbox.prop("checked", !cbox.prop("checked"));
+        })
+        tr.find("input[type=checkbox]").click(function () {
+            tr.trigger("click");
+            return false;
         })
     }
     table.append(tbody);

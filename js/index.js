@@ -46,21 +46,33 @@ var shifted = false;
 var drawingCode = 0;
 
 var drawingType = [{
-        name: "2D Viewable drawing(.pdf, .zip)",
-        ext: ["pdf", "zip"]
+        name: "2D Portable drawing(.pdf)",
+        ext: ["pdf"]
     },
     {
-        name: "2D Source drawing(.slddrw, .dwg, .dxf, .exb)",
-        ext: ["slddrw", "dwg", "dxf", "exb"]
+        name: "2D Source drawing(.slddrw, .dwg, .exb)",
+        ext: ["slddrw", "dwg", "exb"]
     },
     {
-        name: "3D Viewable drawing(.igs, .easm, .eprt)",
-        ext: ["igs", "easm", "eprt"]
+        name: "3D Portable drawing(.easm, .eprt)",
+        ext: ["easm", "eprt"]
     },
     {
-        name: "3D Solidworks drawing(.sldasm, .sldprt)",
+        name: "3D Source drawing(.sldasm, .sldprt)",
         ext: ["sldasm", "sldprt"]
-    }
+    },
+    {
+        name: "2D Vector drawing(.dxf)",
+        ext: ["dxf"]
+    },
+    {
+        name: "3D Vector drawing(.stp, .step, .igs)",
+        ext: ["stp", "step", "igs"]
+    },
+    {
+        name: "Other document(Program, Scanned doc...) (.zip)",
+        ext: ["zip", "jpg", "jpeg", "png"]
+    },
 ];
 
 function updateUserinfo() {

@@ -270,7 +270,21 @@ table.treetable tr.deletion {
   background: #FF0000;
 }
 
-table.treetable tr.deletion input {
+table.treetable tr.nonexisted {
+  color: #fff;
+  background: rgb(168, 137, 0);
+}
+
+table.treetable tr.nonexisted input {
+  color: #fff;
+}
+
+table.treetable tr.wrongver {
+  color: #fff;
+  background: rgb(19, 51, 235);
+}
+
+table.treetable tr.wrongver input {
   color: #fff;
 }
 

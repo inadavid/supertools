@@ -1,3 +1,23 @@
+(function (old) {
+    $.fn.attr = function () {
+        if (arguments.length === 0) {
+            if (this.length === 0) {
+                return null;
+            }
+
+            var obj = {};
+            $.each(this[0].attributes, function () {
+                if (this.specified) {
+                    obj[this.name] = this.value;
+                }
+            });
+            return obj;
+        }
+
+        return old.apply(this, arguments);
+    };
+})($.fn.attr);
+
 $(function () {
     if (drawingCode == 0) {
         alert("No drawing specified");
@@ -40,11 +60,18 @@ $(function () {
                 v = result.recordset[i].version;
                 tmptable.attr("version", v);
             }
-            var tr = $("<tr>").append($("<td>").text(drawingType[result.recordset[i].filetype].name)).append($("<td>").text(result.recordset[i].filename)).append($("<td>").text(moment(result.recordset[i].date).utc().format("YYYY-MM-DD HH:mm:ss"))).append($("<td>").text(result.recordset[i].opname));
-            tr.attr("sn", result.recordset[i].sn).attr("stat", result.recordset[i].stat).attr("opid", result.recordset[i].opid).attr("code", result.recordset[i].code).attr("filetype", result.recordset[i].filetype).attr("version", result.recordset[i].version).attr("filename", result.recordset[i].filename);
+            var tr = $("<tr>").append($("<td>").text(drawingType[result.recordset[i].filetype].name)).append($("<td>").text(result.recordset[i].filename).attr("name", "filename")).append($("<td>").text(moment(result.recordset[i].date).utc().format("YYYY-MM-DD HH:mm:ss"))).append($("<td>").text(result.recordset[i].opname));
+            tr.attr("sn", result.recordset[i].sn).attr("stat", result.recordset[i].stat).attr("opid", result.recordset[i].opid).attr("code", result.recordset[i].code).attr("filetype", result.recordset[i].filetype).attr("version", result.recordset[i].version).attr("filename", result.recordset[i].filename).attr("filesize", result.recordset[i].filesize).attr("trtype", "drawings");
             if (result.recordset[i].stat == 0) {
-                if (result.recordset[i].opid == user.id) tr.append($("<td>").html("<span class='iconfont icon-shanchu' bid='ddel' code='" + result.recordset[i].code + "' version='" + result.recordset[i].version + "'></span> <span class='iconfont icon-open' bid='dopen'></span>"))
-                else tr.append($("<td>").html("Being modified"));
+                if (result.recordset[i].opid == user.id) {
+                    if (result.recordset[i].filesize != 0 && result.recordset[i].filename != "null") {
+                        tr.append($("<td>").html("<span class='iconfont icon-shanchu' bid='ddel' code='" + result.recordset[i].code + "' version='" + result.recordset[i].version + "'></span> <span class='iconfont icon-open' bid='dopen'></span>"))
+                    }
+                    if (result.recordset[i].filesize == 0 && result.recordset[i].filename == "null") {
+                        tr.find("td[name=filename]").html("").append("<button class='btn btn-sm btn-warning' bid='uploadDrawing'>Upload Drawing</button>");
+                        tr.append($("<td>").html("-"));
+                    }
+                } else tr.append($("<td>").html("-"));
             } else if (result.recordset[i].stat == 1) {
                 tr.append($("<td>").html("<span class='iconfont icon-open' bid='dopen'></span>"))
             }
@@ -54,15 +81,67 @@ $(function () {
 
         var pdiv = $("div[bid=drawings]").html("");
 
-        if (bCreateNewVersion) {
+        if (bCreateNewVersion && user.perm.indexOf(7) != -1) {
             maxVersion++;
             pdiv.append(div.clone().append("<button class='btn btn-primary' version='" + maxVersion + "' code='" + drawingCode + "' bid='newVersion'>Create Version " + maxVersion + "</button>"));
+            $("button[bid=newVersion]").click(function () {
+                if (!confirm("Are you sure to create a new version?")) return;
+                var btn = $(this);
+                btn.prop("disabled", true);
+                var nv = btn.attr("version");
+                var code = btn.attr("code");
+                sqltxt = "insert into st_drawings (code, version, filename, filetype, filesize, date, opid, size) values ";
+                for (var i in drawingType) {
+                    sqltxt += "('" + code + "', " + nv + ", 'null', " + i + ", 0, GETDATE(), " + user.id + ", 'null')";
+                    if (i < drawingType.length - 1) sqltxt += ",";
+                }
+                sqltxt += ";";
+                executeMsSql(sqltxt, function () {
+                    loadPanel("drawingdis");
+                })
+            })
+        }
+        if (!bCreateNewVersion && user.perm.indexOf(7) != -1) {
+            pdiv.append(div.clone().append("<button class='btn btn-success' version='" + maxVersion + "' code='" + drawingCode + "' bid='releaseVersion'>Release Version " + maxVersion + "</button> <button class='btn btn-danger' version='" + maxVersion + "' code='" + drawingCode + "' bid='cancelVersion'>Cancel Version " + maxVersion + "</button>"));
+
+            $("button[bid=cancelVersion]").click(function () {
+                if (!confirm("Your temp drawings will be DELETED!\nAre you sure to cancel drawing change?")) return;
+
+                var btn = $(this);
+                btn.prop("disabled", true);
+                var nv = btn.attr("version");
+                var code = btn.attr("code");
+                sqltxt = "delete from st_drawings where code = '" + code + "' and version = " + nv + " and stat = 0 ;";
+                var table = $("table[version=" + nv + "]");
+                var dsn = [];
+                table.find("tr[trtype=drawings]").each(function () {
+                    if ($(this).attr("filesize") != "0" && $(this).attr("filename") != "null") dsn.push($(this).attr("sn"))
+                })
+                console.log(dsn);
+                return;
+                executeMsSql(sqltxt, function () {
+                    var mysql = require('mysql');
+                    var connection = mysql.createConnection({
+                        host: config.mysqlServer,
+                        user: config.serverconfig.user,
+                        password: config.serverconfig.password,
+                        database: config.serverconfig.user
+                    });
+                    connection.connect();
+                    loadPanel("drawingdis");
+                })
+            })
         }
 
         for (var m in tables) {
             pdiv.append(div.clone().append("<h5> Drawings of <b>" + code + "</b> Version <b>" + tables[m].attr("version") + "</b></h5>").append(tables[m]));
         }
 
+        pdiv.find("button[bid=uploadDrawing]").click(function () {
+            var btn = $(this);
+            var tr = $(this).parents("tr[trtype=drawings]");
+            console.log(tr.attr())
+        })
         pdiv.find("span[bid=dopen]").css("cursor", "pointer").click(function () {
             var tbody = $(this).parents("tbody");
             var code = $(this).parents("tr").attr("code");

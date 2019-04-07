@@ -15,7 +15,7 @@ const request = require('request');
 
 let win;
 let flash;
-global.version = "V01805";
+global.version = "V0181";
 global.appPath = app.getAppPath();
 global.argv = process.argv;
 global.flashClosed = false;
@@ -127,7 +127,8 @@ app.on('ready', function () {
                             var cmd = "@echo off\necho Upgrading " + r.last + ", please wait....\nping -n 5 127.0.0.1 >nul\n";
                             cmd += path.normalize(app.getAppPath() + "/../7z.exe") + " x \"" + updatefile + "\" -aoa -o\"" + path.normalize(app.getAppPath() + '/../') + "\" -y";
                             cmd += "\ndel " + updatefile + " /F"
-                            cmd += "\nset /p temp=\"Upgrade complete. Hit any key to continue\"";
+                            cmd += "\nset /p temp=\"Upgrade complete. Hit ENTER to continue.\"";
+                            cmd += "\nstart " + path.normalize(app.getAppPath() + "/../../SuperTools.exe");
                             cmd += "\nexit"
                             fs.writeFileSync(updateBatch, cmd);
                             setTimeout(function () {
