@@ -92,7 +92,7 @@ $(function () {
                 var code = btn.attr("code");
                 sqltxt = "insert into st_drawings (code, version, filename, filetype, filesize, date, opid, size) values ";
                 for (var i in drawingType) {
-                    sqltxt += "('" + code + "', " + nv + ", 'null', " + i + ", 0, GETDATE(), " + user.id + ", 'null')";
+                    sqltxt += "('" + code + "', " + nv + ", 'null', " + i + ", 0, GETDATE(), " + user.id + ", '-')";
                     if (i < drawingType.length - 1) sqltxt += ",";
                 }
                 sqltxt += ";";
@@ -117,8 +117,12 @@ $(function () {
                 table.find("tr[trtype=drawings]").each(function () {
                     if ($(this).attr("filesize") != "0" && $(this).attr("filename") != "null") dsn.push($(this).attr("sn"))
                 })
-                console.log(dsn);
-                return;
+                var mysqltxt = "delete from st_drawings where ";
+                for (var g in dsn) {
+                    mysqltxt += "dsn = " + dsn[g];
+                    if (g < dsn.length - 1) mysqltxt += " or ";
+                }
+                mysqltxt += ";"
                 executeMsSql(sqltxt, function () {
                     var mysql = require('mysql');
                     var connection = mysql.createConnection({
@@ -128,9 +132,70 @@ $(function () {
                         database: config.serverconfig.user
                     });
                     connection.connect();
+                    if (dsn.length > 0) connection.query(mysqltxt);
                     loadPanel("drawingdis");
                 })
             })
+
+            $("button[bid=releaseVersion]").click(function () {
+                var btn = $(this);
+                btn.prop("disabled", true);
+                var nv = btn.attr("version");
+                var table = $("table[version=" + nv + "]");
+                var dsn = [];
+                var esn = [];
+                var tr = [];
+                table.find("tr[trtype=drawings]").each(function () {
+                    var data = $(this).attr();
+                    data.sn = parseInt(data.sn);
+                    data.filesize = parseInt(data.filesize);
+                    data.filetype = parseInt(data.filetype);
+                    data.version = parseInt(data.version);
+                    if ($(this).attr("filesize") != "0" && $(this).attr("filename") != "null") dsn.push($(this).attr("sn"))
+                    if ($(this).attr("filesize") == "0" && $(this).attr("filename") == "null") esn.push($(this).attr("sn"))
+                    tr.push(data);
+                });
+                if (dsn.length <= 0) {
+                    alert("No drawing to release!\nPlease upload drawing or CANCEL version update.");
+                    btn.prop("disabled", false);
+                    return false;
+                }
+
+                var checkmatch = [0, 1, 3];
+                for (var a in checkmatch) {
+                    var filematch = _.findWhere(tr, {
+                        filetype: checkmatch[a],
+                    })
+                    if (filematch.filesize == 0) {
+                        if (!confirm("There is no " + drawingType[checkmatch[a]].name + " in this version.\nAre you sure?")) {
+                            btn.prop("disabled", false);
+                            return;
+                        }
+                    }
+                }
+
+                sqltxt = "update st_drawings set stat=1 where ";
+                for (var i in dsn) {
+                    sqltxt += "sn = " + dsn[i];
+                    if (i < dsn.length - 1) sqltxt += " or ";
+                }
+                sqltxt += "; delete from st_drawings where ";
+                for (var g in esn) {
+                    sqltxt += "sn = " + esn[g];
+                    if (g < esn.length - 1) sqltxt += " or ";
+                }
+                sqltxt += ";";
+                if (!confirm("Last Chance!!!\nYour new version will be released to EVERYBODY after you confirm this!")) {
+                    btn.prop("disabled", false);
+                    console.log(sqltxt)
+                    return;
+                }
+                executeMsSql(sqltxt, function (err) {
+                    if (err) throw err;
+                    loglog("ReleaseNewDrawingVersion", '{"DrawingNumber":"' + drawingCode + '", "NewVersion":' + maxVersion + ', "DrawingSN":' + JSON.stringify(dsn) + '}');
+                    loadPanel("drawingdis");
+                })
+            });
         }
 
         for (var m in tables) {
@@ -140,8 +205,80 @@ $(function () {
         pdiv.find("button[bid=uploadDrawing]").click(function () {
             var btn = $(this);
             var tr = $(this).parents("tr[trtype=drawings]");
-            console.log(tr.attr())
+            var data = tr.attr();
+            data.filetype = parseInt(data.filetype);
+            data.filesize = parseInt(data.filesize);
+            data.sn = parseInt(data.sn);
+
+            var fs = require("fs");
+            var path = require('path');
+            var toLocalPath = path.resolve(app.getPath("documents"));
+            var filepath = dialog.showOpenDialog({
+                defaultPath: toLocalPath,
+                title: 'Open ' + drawingType[data.filetype].name + ' for ' + data.code,
+                filters: [{
+                    name: drawingType[data.filetype].name,
+                    extensions: drawingType[data.filetype].ext
+                }]
+            });
+            if (!filepath) return;
+            if (!fs.existsSync(filepath[0])) return;
+            var info = fs.statSync(filepath[0]);
+            var filename = path.basename(filepath[0]);
+            var filedata = fs.readFileSync(filepath[0]);
+            query = "INSERT INTO st_drawings SET ? ";
+            value = {
+                dsn: data.sn,
+                data: filedata
+            }
+
+            var mysql = require('mysql');
+            var connection = mysql.createConnection({
+                host: config.mysqlServer,
+                user: config.serverconfig.user,
+                password: config.serverconfig.password,
+                database: config.serverconfig.user
+            });
+            connection.query(query, value, function (error, results, fields) {
+                if (error) throw error;
+                sqltxt = "update st_drawings set filename='" + filename + "', filesize=" + info.size;
+                if (/(.)*\_[SV][0-9]+\_[AB][0-9]\_(.)*\.[a-zA-Z]+/g.test(filename)) {
+                    var sizepos = filename.search(/\_[AB][0-9]\_/g);
+                    var sizelength = filename.indexOf("_", sizepos + 1) - sizepos - 1;
+                    var size = filename.substr(sizepos + 1, sizelength)
+                    sqltxt += ", size = '" + size + "'";
+                }
+                sqltxt += " where sn = " + data.sn;
+                executeMsSql(sqltxt, function (error) {
+                    loadPanel("drawingdis");
+                })
+            });
         })
+
+        pdiv.find("span[bid=ddel]").click(function () {
+            if (!confirm("Are you sure to remove the draft drawing?")) return;
+            var btn = $(this);
+            var tr = $(this).parents("tr[trtype=drawings]");
+            var data = tr.attr();
+            data.filetype = parseInt(data.filetype);
+            data.filesize = parseInt(data.filesize);
+            data.sn = parseInt(data.sn);
+            var query = "delete from st_drawings where dsn=" + data.sn + ";";
+            var mysql = require('mysql');
+            var connection = mysql.createConnection({
+                host: config.mysqlServer,
+                user: config.serverconfig.user,
+                password: config.serverconfig.password,
+                database: config.serverconfig.user
+            });
+            connection.query(query, value, function (error, results, fields) {
+                sqltxt = "update st_drawings set filename='null', filesize=0, size='-' where sn = " + data.sn + ";";
+                executeMsSql(sqltxt, function (err) {
+                    if (err) throw err;
+                    loadPanel("drawingdis");
+                })
+            });
+        });
         pdiv.find("span[bid=dopen]").css("cursor", "pointer").click(function () {
             var tbody = $(this).parents("tbody");
             var code = $(this).parents("tr").attr("code");

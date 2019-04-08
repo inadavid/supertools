@@ -142,15 +142,17 @@ $("button[bid=rebuildpl]").click(function () {
                 if (i != bom.length - 1) sql_i = sql_temp;
             }
         }
-        loglog("UpdatePicklist", )
         sql_insert.splice(0, 0, sql_update);
         sql_insert.push(sql_delete);
         executeMsSql(sql_insert, (err, result) => {
             if (err) {
                 alert(JSON.stringify(err));
                 executeMsSql(sql_delete);
+                popup("Picklist updated failed!", "danger");
+                loglog("UpdatePicklist", JSON.stringify(sql_delete));
                 return;
             }
+            loglog("UpdatePicklist", JSON.stringify(sql_insert));
             popup("Picklist updated!", "success");
             loadPanel("picklist");
         })
