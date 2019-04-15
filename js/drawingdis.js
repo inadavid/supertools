@@ -24,6 +24,7 @@ $(function () {
     }
 
     var bCreateNewVersion = true;
+    var bReleaseNewVersion = false;
     var maxVersion = 0;
 
     executeMsSql("select a.*,b.opname from st_drawings as a inner join m_operator as b on a.opid = b.opid where code = '" + drawingCode + "' order by a.version desc, a.filetype asc;", (err, result) => {
@@ -42,47 +43,60 @@ $(function () {
         // })
 
         var v = false;
-        var code = result.recordset[0].code;
+        var cnt = result.recordset.length;
+        var code = drawingCode;
         var div = $("<div>").addClass("card-body");
-        var tables = [];
-        var table = $("<table>").addClass("treetable").append($("<thead>").append($("<th>").text("Drawing Type").css("min-width", "300px")).append($("<th>").text("File Name").css("min-width", "300px")).append($("<th>").text("Update date").css("min-width", "150px")).append($("<th>").text("Owner")).append($("<th>").text("Action").css("min-width", "60px"))).append($("<tbody>"));
-        var tmptable;
-        for (var i in result.recordset) {
-            if (result.recordset[i].stat == 0) bCreateNewVersion = false;
-            if (v !== result.recordset[i].version) {
-                maxVersion = Math.max(maxVersion, result.recordset[i].version);
-                if (v !== false) {
-                    var tmp_tr = tmptable.find("tbody tr:first");
-                    if (parseInt(tmp_tr.attr("stat")) == 0 && parseInt(tmp_tr.attr("opid")) == user.id) tables.push(tmptable);
-                    if (parseInt(tmp_tr.attr("stat")) == 1) tables.push(tmptable);
-                }
-                tmptable = table.clone();
-                v = result.recordset[i].version;
-                tmptable.attr("version", v);
-            }
-            var tr = $("<tr>").append($("<td>").text(drawingType[result.recordset[i].filetype].name)).append($("<td>").text(result.recordset[i].filename).attr("name", "filename")).append($("<td>").text(moment(result.recordset[i].date).utc().format("YYYY-MM-DD HH:mm:ss"))).append($("<td>").text(result.recordset[i].opname));
-            tr.attr("sn", result.recordset[i].sn).attr("stat", result.recordset[i].stat).attr("opid", result.recordset[i].opid).attr("code", result.recordset[i].code).attr("filetype", result.recordset[i].filetype).attr("version", result.recordset[i].version).attr("filename", result.recordset[i].filename).attr("filesize", result.recordset[i].filesize).attr("trtype", "drawings");
-            if (result.recordset[i].stat == 0) {
-                if (result.recordset[i].opid == user.id) {
-                    if (result.recordset[i].filesize != 0 && result.recordset[i].filename != "null") {
-                        tr.append($("<td>").html("<span class='iconfont icon-shanchu' bid='ddel' code='" + result.recordset[i].code + "' version='" + result.recordset[i].version + "'></span> <span class='iconfont icon-open' bid='dopen'></span>"))
-                    }
-                    if (result.recordset[i].filesize == 0 && result.recordset[i].filename == "null") {
-                        tr.find("td[name=filename]").html("").append("<button class='btn btn-sm btn-warning' bid='uploadDrawing'>Upload Drawing</button>");
-                        tr.append($("<td>").html("-"));
-                    }
-                } else tr.append($("<td>").html("-"));
-            } else if (result.recordset[i].stat == 1) {
-                tr.append($("<td>").html("<span class='iconfont icon-open' bid='dopen'></span>"))
-            }
-            tmptable.find("tbody").append(tr);
-        }
-        tables.push(tmptable);
-
         var pdiv = $("div[bid=drawings]").html("");
 
-        if (bCreateNewVersion && user.perm.indexOf(7) != -1) {
-            maxVersion++;
+        if (cnt === 0) {
+
+        } else {
+            var tables = [];
+            var table = $("<table>").addClass("treetable").append($("<thead>").append($("<th>").text("Drawing Type").css("min-width", "300px")).append($("<th>").text("File Name").css("min-width", "300px")).append($("<th>").text("Update date").css("min-width", "150px")).append($("<th>").text("Owner")).append($("<th>").text("Action").css("min-width", "60px"))).append($("<tbody>"));
+            var tmptable;
+            for (var i in result.recordset) {
+                if (result.recordset[i].stat == 0) {
+                    bCreateNewVersion = false;
+                    if (result.recordset[i].opid == user.id) bReleaseNewVersion = true;
+                }
+                if (v !== result.recordset[i].version) {
+                    maxVersion = Math.max(maxVersion, result.recordset[i].version);
+                    if (v !== false) {
+                        var tmp_tr = tmptable.find("tbody tr:first");
+                        if (parseInt(tmp_tr.attr("stat")) == 0 && parseInt(tmp_tr.attr("opid")) == user.id) {
+                            tables.push(tmptable);
+                        }
+                        if (parseInt(tmp_tr.attr("stat")) == 1) tables.push(tmptable);
+                    }
+                    tmptable = table.clone();
+                    v = result.recordset[i].version;
+                    tmptable.attr("version", v);
+                }
+                var tr = $("<tr>").append($("<td>").text(drawingType[result.recordset[i].filetype].name)).append($("<td>").text(result.recordset[i].filename).attr("name", "filename")).append($("<td>").text(moment(result.recordset[i].date).utc().format("YYYY-MM-DD HH:mm:ss"))).append($("<td>").text(result.recordset[i].opname));
+                tr.attr("sn", result.recordset[i].sn).attr("stat", result.recordset[i].stat).attr("opid", result.recordset[i].opid).attr("code", result.recordset[i].code).attr("filetype", result.recordset[i].filetype).attr("version", result.recordset[i].version).attr("filename", result.recordset[i].filename).attr("filesize", result.recordset[i].filesize).attr("trtype", "drawings");
+                if (result.recordset[i].stat == 0) {
+                    if (result.recordset[i].opid == user.id) {
+                        if (result.recordset[i].filesize != 0 && result.recordset[i].filename != "null") {
+                            tr.append($("<td>").html("<span class='iconfont icon-shanchu' bid='ddel' code='" + result.recordset[i].code + "' version='" + result.recordset[i].version + "'></span> <span class='iconfont icon-open' bid='dopen'></span>"))
+                        }
+                        if (result.recordset[i].filesize == 0 && result.recordset[i].filename == "null") {
+                            tr.find("td[name=filename]").html("").append("<button class='btn btn-sm btn-warning' bid='uploadDrawing'>Upload Drawing</button>");
+                            tr.append($("<td>").html("-"));
+                        }
+                    } else tr.append($("<td>").html("-"));
+                } else if (result.recordset[i].stat == 1) {
+                    tr.append($("<td>").html("<span class='iconfont icon-open' bid='dopen'></span> <span class='iconfont icon-Addtodownload' bid='ddl'></span>"))
+                }
+                tmptable.find("tbody").append(tr);
+            }
+            tables.push(tmptable);
+
+            if (bCreateNewVersion) maxVersion++;
+        }
+
+
+
+        if (bCreateNewVersion && user.perm.indexOf(8) != -1) {
             pdiv.append(div.clone().append("<button class='btn btn-primary' version='" + maxVersion + "' code='" + drawingCode + "' bid='newVersion'>Create Version " + maxVersion + "</button>"));
             $("button[bid=newVersion]").click(function () {
                 if (!confirm("Are you sure to create a new version?")) return;
@@ -101,7 +115,10 @@ $(function () {
                 })
             })
         }
-        if (!bCreateNewVersion && user.perm.indexOf(7) != -1) {
+        if (!bCreateNewVersion && !bReleaseNewVersion) {
+            pdiv.append(div.clone().append("<h5>New version is being modified!</h5>"));
+        }
+        if (!bCreateNewVersion && bReleaseNewVersion && user.perm.indexOf(8) != -1) {
             pdiv.append(div.clone().append("<button class='btn btn-success' version='" + maxVersion + "' code='" + drawingCode + "' bid='releaseVersion'>Release Version " + maxVersion + "</button> <button class='btn btn-danger' version='" + maxVersion + "' code='" + drawingCode + "' bid='cancelVersion'>Cancel Version " + maxVersion + "</button>"));
 
             $("button[bid=cancelVersion]").click(function () {
@@ -279,6 +296,38 @@ $(function () {
                 })
             });
         });
+
+        pdiv.find("span[bid=ddl]").css("cursor", "pointer").click(function () {
+
+            var tbody = $(this).parents("tbody");
+            var code = $(this).parents("tr").attr("code");
+            var version = $(this).parents("tr").attr("version");
+            var filetype = $(this).parents("tr").attr("filetype");
+            var filename = $(this).parents("tr").attr("filename");
+            var stat = $(this).parents("tr").attr("stat");
+            var sn = $(this).parents("tr").attr("sn");
+            var btn = $(this);
+            var path = require("path");
+
+            var filepath = dialog.showSaveDialog({
+                title: 'Save as ' + code + ' drawing ',
+                filters: [{
+                    name: drawingType[filetype].name,
+                    extensions: [path.extname(filename).split(".").join("")]
+                }]
+            });
+            if (!filepath) return;
+
+            btn.hide();
+            downloadDrawing(code, version, filepath, function (fp) {
+                // const {
+                //     shell
+                // } = require('electron');
+                // // Open a local file in the default app
+                // shell.openItem(fp);
+                btn.show();
+            }, filetype, true);
+        });
         pdiv.find("span[bid=dopen]").css("cursor", "pointer").click(function () {
             var tbody = $(this).parents("tbody");
             var code = $(this).parents("tr").attr("code");
@@ -289,11 +338,11 @@ $(function () {
             var sn = $(this).parents("tr").attr("sn");
             var btn = $(this);
             btn.hide();
-            if (parseInt(filetype) == 0) {
+            if (parseInt(filetype) == 0 || parseInt(filetype) == 2 || parseInt(filetype) == 4 || parseInt(filetype) == 5 || parseInt(filetype) == 6) {
                 displayDrawing(code, version, function (rtn) {
                     if (!rtn.err) btn.show();
                     else alert(rtn.err)
-                }, 0);
+                }, filetype);
             } else if (parseInt(filetype) == 1) {
                 var ext = filename.split('.').pop().toLowerCase();
                 if (ext == "slddrw") { //incase of solidworks, 3D file needed.

@@ -15,7 +15,7 @@ const request = require('request');
 
 let win;
 let flash;
-global.version = "V0181";
+global.version = "V01814";
 global.appPath = app.getAppPath();
 global.argv = process.argv;
 global.flashClosed = false;
@@ -177,7 +177,11 @@ app.on('ready', function () {
 
 app.on('window-all-closed', () => {
     //if (process.platform !== 'darwin') {
-    app.quit()
+    var tmppath = app.getPath("temp") + "/SuperTools";
+    var rimraf = require("rimraf");
+    rimraf(tmppath, function () {
+        app.quit()
+    });
     //}
 })
 

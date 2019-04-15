@@ -35,6 +35,7 @@ $('button[bid="submit"]').click(function () {
     var importType = $("input[name=importType]:checked").val();
     var uplist = [];
     var fileType = $('select[bid="dtype"]').val();
+    console.log(fileType)
     var fileExt = JSON.parse($('select[bid="dtype"] option:selected').attr("ext"));
     if (importType == 0) {
         var pa = fs.readdirSync(drawingfilepath);
@@ -61,7 +62,7 @@ $('button[bid="submit"]').click(function () {
                         size: size,
                         filename: ele,
                         filesize: info.size,
-                        filetype: importType
+                        filetype: fileType
                     })
             }
         })

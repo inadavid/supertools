@@ -403,7 +403,7 @@ function fetchAllCodes() {
                     name: rs[i].name,
                     spec: rs[i].specs,
                     unit: rs[i].unitname,
-                    warehouse: /[a-zA-Z][0-9]+\-[a-zA-Z][0-9]+\-[a-zA-Z][0-9]+\-[0-9]+/g.test(rs[i].whpos) ? rs[i].whpos : "",
+                    warehouse: /[a-zA-Z]+[0-9]+\-[a-zA-Z]+[0-9]+\-[a-zA-Z]+[0-9]+\-[0-9]+/g.test(rs[i].whpos) ? rs[i].whpos : "",
                 }
             }
             console.log(codesList.length)
@@ -449,7 +449,7 @@ function data2csv(data = null, columnDelimiter = ",", lineDelimiter = "\n") { //
     return result
 }
 
-function savedata(filepath, data, open = false) {
+function savedata(filepath, data, open = false, cb = false) {
     var msExcelBuffer = Buffer.concat([
         new Buffer.from('\xEF\xBB\xBF', 'binary'),
         new Buffer.from(data2csv(data))
@@ -467,6 +467,7 @@ function savedata(filepath, data, open = false) {
                 popup("CVS file exported successfully!", "success");
             }
         } else popup(err, "danger");
+        if (cb && typeof (cb) == "function") cb(filepath);
     });
 
 }
@@ -510,43 +511,52 @@ function loglog(action, remark) {
 }
 
 function checkPicklistUpdate(eco = false) {
-    co(function* () {
-        try {
-            var picklistUpdate = [];
-            var coConn = new cosql.Connection(config.serverconfig);
-            yield coConn.connect();
-            var request = new cosql.Request(coConn);
-            var sqltxt = "select * from st_picklists; ";
+    var picklistUpdate = [];
+    var sqltxt = "select * from st_picklists; ";
 
-            var picklists = yield request.query(sqltxt);
-
-
-            sqltxt = " select * from st_bomeco where ";
-            if (eco && typeof (eco) === "number") sqltxt += " sn = " + eco + " and ";
-            sqltxt += " status = 1;"
-            var ecolists = yield request.query(sqltxt);
+    executeMsSql(sqltxt, function (err, result) {
+        if (err) throw err;
+        var picklists = result.recordset;
+        console.log("picklists", picklists, sqltxt);
+        sqltxt = " select * from st_bomeco where ";
+        if (eco && typeof (eco) === "number") sqltxt += " sn = " + eco + " and ";
+        sqltxt += " status = 1;"
+        executeMsSql(sqltxt, function (err, result) {
+            if (err) throw err;
+            var ecolists = result.recordset;
+            //console.log("ecolist", ecolists, sqltxt)
             var finalSQL = "update st_bomeco set status = 2 where sn = 0"
+            var cnt = ecolists.length;
             for (var k in ecolists) {
                 //select all relevant parents that connected to relevant picklist codes.
-                sqltxt = "WITH CTE AS (SELECT b.*,cast('" + ecolists[k].parentgid + "' as varchar(2000)) as pid , lvl=1 FROM dbo.st_goodsbom as b WHERE goodsid='" + ecolists[k].parentgid + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1 FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid) select c.goodsid from CTE as c where ";
+                sqltxt = "WITH CTE AS (SELECT b.*,cast('" + ecolists[k].parentgid + "' as varchar(2000)) as pid , lvl=1 FROM dbo.st_goodsbom as b WHERE goodsid='" + ecolists[k].parentgid + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1 FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON c.goodsid=b.elemgid) select c.goodsid from CTE as c where ";
                 for (var j in picklists) {
                     sqltxt += " c.goodsid='" + picklists[j].code + "' or ";
                 }
                 sqltxt += " c.goodsid='' group by c.goodsid;";
-                var tmprs = yield request.query(sqltxt);
-                for (var l in tmprs)
-                    if (picklistUpdate.indexOf(tmprs[l].goodsid) == -1) picklistUpdate.push(tmprs[l].goodsid);
-                finalSQL += " or sn = " + ecolists[k].sn;
+
+                executeMsSql(sqltxt, function (err, result) {
+                    if (err) throw err;
+                    var tmprs = result.recordset;
+                    for (var l in tmprs)
+                        if (picklistUpdate.indexOf(tmprs[l].goodsid) == -1) picklistUpdate.push(tmprs[l].goodsid);
+                    finalSQL += " or sn = " + ecolists[k].sn;
+                    cnt--;
+                    if (cnt == 0) {
+                        finalSQL += "; update st_picklists set reflag =1 where code = '' ";
+                        for (var m in picklistUpdate) finalSQL += " or code = '" + picklistUpdate[m] + "' ";
+                        finalSQL += ";";
+                        executeMsSql(finalSQL, function (err, result) {
+                            if (err) throw err;
+                        });
+                    }
+                });
             }
-            finalSQL += "; update st_picklists set reflag =1 where code = '' ";
-            for (var m in picklistUpdate) finalSQL += " or code = '" + picklistUpdate[m] + "' ";
-            finalSQL += ";";
-            yield request.query(finalSQL);
-        } catch (ex) {
-            // ... error checks
-            console.error(ex)
-        }
-    })();
+        });
+    });
+
+
+
 }
 
 function getPicklistData(code, type = 0, cb) {
@@ -588,7 +598,7 @@ function getPicklistData(code, type = 0, cb) {
 
 }
 
-function getPicklist(code, type = 0) {
+function getPicklist(code, type = 0, cb = false) {
     getPicklistData(code, type, function (rdata) {
         rdata.push({
             SN: "===============END OF PICKLIST " + code + "(" + (type == 0 ? "MAKE" : "BUY") + ")===============",
@@ -600,18 +610,13 @@ function getPicklist(code, type = 0) {
             Warehouse: ""
         });
         var path = require('path');
+        const fs = require("fs");
+        var tmppath = app.getPath("temp") + "/SuperTools";
+        if (!fs.existsSync(tmppath)) fs.mkdirSync(tmppath);
+
         var toLocalPath = path.resolve(app.getPath("documents"));
-        var filepath = dialog.showSaveDialog({
-            defaultPath: toLocalPath,
-            title: 'Save exported Picklist for ' + code,
-            filters: [{
-                name: 'CSV (Comma-Separated Values) for Excel',
-                extensions: ['csv']
-            }]
-        });
-        if (filepath !== undefined) {
-            savedata(filepath, rdata, true);
-        }
+        var filepath = path.resolve(tmppath + "/Picklist-" + moment().format("YYYYMMDD-HHmmss") + ".temp.csv");
+        savedata(filepath, rdata, true, cb);
     });
 
 }
@@ -631,18 +636,8 @@ function displayDrawing(code, version = false, cb = false, filetype = 0) {
     }, filetype)
 }
 
-function downloadDrawing(code, version = false, path = false, cb = false, filetype = 0) {
-
-    var mysql = require('mysql');
-    var connection = mysql.createConnection({
-        host: config.mysqlServer,
-        user: config.serverconfig.user,
-        password: config.serverconfig.password,
-        database: config.serverconfig.user
-    });
-    connection.connect();
-
-    executeMsSql("select top 1 * from st_drawings where code = '" + code + "' " + (version === false ? "" : " and version =" + version) + " and filetype = " + filetype + " order by version desc;", (err, result) => {
+function downloadDrawing(code, version = false, path = false, cb = false, filetype = 0, dfile = false) {
+    executeMsSql("select top 1 * from st_drawings where code = '" + code + "' " + (version === false ? "" : " and version =" + version) + " and filetype = " + filetype + " order by version desc, filetype asc;", (err, result) => {
         if (err) {
             console.error(err);
             alert("An error occur when open drawing.\n" + JSON.stringify(err));
@@ -654,29 +649,43 @@ function downloadDrawing(code, version = false, path = false, cb = false, filety
             });
             return false;
         }
-        query = "select data from st_drawings where dsn=" + result.recordset[0].sn;
         var p = require("path");
         var sanitize = require("sanitize-filename");
         if (path === false) {
             var tmppath = app.getPath("temp") + "/SuperTools";
             if (!fs.existsSync(tmppath)) fs.mkdirSync(tmppath);
             //change file name to a standard type for 0 type file
-            if (result.recordset[0].filetype == 0) {
+            if (filetype == 0 || filetype == 4 || filetype == 5) {
                 filepath = tmppath + "/" + sanitize(result.recordset[0].code + "_V" + result.recordset[0].version + "_" + result.recordset[0].size + "_" + codesInfo[result.recordset[0].code].name + "_" + codesInfo[result.recordset[0].code].spec + p.extname(result.recordset[0].filename).toLowerCase());
             } else filepath = tmppath + "/" + result.recordset[0].filename.toLowerCase();
-        } else if (fs.lstatSync(path).isDirectory()) {
+            filepath = p.normalize(filepath);
+        } else if (!dfile && fs.lstatSync(path).isDirectory()) {
             //change file name to a standard type for 0 type file
-            if (result.recordset[0].filetype == 0) {
+            if (filetype == 0 || filetype == 4 || filetype == 5) {
                 filepath = path + "/" + sanitize(result.recordset[0].code + "_V" + result.recordset[0].version + "_" + result.recordset[0].size + "_" + codesInfo[result.recordset[0].code].name + "_" + codesInfo[result.recordset[0].code].spec + p.extname(result.recordset[0].filename).toLowerCase());
-            } else filepath = tmppath + "/" + result.recordset[0].filename.toLowerCase();
+            } else filepath = path + "/" + result.recordset[0].filename.toLowerCase();
+            filepath = p.normalize(filepath);
         } else {
-            filepath = path;
+            var fn = p.basename(path);
+            var nfn = fn.split('.').slice(0, -1).join('.')
+            filepath = p.dirname(path) + "/" + nfn + p.extname(result.recordset[0].filename).toLowerCase();
         }
+
+        var mysql = require('mysql');
+        var connection = mysql.createConnection({
+            host: config.mysqlServer,
+            user: config.serverconfig.user,
+            password: config.serverconfig.password,
+            database: config.serverconfig.user
+        });
+        connection.connect();
+        query = "select data from st_drawings where dsn=" + result.recordset[0].sn;
         connection.query(query, function (error, results, fields) {
+            //if (filetype == 5) console.log(results, query, filepath)
             fs.writeFileSync(filepath, results[0].data);
+            connection.destroy();
             if (typeof (cb) == "function") cb(filepath);
         });
-        connection.end();
     });
 
 }

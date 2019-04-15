@@ -177,7 +177,7 @@ function showBOM(dbom) {
             .append("<td><input did='Name' value='" + dbom[i].Name + "' readonly></td>")
             .append("<td><input did='Spec' value='" + dbom[i].Spec + "' readonly></td>")
             .append("<td><input did='whpos' value='" + dbom[i].Warehouse + "' readonly></td>")
-            .append("<td>" + (dbom[i].dversion !== null && user.perm.indexOf(6) != -1 ? "<span class='iconfont icon-drawing' bid='drawing' code='" + dbom[i].Code + "'></span> <span class='iconfont icon-open' bid='dopen' code='" + dbom[i].Code + "' version='" + dbom[i].dversion + "'></span> <span>V" + dbom[i].dversion + "</span>" : "-") + "</td>");
+            .append("<td>" + (user.perm.indexOf(6) != -1 ? "<span class='iconfont icon-drawing' bid='drawing' code='" + dbom[i].Code + "'>" + (dbom[i].dversion !== null ? "</span> <span class='iconfont icon-open' bid='dopen' code='" + dbom[i].Code + "' version='" + dbom[i].dversion + "'></span> <span>V" + dbom[i].dversion + "</span>" : "") : "-") + "</td>");
         tbody.append(tr);
     }
     table.append(tbody);
@@ -222,6 +222,8 @@ function showBOM(dbom) {
     });
 
     $("button[bid=exportBOM]").click(function () {
+        var btn = $(this);
+        btn.prop("disabled", true);
         var top = $("input[bid=bomtop]").val().trim();
         var cloneArr = JSON.parse(JSON.stringify(dbom));
         var rdata = [{
@@ -254,25 +256,27 @@ function showBOM(dbom) {
             rdata.push(obj);
         }
         var path = require('path');
+        var tmppath = app.getPath("temp") + "/SuperTools";
+        if (!fs.existsSync(tmppath)) fs.mkdirSync(tmppath);
+
         var toLocalPath = path.resolve(app.getPath("documents"));
-        var filepath = dialog.showSaveDialog({
-            defaultPath: toLocalPath,
-            title: 'Save exported BOM for ' + $("input[bid=bomtop]").val(),
-            filters: [{
-                name: 'CSV (Comma-Separated Values) for Excel',
-                extensions: ['csv']
-            }]
+        var filepath = path.resolve(tmppath + "/Export-" + moment().format("YYYYMMDD-HHmmss") + ".temp.csv");
+        savedata(filepath, rdata, true, function (fp) {
+            btn.prop("disabled", false);
         });
-        if (filepath !== undefined) {
-            savedata(filepath, rdata, true);
-        }
+
     });
 
     $("button[bid=exportPL]").click(function () {
+        var btn = $(this);
+        btn.prop("disabled", true);
         var top = $("input[bid=bomtop]").val().trim();
         if (argv[2] == "dev") console.log(shifted)
-        if (shifted) getPicklist(top, 1);
-        else getPicklist(top, 0);
+        var cb = function () {
+            btn.prop("disabled", false);
+        }
+        if (shifted) getPicklist(top, 1, cb);
+        else getPicklist(top, 0, cb);
     });
 
     $("button[bid='dlAllDrawings']").click(function () {
@@ -281,17 +285,34 @@ function showBOM(dbom) {
         })
         if (!dfp) return;
 
+        var fpath = dfp[0];
+
         var downArray = [];
         $('div[bid=bomcard] table').find("tr span[bid='dopen']").each(function () {
             var code = $(this).attr("code");
             var version = $(this).attr("version");
-            var tObj = {
+            var tObj0 = {
                 code: code,
-                version: version
+                version: version,
+                filetype: 0
+            }
+            var tObj4 = {
+                code: code,
+                version: version,
+                filetype: 4
+            }
+            var tObj5 = {
+                code: code,
+                version: version,
+                filetype: 5
             }
             if (_.find(downArray, function (obj) {
                     return obj.code == code
-                }) == undefined) downArray.push(tObj);
+                }) == undefined) {
+                downArray.push(tObj0);
+                downArray.push(tObj4);
+                downArray.push(tObj5);
+            }
         });
         var downCount = downArray.length;
         if (downCount == 0) {
@@ -299,29 +320,24 @@ function showBOM(dbom) {
             return;
         }
         var downQty = 0;
-        var progressDiv = $("<div class='alert alert-primary' role='alert' style='margin-top:10px;'>Downloading " + downCount + " drawings:<br>");
+        var progressDiv = $("<div class='alert alert-primary' role='alert' style='margin-top:10px;'>Downloading " + (downCount / 3) + " drawings:<br>");
         progressDiv.append('<div class="progress"> <div class="progress-bar" bid="download" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"> 0% </div> </div>');
         $('div[bid=bomcard] div[bid=downProgress]').html("").append(progressDiv);
 
         function tmpDown(downArray) {
-            var data = downArray.pop();
+            var data = downArray.splice(0, 1)[0];
             if (!data) return false;
-            downloadDrawing(data.code, data.version, dfp[0], function (rtn) {
-                if (rtn.err) {
-                    alert("Error:" + rtn.err + "\nDrawing downloaded:" + downQty);
+            downloadDrawing(data.code, data.version, fpath, function (rtn) {
+                if (argv[2] == "dev") console.log(rtn + " downloaded.")
+                var rate = (++downQty / downCount * 100).toFixed(2);
+                $('div[bid=bomcard] div[bid=downProgress] div[bid=download]').css("width", rate + "%").attr("aria-valuenow", rate).text(parseInt(downQty / 3) + " Drawings, " + rate + "%");
+                if (downQty == downCount) {
+                    popup("All drawings have been downloaded!", "success");
                     $('div[bid=bomcard] div[bid=downProgress]').html("");
                 } else {
-                    if (argv[2] == "dev") console.log(rtn + " downloaded.")
-                    var rate = (++downQty / downCount * 100).toFixed(2);
-                    $('div[bid=bomcard] div[bid=downProgress] div[bid=download]').css("width", rate + "%").attr("aria-valuenow", rate).text(downQty + " Drawings, " + rate + "%");
-                    if (downQty == downCount) {
-                        popup("All drawings have been downloaded!", "success");
-                        $('div[bid=bomcard] div[bid=downProgress]').html("");
-                    } else {
-                        tmpDown(downArray);
-                    }
+                    tmpDown(downArray);
                 }
-            })
+            }, data.filetype);
         }
         tmpDown(downArray);
     })

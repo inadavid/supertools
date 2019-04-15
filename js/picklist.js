@@ -107,9 +107,13 @@ $('select[name="picklists"]').change(function () {
 })
 
 $("button[bid=dlpl]").click(function () {
+    var btn = $(this);
+    btn.prop("disabled", true);
     var code = $('select[name="picklists"]').find("option:selected").attr("code");
     var type = parseInt($('select[name="picklists"]').find("option:selected").attr("type"));
-    getPicklist(code, type);
+    getPicklist(code, type, function () {
+        btn.prop("disabled", false);
+    });
 });
 
 $("button[bid=rebuildpl]").click(function () {
