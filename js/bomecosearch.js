@@ -11,7 +11,7 @@ $(function () {
     }
 
     new Awesomplete('table.optionTable tr[name="byName"] input[name=name]', {
-        list: ["王福顺", "王世静", "王佳宇", "毕磊", "杨竣轶", "张瑞", "刘洪杰", "魏亮"],
+        list: ["王福顺", "王世静", "王佳宇", "毕磊", "杨竣轶", "张瑞", "刘洪杰", "孙世峰", "李猛", "彭宝奎", "魏亮"],
         minChars: 0
     });
     var sqltext = "select goodsid from st_bomtop;";
