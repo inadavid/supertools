@@ -763,3 +763,23 @@ function executeMsSql(sqlArr, cb = false, rlt = false) {
         }
     }
 }
+
+function HTMLTable(data, cls = false) {
+    //data need to be array of object (recorderset of mysql/mssql query result)
+    if (!Array.isArray(data)) return false;
+    if (data.length < 1) return false;
+    var title = _.keys(data[0]);
+    var table = $("<table>").addClass("table selectable").attr("data", JSON.stringify(data));
+    if (cls !== false) table.addClass(cls);
+    th_tr = $("<tr>");
+    for (var i in title) th_tr.append($("<td>").append(title[i]));
+    var th = $("<thead>").append(th_tr);
+    var tb = $("<tbody>");
+    for (var j in data) {
+        var tb_tr = $("<tr>").attr("data", JSON.stringify(data[j]));
+        for (var h in title) tb_tr.append($("<td>").append(data[j][title[h]]));
+        tb.append(tb_tr);
+    }
+    table.append(th).append(tb);
+    return table;
+}

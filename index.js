@@ -15,13 +15,23 @@ const request = require('request');
 
 let win;
 let flash;
-global.version = "V01815";
+global.version = "V01816";
 global.appPath = app.getAppPath();
 global.argv = process.argv;
 global.flashClosed = false;
 
-function createWindow() {
+////////////////////////////Config ini////////////////////////////
+const ini = require('ini');
+var configFile = app.getAppPath() + '/config.ini';
+if (global.argv[2] != "dev") configFile = app.getAppPath() + '/../config.ini';
+var config = ini.parse(fs.readFileSync(configFile, 'utf-8'));
 
+if (!config.updateServer) config.updateServer = "192.168.16.12";
+if (!config.updatePort) config.updatePort = 8082;
+fs.writeFileSync(configFile, ini.stringify(config));
+////////////////////////////Config ini////////////////////////////
+
+function createWindow() {
     win = new BrowserWindow({
         width: 1500,
         height: 768,
@@ -91,8 +101,8 @@ app.on('ready', function () {
     // });
     const http = require("http");
     var post_options = {
-        host: '192.168.16.12',
-        port: '8082',
+        host: config.updateServer,
+        port: config.updatePort,
         path: '/update',
         method: 'POST',
         headers: {
