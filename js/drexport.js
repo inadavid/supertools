@@ -23,7 +23,19 @@ $(function () {
         btn.prop("disabled", true);
         [fromdate, todate] = checkDate();
         sqltxt = "select a.billcode, convert(varchar, a.billdate, 111) as billdate, c.code, c.name, b.quantity, a.remark, a.userdef1, b.aprice, b.price, b.amount, a.amount as amount_bill from i_otheroutdetail as b inner join i_otherout as a on a.billid = b.billid and a.billdate >= '" + fromdate + "' and a.billdate <= '" + todate + "' inner join l_goods as c on b.goodsid = c.goodsid;";
-        console.log(sqltxt)
+        executeMsSql(sqltxt, function (err, result) {
+            if (err) throw err;
+            var table = HTMLTable(result.recordset, "table-sm");
+            $("div[bid=drtable]").html("").append(table);
+            btn.prop("disabled", false);
+        })
+    })
+    $("button[bid=cmbill]").click(function () {
+        if (!checkDate()) return;
+        var btn = $(this);
+        btn.prop("disabled", true);
+        [fromdate, todate] = checkDate();
+        sqltxt = "select a.billcode, convert(varchar, a.billdate, 111) as billdate, c.code, c.name, b.quantity, b.aprice, b.price, b.amount, a.amount as amount_bill from cm_drawdetail as b inner join cm_draw as a on a.billid = b.billid and a.billdate >= '" + fromdate + "' and a.billdate <= '" + todate + "' inner join l_goods as c on b.goodsid = c.goodsid;";
         executeMsSql(sqltxt, function (err, result) {
             if (err) throw err;
             var table = HTMLTable(result.recordset, "table-sm");
