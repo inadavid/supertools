@@ -68,7 +68,7 @@ function searchChildren(code) {
     selectTD.append(selectCT);
     var button_delete = $("<span class='iconfont icon-shanchu' bid='delete'>");
     var button_cancel = $("<span class='iconfont icon-cancel' bid='cancel'>");
-    var button_confirm = $("<span class='iconfont icon-wancheng' bid='confirm'>");
+    var button_confirm = $("<span class='iconfont icon-wanchengchenggong' bid='confirm'>");
 
     var sqltext = "select * from st_goodsbom where goodsid='" + code + "' and startDate<='" + today + "' and endDate>='" + today + "' order by itemno asc;";
     new sql.Request().query(sqltext, (err, result) => {
