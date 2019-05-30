@@ -173,7 +173,7 @@ function showBOM(dbom) {
             .append("<td><input did='Code' value='" + dbom[i].Code + "' readonly></td>")
             .append("<td><input did='Qty' value='" + dbom[i].Qty + "' readonly></td>")
             .append("<td>" + dbom[i].Unit + "</td>")
-            .append("<td>" + dbom[i].ProchasingType + "</td>")
+            .append("<td bid='ptype'>" + dbom[i].ProchasingType + "</td>")
             .append("<td><input did='Name' value='" + dbom[i].Name + "' readonly></td>")
             .append("<td><input did='Spec' value='" + dbom[i].Spec + "' readonly></td>")
             .append("<td><input did='whpos' value='" + dbom[i].Warehouse + "' readonly></td>")
@@ -280,6 +280,7 @@ function showBOM(dbom) {
     });
 
     $("button[bid='dlAllDrawings']").click(function () {
+        var alldrawing = confirm("Do you want to include the Assembly Drawing?\n您是否需要一同下载装配图？");
         var dfp = dialog.showOpenDialog(win, {
             properties: ['openDirectory']
         })
@@ -289,6 +290,8 @@ function showBOM(dbom) {
 
         var downArray = [];
         $('div[bid=bomcard] table').find("tr span[bid='dopen']").each(function () {
+            var btype = $(this).parents("tr").find("td[bid='ptype']").text();
+            if (!alldrawing && btype.trim() == "A") return;
             var code = $(this).attr("code");
             var version = $(this).attr("version");
             var tObj0 = {

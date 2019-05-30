@@ -403,7 +403,8 @@ function fetchAllCodes() {
                     name: rs[i].name,
                     spec: rs[i].specs,
                     unit: rs[i].unitname,
-                    warehouse: /[a-zA-Z]+[0-9]+\-[a-zA-Z]+[0-9]+\-[a-zA-Z]+[0-9]+\-[0-9]+/g.test(rs[i].whpos) ? rs[i].whpos : "",
+                    warehouse: (typeof (rs[i].whpos) == "string" && rs[i].whpos.length > 6 ? rs[i].whpos : "")
+                    ///[a-zA-Z]+[0-9]+\-[a-zA-Z]+[0-9]+\-[a-zA-Z]+[0-9]+\-[0-9]+/g.test(rs[i].whpos) ? .whpos : "",
                 }
             }
             console.log(codesList.length)

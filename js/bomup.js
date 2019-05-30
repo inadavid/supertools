@@ -160,30 +160,44 @@ function gFormatBOM(bom_top, setup, index = 0, top = false) {
         if (i >= bomexcel_arr.length) break;
         if (bomexcel_arr[i][setup.level] == level) {
             //console.log("parsing " + bomexcel_arr[i][setup.code] + " in same level, ready to add to return array;")
+
+            var ptype = trim(bomexcel_arr[i][setup.pt].toUpperCase());
+            //check if ptype is in target list
+            if (ptype != "A" && ptype != "B" && ptype != "P" && ptype != "N" && ptype != "F" && ptype != "V" && ptype != "C" && ptype != "M") {
+                alert("BOM PType error: line[" + (i + 1) + "], code " + bomexcel_arr[i][setup.code] + " have wrong PTYPE " + ptype);
+                return false;
+            }
+
             //check if code try to add itself into a loop;
             if (top.pid !== false && (top.pid.indexOf(bomexcel_arr[i][setup.code]) != -1 || bomexcel_arr[i][setup.code] == bom_top)) {
                 alert("BOM Data error: code " + bomexcel_arr[i][setup.code] + " tried to add into a loop.\nLevel chain is:" + top.pid + "." + bom_top);
                 return false;
             }
             //check the logic of procumenttype
-            if (top.procumenttype !== false && (top.procumenttype.toUpperCase() == "A" || top.procumenttype.toUpperCase() == "M") && bomexcel_arr[i][setup.pt].toUpperCase() != "B" && bomexcel_arr[i][setup.pt].toUpperCase() != "A" && bomexcel_arr[i][setup.pt].toUpperCase() != "V" && bomexcel_arr[i][setup.pt].toUpperCase() != "M" && bomexcel_arr[i][setup.pt].toUpperCase() != "C") {
-                alert("BOM PType error: line[" + (i + 1) + "], code " + bomexcel_arr[i][setup.code] + " have wrong ptype " + bomexcel_arr[i][setup.pt] + " as sub-material for \"" + top.procumenttype.toUpperCase() + "\".\nLevel chain is:" + top.pid + "." + bom_top);
+            if (top.procumenttype !== false && (top.procumenttype.toUpperCase() == "A" || top.procumenttype.toUpperCase() == "M") && ptype != "B" && ptype != "A" && ptype != "V" && ptype != "M" && ptype != "C") {
+                alert("BOM PType error: line[" + (i + 1) + "], code " + bomexcel_arr[i][setup.code] + " have wrong ptype " + ptype + " as sub-material for \"" + top.procumenttype.toUpperCase() + "\".\nLevel chain is:" + top.pid + "." + bom_top);
                 return false;
             }
-            if (top.procumenttype !== false && top.procumenttype.toUpperCase() == "B" && bomexcel_arr[i][setup.pt].toUpperCase() != "P" && bomexcel_arr[i][setup.pt].toUpperCase() != "N" && bomexcel_arr[i][setup.pt].toUpperCase() != "F" && bomexcel_arr[i][setup.pt].toUpperCase() != "V") {
+            if (top.procumenttype !== false && top.procumenttype.toUpperCase() == "B" && ptype != "P" && ptype != "N" && ptype != "F" && ptype != "V") {
                 alert("BOM PType error: line[" + (i + 1) + "], code" + bomexcel_arr[i][setup.code] + " have wrong ptype " + bomexcel_arr[i][setup.pt] + " as sub-material for \"B\".\nLevel chain is:" + top.pid + "." + bom_top);
                 return false;
             }
-            if (top.procumenttype !== false && top.procumenttype.toUpperCase() == "P" && bomexcel_arr[i][setup.pt].toUpperCase() != "N" && bomexcel_arr[i][setup.pt].toUpperCase() != "F" && bomexcel_arr[i][setup.pt].toUpperCase() != "V") {
+            if (top.procumenttype !== false && top.procumenttype.toUpperCase() == "P" && ptype != "N" && ptype != "F" && ptype != "V") {
                 alert("BOM PType error: line[" + (i + 1) + "], code " + bomexcel_arr[i][setup.code] + " have wrong ptype " + bomexcel_arr[i][setup.pt] + " as sub-material for \"P\".\nLevel chain is:" + top.pid + "." + bom_top);
+                return false;
+            }
+            //check if quantity if reasonable
+            var qty = parseFloat(bomexcel_arr[i][setup.qty]);
+            if (isNaN(qty) || qty < 0) {
+                alert("BOM PType error: line[" + (i + 1) + "], code " + bomexcel_arr[i][setup.code] + " have wrong QUANTITY " + bomexcel_arr[i][setup.qty]);
                 return false;
             }
             rtnArr.push({
                 "code": bomexcel_arr[i][setup.code],
                 "parent": bom_top,
-                "qty": bomexcel_arr[i][setup.qty],
+                "qty": qty,
                 "item": levelnode++,
-                "procumenttype": setup.pt == -1 ? "" : bomexcel_arr[i][setup.pt],
+                "procumenttype": setup.pt == -1 ? "" : ptype,
                 "pfep": setup.pfep == -1 ? "" : bomexcel_arr[i][setup.pfep],
                 "level": level,
                 "pid": top.pid === false ? bom_top : top.pid + "." + bom_top
