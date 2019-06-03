@@ -187,10 +187,11 @@ function searchChildren(code) {
             var order = parseInt(tableArea.find("table tr[type=newitem] input[did=Order]").val());
             if (isNaN(order)) {
                 order = _.max(curOrders) + 1;
+                console.log(order)
                 tableArea.find("table tr[type=newitem] input[did=Order]").val(order)
             }
 
-            if (curOrders.indexOf(order) != -1) {
+            if (curOrders.length > 0 && curOrders.indexOf(order) != -1) {
                 alert("The 'Order'# exists in current BOM.");
                 tableArea.find("table tr[type=newitem] input[did=Order]").focus().select();
                 return;
@@ -241,7 +242,9 @@ function searchChildren(code) {
                 .append("<td bid='action'>   </td>");
             tr.find("td:last-child").append(button_delete.clone());
             tr.addClass("addition");
-            trs.last().after(tr);
+            if (trs.length > 0) trs.last().after(tr);
+            else tbody.prepend(tr);
+
             tableArea.find("table tr[type=newitem] input[did=Order]").val("");
             tableArea.find("table tr[type=newitem] input[did=Code]").val("");
             tableArea.find("table tr[type=newitem] input[did=Qty]").val("");
