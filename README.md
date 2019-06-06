@@ -2,6 +2,7 @@
 
 #### 项目介绍
 ~~Electron练笔项目，为SuperData 5000生成批量SQL语句。~~
+
 SuperTools项目已经远远超过了一开始的Scope，不仅作为生成sql语句的助手，目前还充当了RD BOM、图纸管理的工具。所有的资料，清单和相关的追溯性都统一由SuperTools进行管理，并由各权责部门交叉查询。 SuperTools已经向CS模式的PDM系统迈进了。
 
 #### 软件架构
