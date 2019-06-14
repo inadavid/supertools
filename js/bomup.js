@@ -161,7 +161,7 @@ function gFormatBOM(bom_top, setup, index = 0, top = false) {
         if (bomexcel_arr[i][setup.level] == level) {
             //console.log("parsing " + bomexcel_arr[i][setup.code] + " in same level, ready to add to return array;")
 
-            var ptype = trim(bomexcel_arr[i][setup.pt].toUpperCase());
+            var ptype = bomexcel_arr[i][setup.pt].toUpperCase().trim();
             //check if ptype is in target list
             if (ptype != "A" && ptype != "B" && ptype != "P" && ptype != "N" && ptype != "F" && ptype != "V" && ptype != "C" && ptype != "M") {
                 alert("BOM PType error: line[" + (i + 1) + "], code " + bomexcel_arr[i][setup.code] + " have wrong PTYPE " + ptype);
