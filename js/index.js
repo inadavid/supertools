@@ -19,6 +19,15 @@ var configFile = appPath + '/config.ini';
 if (argv[2] != "dev") configFile = appPath + '/../config.ini';
 var config = ini.parse(fs.readFileSync(configFile, 'utf-8'));
 
+//for the migration of drawing server(mysql server) to new network:
+if (config.mysqlServer == "192.168.16.12") {
+    config.mysqlServer = "sv009168.corp01.schleuniger.com";
+}
+if (config.updateServer == "192.168.16.12") {
+    config.updateServer = "sv009168.corp01.schleuniger.com";
+}
+fs.writeFileSync(configFile, ini.stringify(config));
+//end of "for the migration of drawing server(mysql server) to new network:"
 
 var action = "dashboard";
 var bomexcel_arr = [];

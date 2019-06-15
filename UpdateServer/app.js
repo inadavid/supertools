@@ -8,8 +8,8 @@ app.use(bodyParser.urlencoded({
 	extended: false
 }));
 
-var filepath = '/home/update' // or ../update.zip
-var fileurl = 'http://192.168.16.12:8082/update.7z';
+var filepath = 'D:\\supertools-update\\update' // or ../update.zip
+var fileurl = 'http://sv009168.corp01.schleuniger.com:8082/update.7z';
 var vers = [];
 if (process.argv[2] == "dev") {
 	filepath = path.normalize(__dirname + "/../release-builds/update.7z") // or ../update.zip

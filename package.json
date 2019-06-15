@@ -6,8 +6,8 @@
     "scripts": {
         "start": "electron ./ dev",
         "production": "electron ./ production",
-        "package": "electron-packager ./ SuperTools --platform=win32 --arch=x64 --overwrite --asar --prune=true --out=release-builds --icon=icon/icon.ico && xcopy config.ini release-builds\\SuperTools-win32-x64\\resources\\ /Y && xcopy bin release-builds\\SuperTools-win32-x64\\resources /E /Y && cd release-builds\\SuperTools-win32-x64\\resources && ..\\..\\..\\bin\\7z a  ..\\..\\update.7z app.asar && cd ..\\..\\..\\ && echo 'scp release-builds/update.7z root@192.168.16.12:/home/update/update.'",
-        "packagelinux": "rm release-builds/update.7z db/* -f && electron-packager ./ SuperTools --platform=linux --arch=x64 --overwrite --asar --prune=true --out=release-builds --icon=icon/icon.ico && cd release-builds/SuperTools-linux-x64/resources/ && 7z a update.7z ./app.asar && mv update.7z ../../ && cd ../../..  && echo 'scp release-builds/update.7z root@192.168.16.12:/home/update/update.'",
+        "package": "electron-packager ./ SuperTools --platform=win32 --arch=x64 --overwrite --asar --prune=true --out=release-builds --icon=icon/icon.ico && xcopy config.ini release-builds\\SuperTools-win32-x64\\resources\\ /Y && xcopy bin release-builds\\SuperTools-win32-x64\\resources /E /Y && echo 'scp release-builds/update.7z root@sv009168.corp01.schleuniger.com:/update/update.'",
+        "packagelinux": "rm release-builds/update.7z db/* -f && electron-packager ./ SuperTools --platform=linux --arch=x64 --overwrite --asar --prune=true --out=release-builds --icon=icon/icon.ico && cd release-builds/SuperTools-linux-x64/resources/ && 7z a update.7z ./app.asar && mv update.7z ../../ && cd ../../..  && echo 'scp release-builds/update.7z root@sv009168.corp01.schleuniger.com:/home/update/update.'",
         "packagemac": "electron-packager ./ SuperTools --platform=darwin --arch=x64 --overwrite --asar --prune=true --out=release-builds --icon=icon/icon.icns"
     },
     "author": "David.Wei@schleuniger.com",
