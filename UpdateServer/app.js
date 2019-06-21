@@ -29,7 +29,7 @@ app.post('/update', function (req, res) {
 		"last": "V" + vers[vers.length - 1],
 		"file": fileurl
 	}).replace(/[\/]/g, '\\/'));
-	console.log("reply to post @" + moment().format("HH:mm:ss"))
+	console.log("reply to post to " + req.ip + " @" + moment().format("HH:mm:ss"))
 	res.end();
 })
 
