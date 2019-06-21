@@ -1,6 +1,6 @@
 {
     "name": "supertools",
-    "version": "1.8.0",
+    "version": "1.9.01",
     "description": "SuperData addon tools",
     "main": "index.js",
     "scripts": {
@@ -30,7 +30,7 @@
         "underscore": "^1.9.1"
     },
     "devDependencies": {
-        "electron": "^4.0.0",
+        "electron": "4.2.4",
         "electron-packager": "^12.2.0"
     }
 }
