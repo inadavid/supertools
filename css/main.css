@@ -418,3 +418,16 @@ select option[rebuilt="1"] {
   background: #ffc0a3;
   font-weight: bold;
 }
+
+textarea[bid="plme-codes"] {
+  display: inline-block;
+  width: 150px;
+  height: 500px;
+}
+
+textarea[bid="plme-namespec"] {
+  display: inline-block;
+  margin-left: 20px;
+  width: 400px;
+  height: 500px;
+}

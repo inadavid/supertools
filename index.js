@@ -15,7 +15,7 @@ const request = require('request');
 
 let win;
 let flash;
-global.version = "V01901";
+global.version = "V01902";
 global.appPath = app.getAppPath();
 global.argv = process.argv;
 global.flashClosed = false;
@@ -110,7 +110,7 @@ app.on('ready', function () {
             'Content-Length': 2
         }
     };
-    if (process.argv[1] == "dev") post_options.host = '127.0.0.1';
+    //if (process.argv[1] == "dev") post_options.host = '127.0.0.1';
     var req = http.request(post_options, function (res) {
         var body = '';
 
