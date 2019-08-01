@@ -399,7 +399,9 @@ function fetchAllCodes() {
     }
 
     if (argv[2] != "dev" || flag) {
-        sqltxt = "select dbo.l_goods.goodsid,dbo.l_goods.code,dbo.l_goods.name,dbo.l_goods.specs,dbo.l_goodsunit.unitname, dbo.l_goods.guserdef1 as whpos from dbo.l_goods inner join l_goodsunit on l_goods.goodsid=l_goodsunit.goodsid and l_goods.unitid=l_goodsunit.unitid ;";
+        //sqltxt = "select dbo.l_goods.goodsid,dbo.l_goods.code,dbo.l_goods.name,dbo.l_goods.specs,dbo.l_goodsunit.unitname, dbo.l_goods.guserdef1 as whpos from dbo.l_goods inner join l_goodsunit on l_goods.goodsid=l_goodsunit.goodsid and l_goods.unitid=l_goodsunit.unitid ;";
+        //changed to another way to read unit from 20190801
+        sqltxt = "select dbo.l_goods.goodsid,dbo.l_goods.code,dbo.l_goods.name,dbo.l_goods.specs,dbo.l_goodsunit.unitname, dbo.l_goods.guserdef1 as whpos from dbo.l_goods inner join l_goodsunit on l_goods.goodsid=l_goodsunit.goodsid and l_goodsunit.unittype=0;";
         var request = new sql.Request();
         request.query(sqltxt, function (err, recordset) {
             // ... error checks

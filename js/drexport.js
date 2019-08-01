@@ -8,7 +8,7 @@ $(function () {
         var btn = $(this);
         btn.prop("disabled", true);
         [fromdate, todate] = checkDate();
-        sqltxt = "select a.billcode, convert(varchar, a.billdate, 111) as billdate, b.amount as amount_dr, b.remark, b.userdef1, a.price, a.amount, a.quantity, c.code, c.name from aa_billflow as a inner join i_draw as b on a.billcode = b.billcode inner join l_goods as c on a.goodsid = c.goodsid where a.billdate >= '" + fromdate + "' and a.billdate <= '" + todate + "';";
+        sqltxt = "select a.billcode, convert(varchar, a.billdate, 111) as billdate, b.amount as amount_dr, b.remark, b.userdef1, d.referbillcode, a.price, a.amount, a.quantity, c.code, c.name from aa_billflow as a inner join i_draw as b on a.billcode = b.billcode inner join l_goods as c on a.goodsid = c.goodsid inner join i_drawdetail as d on a.billid=d.billid and a.goodsid=d.goodsid where a.billdate >= '" + fromdate + "' and a.billdate <= '" + todate + "';";
 
         executeMsSql(sqltxt, function (err, result) {
             if (err) throw err;
