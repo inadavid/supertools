@@ -43,6 +43,23 @@ $(function () {
             btn.prop("disabled", false);
         })
     })
+    $("button[bid=cabill]").click(function () {
+        if (!checkDate()) return;
+        var btn = $(this);
+        btn.prop("disabled", true);
+        [fromdate, todate] = checkDate();
+        sqltxt = "select a.billdate as [CA Billdate], a.billcode as [CA Code], b.billcode as [CE Code], b.lcappamt as [CE Amount],c.billcode as [CF Code], c.expense as [CF Expense], c.material as [CF Material], c.quantity as [CF Qty], d.code, d.name, d.specs from cm_expenseapp as a inner join cm_expenseappexpense as e on e.billid=a.billid inner join cm_expense as b on e.referbillid = b.billid inner join cm_expenseappfinished as f on f.billid=a.billid inner join cm_finished as c on f.referbillid=c.billid inner join l_goods as d on d.goodsid = c.goodsid where a.billdate >= '" + fromdate + "' and a.billdate <= '" + todate + "' order by [CA Code] desc, [CE Code] asc, [CF Code] asc;";
+        console.log(sqltxt)
+        executeMsSql(sqltxt, function (err, result) {
+            if (err) throw err;
+            for(var i in result.recordset){
+                result.recordset[i]["CA Billdate"]=moment(result.recordset[i]["CA Billdate"]).format("YYYY-MM-DD");
+            }
+            var table = HTMLTable(result.recordset, "table-sm");
+            $("div[bid=drtable]").html("").append(table);
+            btn.prop("disabled", false);
+        })
+    })
     $("button[bid=export]").click(function () {
         var btn = $(this);
         btn.prop("disabled", true);
