@@ -15,7 +15,7 @@ const request = require('request');
 
 let win;
 let flash;
-global.version = "V01904";
+global.version = "V01905";
 global.appPath = app.getAppPath();
 global.argv = process.argv;
 global.flashClosed = false;
@@ -27,6 +27,7 @@ if (global.argv[2] != "dev") configFile = app.getAppPath() + '/../config.ini';
 var config = ini.parse(fs.readFileSync(configFile, 'utf-8'));
 
 if (!config.updateServer) config.updateServer = "sv009168.corp01.schleuniger.com";
+//if (config.updateServer == "sv009168.corp01.schleuniger.com") config.updateServer="10.11.50.168";
 if (!config.updatePort) config.updatePort = 8082;
 fs.writeFileSync(configFile, ini.stringify(config));
 ////////////////////////////Config ini////////////////////////////
