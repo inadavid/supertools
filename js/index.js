@@ -19,16 +19,6 @@ var configFile = appPath + '/config.ini';
 if (argv[2] != "dev") configFile = appPath + '/../config.ini';
 var config = ini.parse(fs.readFileSync(configFile, 'utf-8'));
 
-//for the migration of drawing server(mysql server) to new network:
-if (config.mysqlServer == "192.168.16.12") {
-    config.mysqlServer = "sv009168.corp01.schleuniger.com";
-}
-if (config.updateServer == "192.168.16.12") {
-    config.updateServer = "sv009168.corp01.schleuniger.com";
-}
-fs.writeFileSync(configFile, ini.stringify(config));
-//end of "for the migration of drawing server(mysql server) to new network:"
-
 var action = "dashboard";
 var bomexcel_arr = [];
 var bom = [];
@@ -53,7 +43,7 @@ const rejectTimeDiff = 30; //30min time difference allowed.
 var allcodesHint = [];
 var shifted = false;
 var drawingCode = 0;
-
+var lastbom = false;
 var drawingType = [{
         name: "2D Portable drawing(.pdf)",
         ext: ["pdf"]
@@ -101,7 +91,7 @@ $(() => {
     } else {
         user.id = 54;
         user.name = "魏亮";
-        user.perm = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 20,21,22,23];
+        user.perm = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 20, 21, 22, 23, 30, 31, 32, 33];
         updateUserinfo();
     }
 
@@ -294,7 +284,7 @@ function tryHost(c) {
 
 function updateSQLserver() {
     var a = $("a[bid=SQLServerStatus]");
-    var text = config.SQLserver + " ";
+    var text = "";
     switch (config.fSQLserver) {
         case -1:
             text = "所有服务器连接失败！";
@@ -312,12 +302,12 @@ function updateSQLserver() {
             text += "数据库连接失败";
             break;
         case 4:
-            text += "系统准备完毕！";
+            text += "账套" + config.database + " <br>连接准备完毕！<br>包含物料号" + codesList.length + "个";
             break;
         default:
             text = "连接初始化";
     }
-    a.text(text);
+    a.html(text);
     if (config.fSQLserver == -1 || config.fSQLserver == 3) a.addClass("list-group-item-danger");
     if (config.fSQLserver == 4) a.addClass("list-group-item-success");
     fs.writeFileSync(configFile, ini.stringify(config));
@@ -402,8 +392,9 @@ function fetchAllCodes() {
         //sqltxt = "select dbo.l_goods.goodsid,dbo.l_goods.code,dbo.l_goods.name,dbo.l_goods.specs,dbo.l_goodsunit.unitname, dbo.l_goods.guserdef1 as whpos from dbo.l_goods inner join l_goodsunit on l_goods.goodsid=l_goodsunit.goodsid and l_goods.unitid=l_goodsunit.unitid ;";
         //changed to another way to read unit from 20190801
         sqltxt = "select dbo.l_goods.goodsid,dbo.l_goods.code,dbo.l_goods.name,dbo.l_goods.specs,dbo.l_goodsunit.unitname, dbo.l_goods.guserdef1 as whpos from dbo.l_goods inner join l_goodsunit on l_goods.goodsid=l_goodsunit.goodsid and l_goodsunit.unittype=0;";
-        var request = new sql.Request();
-        request.query(sqltxt, function (err, recordset) {
+        codesList = [];
+        codesInfo = {};
+        executeMsSql(sqltxt, function (err, recordset) {
             // ... error checks
             var rs = recordset.recordset;
             for (var i in rs) {
