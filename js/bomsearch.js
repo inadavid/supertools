@@ -3,6 +3,10 @@ var appliedDate = '2019-02-01';
 var searchHistory = [];
 var historyLength = 5;
 var completeBomTop;
+var firstTr = [];
+var currentIndex = 0;
+var f3bind;
+
 $(function () {
     var moment = require('moment');
     appliedDate = moment(new Date()).format("YYYY-MM-DD");
@@ -51,6 +55,33 @@ $(function () {
         }
         return true;
     });
+
+    if (f3bind != true) {
+        $(document).on("keydown", function (e) {
+            if (firstTr.length == 0) return;
+            if (e.which == 114) {
+                if (firstTr.length > 0 && currentIndex < firstTr.length - 1) {
+                    currentIndex++;
+                } else if (firstTr.length > 0) {
+                    currentIndex = 0
+                } else return;
+            }
+            if (e.which == 115) {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                } else if (firstTr.length > 0) {
+                    currentIndex = firstTr.length - 1;
+                }
+            }
+            if ([114, 115].indexOf(e.which) != -1) {
+                $([document.documentElement, document.body]).animate({
+                    scrollTop: firstTr[currentIndex].offset().top
+                }, 500);
+            }
+        });
+        f3bind = true;
+    }
+
 })
 
 $("input[bid=bomtop]").on("keyup", function (event) {
@@ -199,7 +230,7 @@ function showBOM(dbom) {
             else alert(rtn.err)
         });
     });
-    $("div[bid=bomcard]").html("<h5><strong>" + $("input[bid=bomtop]").val() + "</strong> BOM Tree View &nbsp; &nbsp; &nbsp; <button class='btn btn-form btn-warning btn-sm' bid='exportBOM'>Export BOM</button> <button class='btn btn-form btn-primary btn-sm' bid='exportPL'>Export Picklist</button> " + (user.perm.indexOf(6) != -1 ? "<button class='btn btn-form btn-success btn-sm' bid='dlAllDrawings'>Download drawings(pdf)</button><div bid='downProgress'></div> " : "") + "</h5>").append(table);
+    $("div[bid=bomcard]").html("<h5><strong>" + $("input[bid=bomtop]").val() + "</strong> BOM Tree View &nbsp; &nbsp; &nbsp; <input type='input' bid='keyword' class='form-control' style='width:200px; display: inline-block;' placeholder='Keyword' title='Press Enter to search\n按回车键搜索'> &nbsp; &nbsp; &nbsp; <button class='btn btn-form btn-warning btn-sm' bid='exportBOM'>Export BOM</button> <button class='btn btn-form btn-primary btn-sm' bid='exportPL'>Export Picklist</button> " + (user.perm.indexOf(6) != -1 ? "<button class='btn btn-form btn-success btn-sm' bid='dlAllDrawings'>Download drawings(pdf)</button><div bid='downProgress'></div> " : "") + "</h5>").append(table);
 
     var jstt = com_github_culmat_jsTreeTable;
     // $("div[bid=bomcard] table").treetable({
@@ -345,6 +376,38 @@ function showBOM(dbom) {
         tmpDown(downArray);
     })
     if (completeBomTop) completeBomTop.close();
+
+    $("input[bid='keyword']").on("keydown", function (e) {
+        if (e.which == 13) {
+            var keyword = $("input[bid='keyword']").val().trim();
+            searchKW(keyword);
+        }
+
+        function searchKW(keyword) {
+            firstTr = [];
+            currentIndex = 0;
+            table.find("tr[type='bomitem']").each(function () {
+                var tr = $(this);
+                var code = tr.find("input[did='Code']").val().trim();
+                var name = tr.find("input[did='Name']").val().trim();
+                var spec = tr.find("input[did='Spec']").val().trim();
+                tr.removeClass("selected");
+                if (keyword.trim().length == 0) return;
+                if (code.indexOf(keyword) != -1 || name.indexOf(keyword) != -1 || spec.indexOf(keyword) != -1) {
+                    tr.addClass("selected");
+                    firstTr.push(tr);
+                }
+            });
+            if (keyword.trim().length != 0) alert(firstTr.length + " match found.\n F3 for next, F4 for prev.");
+            else return;
+            if (firstTr.length > 0) {
+                $([document.documentElement, document.body]).animate({
+                    scrollTop: firstTr[currentIndex].offset().top
+                }, 500);
+                firstTr[currentIndex].trigger("mouseover");
+            }
+        }
+    })
 
 }
 
