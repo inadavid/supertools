@@ -15,7 +15,7 @@ const request = require('request');
 
 let win;
 let flash;
-global.version = "V02001";
+global.version = "V02002";
 global.appPath = app.getAppPath();
 global.argv = process.argv;
 global.flashClosed = false;
