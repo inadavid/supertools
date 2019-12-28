@@ -412,7 +412,7 @@ function showBOM(dbom) {
 }
 
 function searchBOM(code) {
-    if (code.length != 10) return false;
+    if (code.length <6) return false;
 
     displayBOM = [];
     if (lastbom && lastbom[0].Code == code) {
