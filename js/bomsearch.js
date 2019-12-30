@@ -1,7 +1,5 @@
 var displayBOM = [];
 var appliedDate = '2019-02-01';
-var searchHistory = [];
-var historyLength = 5;
 var completeBomTop;
 var firstTr = [];
 var currentIndex = 0;
@@ -122,15 +120,7 @@ $("button[bid=bomSearch]").on("click", function () {
 
         //history of the button:
 
-        if (searchHistory.indexOf(val) == -1) {
-            searchHistory.push(val);
-            if (searchHistory.length > historyLength) searchHistory.splice(0, 1);
-        } else {
-            searchHistory.splice(searchHistory.indexOf(val), 1);
-            searchHistory.push(val);
-        }
-        config.bomsearchhistory = Base64.encode(JSON.stringify(searchHistory));
-        fs.writeFileSync(configFile, ini.stringify(config));
+        pushHistory(val)
         searchHistories();
     }
 })

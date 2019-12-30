@@ -1,0 +1,20 @@
+<div class="card ">
+    <div class="card-body">
+        <h4>Create Mass BOM ECO</h4>
+        <div class="form-group">
+            <h5>1) Input ERP# that is affected.</h5>
+            <input class="form-control form-inline" bid="ecoparent" placeholder="ERP#" autofocus>
+            <button class="btn btn-form btn-primary btn-sm" bid="parentSearch">Search Parent(s)</button>
+            <span bid="codespec"></span>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="form-group" bstep="2" display="none">
+            <h5>2) Selected parents that involved.</h5>
+            <button class="btn btn-form btn-primary btn-sm" bid="submit">Submit</button>
+        </div>
+    </div>
+</div>
+<script src="../js/lib/jquery.treetable.js"></script>
+<script src="../js/lib/awesomplete.js"></script>
+<script src="../js/bomecomass.js"></script>

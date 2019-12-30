@@ -26,6 +26,8 @@ var bom_top;
 var codesInfo = {};
 var codesList = [];
 var bomtopList = [];
+var historyLength = 5;
+var searchHistory = [];
 const ptypeList = {
     "B": "Buy from supplier",
     "A": "Assemble in house",
@@ -204,7 +206,7 @@ $("#quickNumberCheck button.btn-success").on("click", function () {
     if (kw.length == 0) return false;
     var btn = $(this);
     btn.prop("disabled", true);
-    $("#quickNumberCheck textarea").val("");
+    $("#quickNumberCheck select").html("");
     var result = [];
     for (var i in codesInfo) {
         if (codesInfo[i].code.indexOf(kw) != -1) result.push(i);
@@ -213,7 +215,7 @@ $("#quickNumberCheck button.btn-success").on("click", function () {
         else if (codesInfo[i].warehouse && codesInfo[i].warehouse.indexOf(kw) != -1) result.push(i);
     }
     for (var m in result) {
-        var tv = $("#quickNumberCheck textarea").val();
+        var tv=""
         //if (tv.length > 0) tv += "\n============================\n";
         // tv += "Code: " + codesInfo[result[m]].code + "\t";
         // tv += "Name: " + codesInfo[result[m]].name + "\t";
@@ -224,10 +226,16 @@ $("#quickNumberCheck button.btn-success").on("click", function () {
         tv += codesInfo[result[m]].name + "\t|";
         tv += codesInfo[result[m]].unit + "\t|";
         tv += codesInfo[result[m]].spec + "\t|";
-        tv += codesInfo[result[m]].warehouse + "\n";
-        $("#quickNumberCheck textarea").val(tv);
+        tv += codesInfo[result[m]].warehouse;
+        $("#quickNumberCheck select").append($("<option>").val(result[m]).text(tv));
     }
     btn.prop("disabled", false);
+    $("#quickNumberCheck select option").on("dblclick",function(){
+        opt = $(this);
+        pushHistory(opt.val());
+        $.modal.close();
+        $("div[bid=sidebar] a[href='bomsearch']").click();
+    })
 })
 //connect with menu ========================================
 ipcRenderer.on('win-menu-toggle-sidebar', (event, arg) => {
@@ -243,6 +251,19 @@ ipcRenderer.on('win-menu-quick-search', (event, arg) => {
     $("#quickNumberCheck input[bid='minfo']").focus();
 })
 //below are functions ======================================
+function pushHistory(val){
+    searchHistory = JSON.parse(Base64.decode(config.bomsearchhistory));
+    if (searchHistory.indexOf(val) == -1) {
+        searchHistory.push(val);
+        if (searchHistory.length > historyLength) searchHistory.splice(0, 1);
+    } else {
+        searchHistory.splice(searchHistory.indexOf(val), 1);
+        searchHistory.push(val);
+    }
+    config.bomsearchhistory = Base64.encode(JSON.stringify(searchHistory));
+    fs.writeFileSync(configFile, ini.stringify(config));
+}
+
 function loadPanel(pname) {
     action = pname;
     $("div[bid=main]").load(pname + ".html");
