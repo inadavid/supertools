@@ -208,14 +208,33 @@ $("#quickNumberCheck button.btn-success").on("click", function () {
     btn.prop("disabled", true);
     $("#quickNumberCheck select").html("");
     var result = [];
+    var kwa = []
+    if (kw.indexOf(" ") != -1) kwa = kw.split(" ");
+    else kwa = [kw];
+
     for (var i in codesInfo) {
-        if (codesInfo[i].code.indexOf(kw) != -1) result.push(i);
-        else if (codesInfo[i].name && codesInfo[i].name.indexOf(kw) != -1) result.push(i);
-        else if (codesInfo[i].spec && codesInfo[i].spec.indexOf(kw) != -1) result.push(i);
-        else if (codesInfo[i].warehouse && codesInfo[i].warehouse.indexOf(kw) != -1) result.push(i);
+        if (codesInfo[i].code.indexOf(kwa[0]) != -1) result.push(i);
+        else if (codesInfo[i].name && codesInfo[i].name.indexOf(kwa[0]) != -1) result.push(i);
+        else if (codesInfo[i].spec && codesInfo[i].spec.indexOf(kwa[0]) != -1) result.push(i);
+        else if (codesInfo[i].warehouse && codesInfo[i].warehouse.indexOf(kwa[0]) != -1) result.push(i);
     }
+
+    if (kwa.length > 1) {
+        for(var n=1; n<kwa.length; n++){
+            var newRlt = [];
+            for (var g in result) {
+                console.log("processing ",result[g])
+                if (codesInfo[result[g]].code.indexOf(kwa[n]) != -1) newRlt.push(result[g]);
+                else if (codesInfo[result[g]].name && codesInfo[result[g]].name.indexOf(kwa[n]) != -1) newRlt.push(result[g]);
+                else if (codesInfo[result[g]].spec && codesInfo[result[g]].spec.indexOf(kwa[n]) != -1) newRlt.push(result[g]);
+                else if (codesInfo[result[g]].warehouse && codesInfo[result[g]].warehouse.indexOf(kwa[n]) != -1) newRlt.push(result[g]);
+            }
+            result = newRlt;
+        }
+    }
+
     for (var m in result) {
-        var tv=""
+        var tv = ""
         //if (tv.length > 0) tv += "\n============================\n";
         // tv += "Code: " + codesInfo[result[m]].code + "\t";
         // tv += "Name: " + codesInfo[result[m]].name + "\t";
@@ -230,7 +249,7 @@ $("#quickNumberCheck button.btn-success").on("click", function () {
         $("#quickNumberCheck select").append($("<option>").val(result[m]).text(tv));
     }
     btn.prop("disabled", false);
-    $("#quickNumberCheck select option").on("dblclick",function(){
+    $("#quickNumberCheck select option").on("dblclick", function () {
         opt = $(this);
         pushHistory(opt.val());
         $.modal.close();
@@ -251,7 +270,7 @@ ipcRenderer.on('win-menu-quick-search', (event, arg) => {
     $("#quickNumberCheck input[bid='minfo']").focus();
 })
 //below are functions ======================================
-function pushHistory(val){
+function pushHistory(val) {
     searchHistory = JSON.parse(Base64.decode(config.bomsearchhistory));
     if (searchHistory.indexOf(val) == -1) {
         searchHistory.push(val);
