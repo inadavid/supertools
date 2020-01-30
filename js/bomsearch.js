@@ -169,21 +169,21 @@ function showBOM(dbom) {
     }
     var table = $("<table>");
     table.addClass("treetable")
-    var thead = $("<thead>");
+    var thead = $("<thead><tr>");
     thead
-        .append("<th width='20%'>Level</th>")
+        .append("<th style='width:150px'>Level</th>")
         .append("<th style='width:10px'>SN</th>")
         .append("<th style='width:10px'>Order</th>")
-        .append("<th style='width:30px'>Code#</th>")
+        .append("<th style='width:100px'>Code#</th>")
         .append("<th style='width:10px'>Qty</th>")
         .append("<th style='width:20px'>Unit</th>")
-        .append("<th style='width:10px'>PType</th>")
-        .append("<th style='width:150px'>Name</th>")
-        .append("<th style='width:150px'>Desc</th>")
-        .append("<th style='width:150px'>Warehouse</th>")
+        //.append("<th style='width:10px'>PType</th>")
+        .append("<th style='width:250px'>Name</th>")
+        .append("<th style='width:300px'>Desc</th>")
+        //.append("<th style='width:150px'>Warehouse</th>")
         .append("<th style='width:100px'>Drawing</th>")
     table.append(thead);
-    var tbody = $("<tbody>");
+    var tbody = $("</tr><tbody>");
     var count = 1;
     for (var i in dbom) {
         var tr = $("<tr type='bomitem' data-tt-id='" + (dbom[i].pid ? dbom[i].pid + "." : "") + dbom[i].Code + "' data-tt-parent-id='" + dbom[i].pid + "' class='" + (plist.indexOf(dbom[i].Code) == -1 ? "" : "branch") + "'>")
@@ -194,10 +194,10 @@ function showBOM(dbom) {
             .append("<td><input did='Code' value='" + dbom[i].Code + "' readonly></td>")
             .append("<td><input did='Qty' value='" + dbom[i].Qty + "' readonly></td>")
             .append("<td>" + dbom[i].Unit + "</td>")
-            .append("<td bid='ptype'>" + dbom[i].ProchasingType + "</td>")
+            //.append("<td bid='ptype'>" + dbom[i].ProchasingType + "</td>")
             .append("<td><input did='Name' value='" + dbom[i].Name + "' readonly></td>")
             .append("<td><input did='Spec' value='" + dbom[i].Spec + "' readonly></td>")
-            .append("<td><input did='whpos' value='" + dbom[i].Warehouse + "' readonly></td>")
+            //.append("<td><input did='whpos' value='" + dbom[i].Warehouse + "' readonly></td>")
             .append("<td>" + (user.perm.indexOf(6) != -1 ? "<span class='iconfont icon-drawing' bid='drawing' code='" + dbom[i].Code + "'>" + (dbom[i].dversion !== null ? "</span> <span class='iconfont icon-open' bid='dopen' code='" + dbom[i].Code + "' version='" + dbom[i].dversion + "'></span> <span>V" + dbom[i].dversion + "</span>" : "") : "-") + "</td>");
         tbody.append(tr);
     }
@@ -220,7 +220,7 @@ function showBOM(dbom) {
             else alert(rtn.err)
         });
     });
-    $("div[bid=bomcard]").html("<h5><strong>" + $("input[bid=bomtop]").val() + "</strong> BOM Tree View &nbsp; &nbsp; &nbsp; <input type='input' bid='keyword' class='form-control' style='width:200px; display: inline-block;' placeholder='Keyword' title='Press Enter to search\n按回车键搜索'> &nbsp; &nbsp; &nbsp; <button class='btn btn-form btn-warning btn-sm' bid='exportBOM'>Export BOM</button> <button class='btn btn-form btn-primary btn-sm' bid='exportPL'>Export Picklist</button> " + (user.perm.indexOf(6) != -1 ? "<button class='btn btn-form btn-success btn-sm' bid='dlAllDrawings'>Download drawings(pdf)</button><div bid='downProgress'></div> " : "") + "</h5>").append(table);
+    $("div[bid=bomcard]").html("<h5><strong>" + $("input[bid=bomtop]").val() + "</strong> BOM Tree View &nbsp; &nbsp; &nbsp; <input type='input' bid='keyword' class='form-control' style='width:200px; display: inline-block;' placeholder='Keyword' title='Press Enter to search\n按回车键搜索'> &nbsp; &nbsp; &nbsp; <button class='btn btn-form btn-warning btn-sm' bid='exportBOM'>Export BOM</button> <!--button class='btn btn-form btn-primary btn-sm' bid='exportPL'>Export Picklist</button--> " + (user.perm.indexOf(6) != -1 ? "<button class='btn btn-form btn-success btn-sm' bid='dlAllDrawings'>Download drawings(pdf)</button><div bid='downProgress'></div> " : "") + "</h5>").append(table);
 
     var jstt = com_github_culmat_jsTreeTable;
     // $("div[bid=bomcard] table").treetable({
@@ -252,13 +252,13 @@ function showBOM(dbom) {
             Level: "-",
             Order: "-",
             Code: top,
-            "PDF.Ver": "-",
+            "Drawing.Ver": "-",
             Qty: "-",
-            Unit: "-",
-            PT: "-",
+            Unit: codesInfo[top].unit,
+            //PT: "-",
             Name: codesInfo[top].name,
             Spec: codesInfo[top].spec,
-            PFEP: ""
+            //PFEP: ""
         }];
         var count = 1;
         for (var i in cloneArr) {
@@ -267,13 +267,13 @@ function showBOM(dbom) {
             obj.Level = cloneArr[i].Level;
             obj.Order = cloneArr[i].Order;
             obj.Code = cloneArr[i].Code;
-            obj["PDF.Ver"] = cloneArr[i].dversion != null ? "V" + cloneArr[i].dversion : "";
+            obj["Drawing.Ver"] = cloneArr[i].dversion != null ? "V" + cloneArr[i].dversion : "";
             obj.Qty = cloneArr[i].Qty;
             obj.Unit = cloneArr[i].Unit;
-            obj.PT = cloneArr[i].ProchasingType;
+            //obj.PT = cloneArr[i].ProchasingType;
             obj.Name = cloneArr[i].Name;
             obj.Spec = cloneArr[i].Spec;
-            obj.PFEP = cloneArr[i].PFEP;
+            //obj.PFEP = cloneArr[i].PFEP;
             rdata.push(obj);
         }
         var path = require('path');
@@ -288,17 +288,17 @@ function showBOM(dbom) {
 
     });
 
-    $("button[bid=exportPL]").click(function () {
-        var btn = $(this);
-        btn.prop("disabled", true);
-        var top = $("input[bid=bomtop]").val().trim();
-        if (argv[2] == "dev") console.log(shifted)
-        var cb = function () {
-            btn.prop("disabled", false);
-        }
-        if (shifted) getPicklist(top, 1, cb);
-        else getPicklist(top, 0, cb);
-    });
+    // $("button[bid=exportPL]").click(function () {
+    //     var btn = $(this);
+    //     btn.prop("disabled", true);
+    //     var top = $("input[bid=bomtop]").val().trim();
+    //     if (argv[2] == "dev") console.log(shifted)
+    //     var cb = function () {
+    //         btn.prop("disabled", false);
+    //     }
+    //     if (shifted) getPicklist(top, 1, cb);
+    //     else getPicklist(top, 0, cb);
+    // });
 
     $("button[bid='dlAllDrawings']").click(function () {
         var alldrawing = confirm("Do you want to include the Assembly Drawing?\n您是否需要一同下载装配图？");
@@ -430,9 +430,9 @@ function searchBOM(code) {
                     Qty: result.recordset[i].quantity,
                     Unit: codesInfo[result.recordset[i].elemgid].unit,
                     Spec: codesInfo[result.recordset[i].elemgid].spec,
-                    Warehouse: codesInfo[result.recordset[i].elemgid].warehouse && codesInfo[result.recordset[i].elemgid].warehouse.length > 0 ? codesInfo[result.recordset[i].elemgid].warehouse : "",
-                    ProchasingType: result.recordset[i].ptype,
-                    PFEP: result.recordset[i].pfep,
+                    //Warehouse: codesInfo[result.recordset[i].elemgid].warehouse && codesInfo[result.recordset[i].elemgid].warehouse.length > 0 ? codesInfo[result.recordset[i].elemgid].warehouse : "",
+                    //ProchasingType: result.recordset[i].ptype,
+                    //PFEP: result.recordset[i].pfep,
                     pid: result.recordset[i].pid,
                     rQty: result.recordset[i].rQty,
                     dversion: result.recordset[i].dversion,
@@ -448,11 +448,11 @@ function searchBOM(code) {
                 Parent: "",
                 Name: codesInfo[code].name,
                 Qty: 0,
-                Unit: "",
+                Unit: codesInfo[code].unit,
                 Spec: codesInfo[code].spec,
-                Warehouse: codesInfo[code].warehouse && codesInfo[code].warehouse.length > 0 ? codesInfo[code].warehouse : "",
-                ProchasingType: "",
-                PFEP: "",
+                //Warehouse: codesInfo[code].warehouse && codesInfo[code].warehouse.length > 0 ? codesInfo[code].warehouse : "",
+                //ProchasingType: "",
+                //PFEP: "",
                 pid: "",
                 rQty: 0,
                 dversion: result.recordset.length == 1 ? result.recordset[0].version : null,

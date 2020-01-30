@@ -51,21 +51,21 @@ function searchChildren(code) {
         .append("<th style='width:30px'>Code#</th>")
         .append("<th style='width:10px'>Qty</th>")
         .append("<th style='width:20px'>Unit</th>")
-        .append("<th style='width:10px'>PType</th>")
+        //.append("<th style='width:10px'>PType</th>")
         .append("<th style='width:200px'>Name</th>")
         .append("<th style='width:200px'>Spec</th>")
         .append("<th style='width:100px'>Stat</th>")
-        .append("<th>Action</th>")
+        .append("<th style='width:100px'>Action</th>")
     table.append(thead);
     var tbody = $("<tbody>");
 
-    var selectTD = $("<td>");
-    var selectCT = $("<select did='ptype'>");
-    for (var i in ptypeList) {
-        var opt = $("<option>").val(i).text(i);
-        selectCT.append(opt);
-    }
-    selectTD.append(selectCT);
+    // var selectTD = $("<td>");
+    // var selectCT = $("<select did='ptype'>");
+    // for (var i in ptypeList) {
+    //     var opt = $("<option>").val(i).text(i);
+    //     selectCT.append(opt);
+    // }
+    // selectTD.append(selectCT);
     var button_delete = $("<span class='iconfont icon-shanchu' bid='delete'>");
     var button_cancel = $("<span class='iconfont icon-cancel' bid='cancel'>");
     var button_confirm = $("<span class='iconfont icon-wanchengchenggong' bid='confirm'>");
@@ -83,7 +83,7 @@ function searchChildren(code) {
                 .append("<td><input did='Code' value='" + result.recordset[m].elemgid + "' readonly></td>")
                 .append("<td><input did='Qty' value='" + result.recordset[m].quantity + "' readonly></td>")
                 .append("<td>" + codesInfo[result.recordset[m].elemgid].unit + "</td>")
-                .append("<td><input did='Ptype' value='" + result.recordset[m].ptype + "' readonly></td>")
+                //.append("<td><input did='Ptype' value='" + result.recordset[m].ptype + "' readonly></td>")
                 .append("<td><input did='Name' value='" + codesInfo[result.recordset[m].elemgid].name + "' readonly></td>")
                 .append("<td><input did='Spec' value='" + codesInfo[result.recordset[m].elemgid].spec + "' readonly></td>")
                 .append("<td bid='status'>No Change</td>")
@@ -96,7 +96,7 @@ function searchChildren(code) {
             .append("<td><input did='Code'></td>")
             .append("<td><input did='Qty'></td>")
             .append("<td did='Unit'></td>")
-            .append(selectTD.clone())
+            //.append(selectTD.clone())
             .append("<td><input did='Name' readonly></td>")
             .append("<td><input did='Spec' readonly></td>")
             .append("<td bid='status'> Addition </td>")
@@ -141,7 +141,8 @@ function searchChildren(code) {
                         order: parseInt(tr.find("td[did=Order]").text().trim()),
                         code: curCode,
                         qty: parseFloat(tr.find("input[did=Qty]").val().trim()),
-                        ptype: tr.find("input[did=Ptype]").val().trim()
+                        //ptype: tr.find("input[did=Ptype]").val().trim()
+                        ptype: "P"
                     }
                 });
                 tr.addClass("deletion").find("td[bid=status]").text("Deleted");
@@ -185,9 +186,10 @@ function searchChildren(code) {
                 curCodes.push($(this).find("input[did=Code]").val().trim());
             })
             var order = parseInt(tableArea.find("table tr[type=newitem] input[did=Order]").val());
-            if (isNaN(order)) {
-                order = _.max(curOrders) + 1;
+            if (isNaN(Number(order))) {
+                order = Math.abs(Number(_.max(curOrders))) + 1;
                 console.log(order)
+                if(order =="Infinity") order = 1;
                 tableArea.find("table tr[type=newitem] input[did=Order]").val(order)
             }
 
@@ -198,6 +200,11 @@ function searchChildren(code) {
             }
 
             var codeNew = tableArea.find("table tr[type=newitem] input[did=Code]").val().trim();
+            if(codeNew == code) {
+                alert("You can not add the code as the child of itself.");
+                tableArea.find("table tr[type=newitem] input[did=Code]").focus().select();
+                return;
+            }
             if (codesList.indexOf(codeNew) == -1) {
                 alert("The 'Code'# does not exist in ERP system.");
                 tableArea.find("table tr[type=newitem] input[did=Code]").focus().select();
@@ -216,7 +223,7 @@ function searchChildren(code) {
                 return;
             }
 
-            var ptype = tableArea.find("table tr[type=newitem] select[did=ptype]").val();
+            var ptype = "P";
 
             ECOList.push({
                 sn: null,
@@ -225,7 +232,7 @@ function searchChildren(code) {
                     order: order,
                     code: codeNew,
                     qty: qty,
-                    ptype: ptype
+                    ptype: "P"
                 }
             });
             ECOCheckChange();
@@ -235,7 +242,7 @@ function searchChildren(code) {
                 .append("<td><input did='Code' value='" + codeNew + "' readonly></td>")
                 .append("<td><input did='Qty' value='" + qty + "' readonly></td>")
                 .append("<td did='Unit'>" + codesInfo[codeNew].unit + "</td>")
-                .append("<td did='ptype'>" + ptype + "</td>")
+                //.append("<td did='ptype'>" + ptype + "</td>")
                 .append("<td><input did='Name' readonly value='" + codesInfo[codeNew].name + "'></td>")
                 .append("<td><input did='Spec' readonly value='" + codesInfo[codeNew].spec + "'></td>")
                 .append("<td bid='status'> Addition </td>")
@@ -248,7 +255,7 @@ function searchChildren(code) {
             tableArea.find("table tr[type=newitem] input[did=Order]").val("");
             tableArea.find("table tr[type=newitem] input[did=Code]").val("");
             tableArea.find("table tr[type=newitem] input[did=Qty]").val("");
-            tableArea.find("table tr[type=newitem] select[did=ptype]").val("B");
+            //tableArea.find("table tr[type=newitem] select[did=ptype]").val("B");
             tableArea.find("table tr[type=newitem] input[did=Name]").val("");
             tableArea.find("table tr[type=newitem] input[did=Spec]").val("");
             tableArea.find("table tr[type=newitem] td[did=Unit]").text("");
@@ -305,14 +312,21 @@ function searchChildren(code) {
 
                         }
                     }
-                    sqltext = "update st_bomeco set status = 1 where sn = " + ecosn;
-                    yield request.query(sqltext);
-                    coConn.close();
+
+                    
                     popup("ECO has been applied to BOM", "success");
+                    // setTimeout(function () {
+                    //     checkPicklistUpdate(ecosn);
+                    // }, 10);
                     setTimeout(function () {
-                        checkPicklistUpdate(ecosn);
-                    }, 10);
-                    loadPanel("bomecosearch");
+                        sqltext = "update st_bomeco set status = 1 where sn = " + ecosn;
+                        var coConn = new cosql.Connection(config.serverconfig);
+                        yield coConn.connect();
+                        var request = new cosql.Request(coConn);
+                        yield request.query(sqltext);
+                        coConn.close();
+                        loadPanel("bomecosearch");
+                    }, 100);
 
                 } catch (ex) {
                     // ... error checks
