@@ -31,6 +31,9 @@
     <div class="bodydiv">
         <div class="sidebar" bid="sidebar">
             <div class="list-group">
+                <a href="inbox" class="list-group-item" perm="8">Dashboard</a>
+            </div>
+            <div class="list-group">
                 <a href="bomsearch" class="list-group-item" perm="1">BOM Search</a>
                 <a href="#" class="list-group-item" perm="2">BOM New</a>
                 <a href="bomeco" class="list-group-item" perm="3">BOM ECO</a>
@@ -86,6 +89,18 @@
         </p>
         <p style="text-align: right"> <button class="btn btn-success">Query</button> </p>
     </div>
+
+    <div class="approval modal" style="display:none;z-index: 999999;">
+        <h3>Approval flow for releasing drawing</h3>
+        <p><label>Checked by:</label><input type="text" bid="checkedby"
+                placeholder="" autofocus /></p>
+        <p> <label>Approved by:</label> 
+            <input type="text" bid="approvedby"
+                placeholder=""/>
+        </p>
+        <p style="text-align: right"> <button class="btn btn-success" tag="submit">Submit</button> </p>
+    </div>
+
     <script src="../js/index.js"></script>
     <script src="../js/lib/jquery.modal.min.js"></script>
 </body>

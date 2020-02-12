@@ -27,14 +27,14 @@ $("button[type=submit][step=1]").on("click", (e) => {
     $("select[meta='bomexcel.level']").append(options);
     $("select[meta='bomexcel.code']").append(options);
     $("select[meta='bomexcel.quantity']").append(options);
-    $("select[meta='bomexcel.procumenttype']").append(options);
-    $("select[meta='bomexcel.pfep']").append(options);
+    // $("select[meta='bomexcel.procumenttype']").append(options);
+    // $("select[meta='bomexcel.pfep']").append(options);
 
     selectKey($("select[meta='bomexcel.level']"), "level");
     selectKey($("select[meta='bomexcel.code']"), "material");
     selectKey($("select[meta='bomexcel.quantity']"), "qty");
-    selectKey($("select[meta='bomexcel.procumenttype']"), "Purchasing Type ID");
-    selectKey($("select[meta='bomexcel.pfep']"), "pfep");
+    // selectKey($("select[meta='bomexcel.procumenttype']"), "Purchasing Type ID");
+    // selectKey($("select[meta='bomexcel.pfep']"), "pfep");
 
     $('div[meta="bomup"][step="2"]').css("display", "block");
 });
@@ -113,8 +113,8 @@ function formatBOM(bom_top) {
     setup.level = parseInt($("select[meta='bomexcel.level']").val());
     setup.code = parseInt($("select[meta='bomexcel.code']").val());
     setup.qty = parseFloat($("select[meta='bomexcel.quantity']").val());
-    setup.pt = parseInt($("select[meta='bomexcel.procumenttype']").val());
-    setup.pfep = parseInt($("select[meta='bomexcel.pfep']").val());
+    // setup.pt = parseInt($("select[meta='bomexcel.procumenttype']").val());
+    // setup.pfep = parseInt($("select[meta='bomexcel.pfep']").val());
 
     addResultText("<div class='alert alert-primary' role='alert'>取得相关列信息</div>");
 
@@ -161,12 +161,13 @@ function gFormatBOM(bom_top, setup, index = 0, top = false) {
         if (bomexcel_arr[i][setup.level] == level) {
             //console.log("parsing " + bomexcel_arr[i][setup.code] + " in same level, ready to add to return array;")
 
-            var ptype = bomexcel_arr[i][setup.pt].toUpperCase().trim();
+            // var ptype = bomexcel_arr[i][setup.pt].toUpperCase().trim();
+            var ptype = "P"
             //check if ptype is in target list
-            if (ptype != "A" && ptype != "B" && ptype != "P" && ptype != "N" && ptype != "F" && ptype != "V" && ptype != "C" && ptype != "M") {
-                alert("BOM PType error: line[" + (i + 1) + "], code " + bomexcel_arr[i][setup.code] + " have wrong PTYPE " + ptype);
-                return false;
-            }
+            // if (ptype != "A" && ptype != "B" && ptype != "P" && ptype != "N" && ptype != "F" && ptype != "V" && ptype != "C" && ptype != "M") {
+            //     alert("BOM PType error: line[" + (i + 1) + "], code " + bomexcel_arr[i][setup.code] + " have wrong PTYPE " + ptype);
+            //     return false;
+            // }
 
             //check if code try to add itself into a loop;
             if (top.pid !== false && (top.pid.indexOf(bomexcel_arr[i][setup.code]) != -1 || bomexcel_arr[i][setup.code] == bom_top)) {
@@ -174,18 +175,18 @@ function gFormatBOM(bom_top, setup, index = 0, top = false) {
                 return false;
             }
             //check the logic of procumenttype
-            if (top.procumenttype !== false && (top.procumenttype.toUpperCase() == "A" || top.procumenttype.toUpperCase() == "M") && ptype != "B" && ptype != "A" && ptype != "V" && ptype != "M" && ptype != "C") {
-                alert("BOM PType error: line[" + (i + 1) + "], code " + bomexcel_arr[i][setup.code] + " have wrong ptype " + ptype + " as sub-material for \"" + top.procumenttype.toUpperCase() + "\".\nLevel chain is:" + top.pid + "." + bom_top);
-                return false;
-            }
-            if (top.procumenttype !== false && top.procumenttype.toUpperCase() == "B" && ptype != "P" && ptype != "N" && ptype != "F" && ptype != "V") {
-                alert("BOM PType error: line[" + (i + 1) + "], code" + bomexcel_arr[i][setup.code] + " have wrong ptype " + bomexcel_arr[i][setup.pt] + " as sub-material for \"B\".\nLevel chain is:" + top.pid + "." + bom_top);
-                return false;
-            }
-            if (top.procumenttype !== false && top.procumenttype.toUpperCase() == "P" && ptype != "N" && ptype != "F" && ptype != "V") {
-                alert("BOM PType error: line[" + (i + 1) + "], code " + bomexcel_arr[i][setup.code] + " have wrong ptype " + bomexcel_arr[i][setup.pt] + " as sub-material for \"P\".\nLevel chain is:" + top.pid + "." + bom_top);
-                return false;
-            }
+            // if (top.procumenttype !== false && (top.procumenttype.toUpperCase() == "A" || top.procumenttype.toUpperCase() == "M") && ptype != "B" && ptype != "A" && ptype != "V" && ptype != "M" && ptype != "C") {
+            //     alert("BOM PType error: line[" + (i + 1) + "], code " + bomexcel_arr[i][setup.code] + " have wrong ptype " + ptype + " as sub-material for \"" + top.procumenttype.toUpperCase() + "\".\nLevel chain is:" + top.pid + "." + bom_top);
+            //     return false;
+            // }
+            // if (top.procumenttype !== false && top.procumenttype.toUpperCase() == "B" && ptype != "P" && ptype != "N" && ptype != "F" && ptype != "V") {
+            //     alert("BOM PType error: line[" + (i + 1) + "], code" + bomexcel_arr[i][setup.code] + " have wrong ptype " + bomexcel_arr[i][setup.pt] + " as sub-material for \"B\".\nLevel chain is:" + top.pid + "." + bom_top);
+            //     return false;
+            // }
+            // if (top.procumenttype !== false && top.procumenttype.toUpperCase() == "P" && ptype != "N" && ptype != "F" && ptype != "V") {
+            //     alert("BOM PType error: line[" + (i + 1) + "], code " + bomexcel_arr[i][setup.code] + " have wrong ptype " + bomexcel_arr[i][setup.pt] + " as sub-material for \"P\".\nLevel chain is:" + top.pid + "." + bom_top);
+            //     return false;
+            // }
             //check if quantity if reasonable
             var qty = parseFloat(bomexcel_arr[i][setup.qty]);
             if (isNaN(qty) || qty < 0) {
@@ -197,8 +198,10 @@ function gFormatBOM(bom_top, setup, index = 0, top = false) {
                 "parent": bom_top,
                 "qty": qty,
                 "item": levelnode++,
-                "procumenttype": setup.pt == -1 ? "" : ptype,
-                "pfep": setup.pfep == -1 ? "" : bomexcel_arr[i][setup.pfep],
+                "procumenttype": "P",
+                "pfep": "",
+                // "procumenttype": setup.pt == -1 ? "" : ptype,
+                // "pfep": setup.pfep == -1 ? "" : bomexcel_arr[i][setup.pfep],
                 "level": level,
                 "pid": top.pid === false ? bom_top : top.pid + "." + bom_top
             });
@@ -266,8 +269,8 @@ function generateSQL(bom) {
         if (veryTop) {
             sql_i += "insert into st_bomtop (goodsid) values ( '" + bom_top + "'); ";
         }
-        sql_i += "insert into st_picklists (code, date, opid,type) values ('" + bom_top + "', GETDATE(), " + user.id + ", 0); insert into st_bomeco (parentgid, comments, date, data, userid, status) values ( '" + bom_top + "', '" + Base64.encode("New BOM upload") + "', GETDATE(), '" + Base64.encode(JSON.stringify([])) + "', " + user.id + " ,1 );";
-        sql_insert.push(sql_i);
+        //sql_i += "insert into st_picklists (code, date, opid,type) values ('" + bom_top + "', GETDATE(), " + user.id + ", 0); insert into st_bomeco (parentgid, comments, date, data, userid, status) values ( '" + bom_top + "', '" + Base64.encode("New BOM upload") + "', GETDATE(), '" + Base64.encode(JSON.stringify([])) + "', " + user.id + " ,1 );";
+        //sql_insert.push(sql_i);
         addResultText("<div class='alert alert-success' role='alert'>数据库语句已经生成。执行数据导入中……</div>");
         //console.log(sql_insert)
         executeMsSql(sql_insert, (err, result) => {

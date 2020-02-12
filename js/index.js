@@ -6,8 +6,6 @@ const app = require('electron').remote.app;
 const clipboard = require('electron').remote.clipboard;
 const moment = require('moment');
 const sql = require('mssql');
-var co = require('co');
-var cosql = require('co-mssql');
 const {
     ipcRenderer
 } = require('electron')
@@ -28,6 +26,7 @@ var codesList = [];
 var bomtopList = [];
 var historyLength = 5;
 var searchHistory = [];
+var userlistall = {};
 const ptypeList = {
     "B": "Buy from supplier",
     "A": "Assemble in house",
@@ -91,7 +90,7 @@ $(() => {
             showClose: false
         });
     } else {
-        user.id = 54;
+        user.id = 28;
         user.name = "魏亮";
         user.perm = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 20, 21, 22, 23, 30, 31, 32, 33];
         updateUserinfo();
@@ -220,10 +219,10 @@ $("#quickNumberCheck button.btn-success").on("click", function () {
     }
 
     if (kwa.length > 1) {
-        for(var n=1; n<kwa.length; n++){
+        for (var n = 1; n < kwa.length; n++) {
             var newRlt = [];
             for (var g in result) {
-                console.log("processing ",result[g])
+                console.log("processing ", result[g])
                 if (codesInfo[result[g]].code.indexOf(kwa[n]) != -1) newRlt.push(result[g]);
                 else if (codesInfo[result[g]].name && codesInfo[result[g]].name.indexOf(kwa[n]) != -1) newRlt.push(result[g]);
                 else if (codesInfo[result[g]].spec && codesInfo[result[g]].spec.indexOf(kwa[n]) != -1) newRlt.push(result[g]);
@@ -360,6 +359,16 @@ function connectSQLserver() {
         } else {
             config.fSQLserver = 2;
             fetchAllCodes();
+            //get userlist 
+            executeMsSql("select opid,opname from m_operator;", (err, result) => {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                for(var i in result.recordset){
+                    userlistall[result.recordset[i].opid+""]=result.recordset[i].opname;
+                }
+            })
         }
         updateSQLserver();
         if (argv[2] == "dev") updatePerminfo();

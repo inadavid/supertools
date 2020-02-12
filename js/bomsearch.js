@@ -420,6 +420,7 @@ function searchBOM(code) {
         console.log("using new BOM data;")
         // ... error checks
         if (result.recordset.length > 0) {
+            console.log(result.recordset)
             for (var i in result.recordset) {
                 displayBOM.push({
                     Level: result.recordset[i].lvl,
@@ -440,7 +441,7 @@ function searchBOM(code) {
             }
             displayBOM = reOrderBOM(displayBOM, code);
         }
-        executeMsSql("select top 1 b.version from st_drawings as b where b.code = '" + code + "' order by b.version desc;", (err, result) => {
+        executeMsSql("select top 1 b.version from st_drawings as b where b.code = '" + code + "' and b.filetype=0 and b.stat=1 order by b.version desc;", (err, result) => {
             displayBOM.splice(0, 0, {
                 Level: 0,
                 Order: 1,

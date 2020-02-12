@@ -25,7 +25,7 @@ function searchChildren(code) {
 
     //existed eco check
     var sqltext = "select sn from st_bomeco where parentgid = '" + code + "' and cast([date] as date)=cast(getdate() as date);";
-    new sql.Request().query(sqltext, (err, result) => {
+    executeMsSql(sqltext, (err, result) => {
         if (err) {
             console.error(err);
             return;
@@ -71,7 +71,7 @@ function searchChildren(code) {
     var button_confirm = $("<span class='iconfont icon-wanchengchenggong' bid='confirm'>");
 
     var sqltext = "select * from st_goodsbom where goodsid='" + code + "' and startDate<='" + today + "' and endDate>='" + today + "' order by itemno asc;";
-    new sql.Request().query(sqltext, (err, result) => {
+    executeMsSql(sqltext, (err, result) => {
         if (err) {
             console.error(err);
             return;
@@ -189,7 +189,7 @@ function searchChildren(code) {
             if (isNaN(Number(order))) {
                 order = Math.abs(Number(_.max(curOrders))) + 1;
                 console.log(order)
-                if(order =="Infinity") order = 1;
+                if (order == "Infinity") order = 1;
                 tableArea.find("table tr[type=newitem] input[did=Order]").val(order)
             }
 
@@ -200,7 +200,7 @@ function searchChildren(code) {
             }
 
             var codeNew = tableArea.find("table tr[type=newitem] input[did=Code]").val().trim();
-            if(codeNew == code) {
+            if (codeNew == code) {
                 alert("You can not add the code as the child of itself.");
                 tableArea.find("table tr[type=newitem] input[did=Code]").focus().select();
                 return;
@@ -272,67 +272,52 @@ function searchChildren(code) {
                 return;
             }
 
-            co(function* () {
-                try {
-                    var coConn = new cosql.Connection(config.serverconfig);
-                    yield coConn.connect();
-                    var request = new cosql.Request(coConn);
+            $("button[bid=submit]").prop("disabled", true);
 
-                    $("button[bid=submit]").prop("disabled", true);
+            var sqltext = "insert into st_bomeco (parentgid, comments, date, data, userid) values ('" + code + "','" + Base64.encode(comments) + "', GETDATE(), '" + Base64.encode(JSON.stringify(ECOList)) + "', " + user.id + " ); SELECT SCOPE_IDENTITY() as sn;";
 
-                    var sqltext = "insert into st_bomeco (parentgid, comments, date, data, userid) values ('" + code + "','" + Base64.encode(comments) + "', GETDATE(), '" + Base64.encode(JSON.stringify(ECOList)) + "', " + user.id + " ); SELECT SCOPE_IDENTITY() as sn;";
-                    recordset = yield request.query(sqltext);
-                    console.log("insert into bomeco", recordset)
-                    ecosn = recordset[0].sn;
-                    loglog("CreatECO", "ECO-sn:" + ecosn);
+            executeMsSql(sqltext, (err, result) => {
+                console.log("insert into bomeco", result)
+                ecosn = result.recordset[0].sn;
+                loglog("CreatECO", "ECO-sn:" + ecosn);
 
-                    for (var i in ECOList) {
-                        if (ECOList[i].action == "deletion") { // delete bom item. 2 steps.
-                            //1, insert the change into st_bomeco_children
-                            sqltext = "insert into st_bomeco_children (ecosn, goodsid, elemgid,[type],itemno,quanlity,ptype,bomsn) values ( " + ecosn + ", '" + code + "', '" + ECOList[i].data.code + "', 0, " + ECOList[i].data.order + ", " + ECOList[i].data.qty + ", '" + ECOList[i].data.ptype + "', " + ECOList[i].sn + ");";
-                            var log = sqltext;
-                            yield request.query(sqltext);
-                            //2, mark the item in st_goodsbom endDate as yesterday.
-                            sqltext = "update st_goodsbom set endDate = dateadd(day,-1, cast(getdate() as date)) where sn = " + ECOList[i].sn;
-                            log += "|" + sqltext;
-                            yield request.query(sqltext);
-                            loglog("CreatECO_subsql", "ECO-sn:" + ecosn + "|" + log);
-                        }
-                        if (ECOList[i].action == "addition") { // add bom item. 2 steps.
-                            //1, insert the new bom item into st_goodsbom
-                            sqltext = "insert into st_goodsbom (goodsid, elemgid, quantity, itemno, ptype, pfep, opid, startDate, endDate) values ('" + code + "', '" + ECOList[i].data.code + "', " + ECOList[i].data.qty + "," + ECOList[i].data.order + ", '" + ECOList[i].data.ptype + "', '', " + user.id + ", cast(getdate() as date), '2099-01-01'); SELECT SCOPE_IDENTITY() as sn;";
-                            var log = sqltext;
-                            var recordset = yield request.query(sqltext);
-                            console.log("addtion child:", recordset)
-                            //2, insert the change item into st_bomeco_children.
-                            sqltext = "insert into st_bomeco_children (ecosn, goodsid, elemgid,[type],itemno,quanlity,ptype,bomsn) values ( " + ecosn + ", '" + code + "', '" + ECOList[i].data.code + "', 1, " + ECOList[i].data.order + ", " + ECOList[i].data.qty + ", '" + ECOList[i].data.ptype + "', " + recordset[0].sn + ");";
-                            yield request.query(sqltext);
-                            log += "|" + sqltext;
-                            loglog("CreatECO_subsql", "ECO-sn:" + ecosn + "|" + log);
-
-                        }
+                for (var i in ECOList) {
+                    if (ECOList[i].action == "deletion") { // delete bom item. 2 steps.
+                        //1, insert the change into st_bomeco_children
+                        sqltext = "insert into st_bomeco_children (ecosn, goodsid, elemgid,[type],itemno,quanlity,ptype,bomsn) values ( " + ecosn + ", '" + code + "', '" + ECOList[i].data.code + "', 0, " + ECOList[i].data.order + ", " + ECOList[i].data.qty + ", '" + ECOList[i].data.ptype + "', " + ECOList[i].sn + ");";
+                        var log = sqltext;
+                        executeMsSql(sqltext);
+                        //2, mark the item in st_goodsbom endDate as yesterday.
+                        sqltext = "update st_goodsbom set endDate = dateadd(day,-1, cast(getdate() as date)) where sn = " + ECOList[i].sn;
+                        log += "|" + sqltext;
+                        executeMsSql(sqltext);
+                        loglog("CreatECO_subsql", "ECO-sn:" + ecosn + "|" + log);
                     }
-
-                    
-                    popup("ECO has been applied to BOM", "success");
-                    // setTimeout(function () {
-                    //     checkPicklistUpdate(ecosn);
-                    // }, 10);
-                    setTimeout(function () {
-                        sqltext = "update st_bomeco set status = 1 where sn = " + ecosn;
-                        var coConn = new cosql.Connection(config.serverconfig);
-                        yield coConn.connect();
-                        var request = new cosql.Request(coConn);
-                        yield request.query(sqltext);
-                        coConn.close();
-                        loadPanel("bomecosearch");
-                    }, 100);
-
-                } catch (ex) {
-                    // ... error checks
-                    console.error(ex)
+                    if (ECOList[i].action == "addition") { // add bom item. 2 steps.
+                        //1, insert the new bom item into st_goodsbom
+                        sqltext = "insert into st_goodsbom (goodsid, elemgid, quantity, itemno, ptype, pfep, opid, startDate, endDate) values ('" + code + "', '" + ECOList[i].data.code + "', " + ECOList[i].data.qty + "," + ECOList[i].data.order + ", '" + ECOList[i].data.ptype + "', '', " + user.id + ", cast(getdate() as date), '2099-01-01'); SELECT SCOPE_IDENTITY() as sn;";
+                        var log = sqltext;
+                        executeMsSql(sqltext, (err, result) => {
+                            console.log("addtion child:", result.recordset)
+                            sqltext = "insert into st_bomeco_children (ecosn, goodsid, elemgid,[type],itemno,quanlity,ptype,bomsn) values ( " + ecosn + ", '" + code + "', '" + ECOList[i].data.code + "', 1, " + ECOList[i].data.order + ", " + ECOList[i].data.qty + ", '" + ECOList[i].data.ptype + "', " + result.recordset[0].sn + ");";
+                            executeMsSql(sqltext);
+                            log += "|" + sqltext;
+                            loglog("CreatECO_subsql", "ECO-sn:" + ecosn + "|" + log);
+                        });
+                    }
                 }
-            })();
+
+
+                popup("ECO has been applied to BOM", "success");
+                // setTimeout(function () {
+                //     checkPicklistUpdate(ecosn);
+                // }, 10);
+                setTimeout(function () {
+                    sqltext = "update st_bomeco set status = 1 where sn = " + ecosn;
+                    executeMsSql(sqltext);
+                    loadPanel("bomecosearch");
+                }, 100);
+            });
         });
     });
 }
