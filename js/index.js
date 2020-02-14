@@ -79,6 +79,26 @@ function updateUserinfo() {
     $("a[bid=userinfo]").text("User:" + user.name + "; UID:" + user.id)
 }
 
+(function (old) {
+    $.fn.attr = function () {
+        if (arguments.length === 0) {
+            if (this.length === 0) {
+                return null;
+            }
+
+            var obj = {};
+            $.each(this[0].attributes, function () {
+                if (this.specified) {
+                    obj[this.name] = this.value;
+                }
+            });
+            return obj;
+        }
+
+        return old.apply(this, arguments);
+    };
+})($.fn.attr);
+
 $(() => {
     document.getElementById('passwd').focus();
     $("div[bid=sidebar] a[perm!=0]").hide();
@@ -90,8 +110,8 @@ $(() => {
             showClose: false
         });
     } else {
-        user.id = 28;
-        user.name = "魏亮";
+        user.id = 33;
+        user.name = "张瑞";
         user.perm = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 20, 21, 22, 23, 30, 31, 32, 33];
         updateUserinfo();
     }

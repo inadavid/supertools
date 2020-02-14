@@ -1,28 +1,34 @@
 $(function () {
+    var drs = [];
 
     function updateContentData() {
         sqltxt = "select * from st_approval where stat = 0 and flownext = " + user.id + " order by date asc;";
         var rltlen = 0;
         var rltcnt = 0;
+        var procnt = 0;
         executeMsSql(sqltxt, (err, result) => {
+            drs = [];
             rltlen = result.recordset.length;
             var rs = result.recordset;
             for (var i in rs) {
-                var code = rs[i].code;
-                var version = rs[i].version;
-                sqltxt = "select * from st_drawings where code = '" + code + "' and version = '" + version + "' order by filetype;";
+                var trs = rs[i];
+                var code = trs.code;
+                var version = trs.version;
+                var index = rltcnt++;
+                drs[index] = trs;
+                sqltxt = "select " + index + " as ind, * from st_drawings where code = '" + code + "' and version = '" + version + "' order by filetype;";
                 executeMsSql(sqltxt, (err, result) => {
-                    rs[i]["drawings"] = result.recordset;
-                    rltcnt += 1;
+                    if (!err && result.recordset.length > 0) drs[result.recordset[0]["ind"]]["drawings"] = result.recordset;
+                    procnt++;
                 });
             }
             var itv = setInterval(function () {
-                if (rltcnt < rltlen) {
-                    console.log("debug info:", rltcnt, rltlen)
+                if (procnt < rltlen) {
+                    console.log("debug info:", procnt, rltlen)
                     return;
                 }
                 clearInterval(itv);
-                updateContentTable(rs);
+                updateContentTable(drs);
             }, 100);
         })
     }
@@ -51,11 +57,15 @@ $(function () {
             var tr = $("<tr>").attr("data", Base64.encode(JSON.stringify(rs[i]))).attr("curindex", curindex);
 
             tr.append($("<th>").text(rs[i].sn));
-
             if (rs[i].drawings.length == 1) {
-                tr.append($("<td>").html("<a href='#' bid='open'>" + rs[i].code + "</a>"));
+                tr.append($("<td>").html("<a href='#' bid='open' code='" + rs[i].code + "' version='" + rs[i].drawings[0].version + "' filetype='0'>" + rs[i].code + "</a>"));
             } else {
-                tr.append($("<td>").html(rs[i].code));
+                var html = "";
+                for (var ii in rs[i].drawings) {
+                    var drw = rs[i].drawings[ii];
+                    html += " <a href='#' bid='open' code='" + drw.code + "' version='" + drw.version + "' filetype='" + drw.filetype + "'><span  class='iconfont icon-open'></span>F" + drw.filetype + "</a> "
+                }
+                tr.append($("<td>").html(rs[i].code + html));
             }
             tr.append($("<td>").text(rs[i].version));
             tr.append($("<td>").text(userlistall[adata.author]));
@@ -68,15 +78,14 @@ $(function () {
             tbody.append(tr);
         }
         tbody.find("a").on("click", function () {
-            var data = JSON.parse(Base64.decode($(this).parents("tr").attr("data")));
-            console.log(data)
-            downloadDrawing(data.drawings[0].code, data.drawings[0].version, false, function (fp) {
+            var data = $(this).attr();
+            downloadDrawing(data.code, data.version, false, function (fp) {
                 const {
                     shell
                 } = require('electron');
                 // Open a local file in the default app
                 shell.openItem(fp);
-            }, data.drawings[0].filetype);
+            }, data.filetype);
         });
         tbody.find("button[tag=submit]").on("click", function () {
             if (!confirm("Are you sure? The result is not irrevocable.")) return;
@@ -121,7 +130,6 @@ $(function () {
     function updateInbox(page = 0, pageCount = 10) {
         if (pageCount < 10) pageCount = 10;
         sqltxt = "select top " + pageCount + " * from st_inbox where opid=" + user.id + " and sn not in (select top " + (page * pageCount) + " sn from st_inbox where opid=" + user.id + " order by sn desc) order by sn desc;";
-        console.log(sqltxt)
         var tbody = $("table[bid=inbox] tbody").html("");
         executeMsSql(sqltxt, (err, result) => {
             var rs = result.recordset;
@@ -144,7 +152,6 @@ $(function () {
     function updateDrawingProcess() {
         sqltxt = "select * from st_approval where stat=0 and (data like '%\"author\":" + user.id + ",%' or data like '%\"author\":" + user.id + "}') order by sn desc";
         var tbody = $("table[bid=dprocess] tbody").html("");
-        console.log(sqltxt)
         executeMsSql(sqltxt, (err, result) => {
             var rs = result.recordset;
             for (var i in rs) {
