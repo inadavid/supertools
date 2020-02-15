@@ -30,7 +30,7 @@ $(function () {
         var code = drawingCode;
         var div = $("<div>").addClass("card-body");
         var pdiv = $("div[bid=drawings]").html("");
-
+        //console.log("cnt",cnt)
         if (cnt === 0) {
 
         } else {
@@ -38,11 +38,13 @@ $(function () {
             var table = $("<table>").addClass("treetable").append($("<thead>").append($("<th>").text("Drawing Type").css("min-width", "300px")).append($("<th>").text("File Name").css("min-width", "300px").attr("tag", "filename")).append($("<th>").text("Update date").css("min-width", "150px")).append($("<th>").text("Owner")).append($("<th>").text("Action").css("min-width", "60px"))).append($("<tbody>"))
             var tmptable;
             for (var i in result.recordset) {
+
+                //console.log("this record:",result.recordset[i],"v=",v)
                 if (result.recordset[i].stat == 0) {
                     bCreateNewVersion = false;
                     if (result.recordset[i].opid == user.id) bReleaseNewVersion = true;
                 }
-                if (!beingApproved && (result.recordset[i].stat == 2 || result.recordset[i].stat == 3)){
+                if (!beingApproved && (result.recordset[i].stat == 2)) {
                     beingApproved = true;
                 }
                 if (v !== result.recordset[i].version) {
@@ -51,8 +53,7 @@ $(function () {
                         var tmp_tr = tmptable.find("tbody tr:first");
                         if (parseInt(tmp_tr.attr("stat")) == 0 && parseInt(tmp_tr.attr("opid")) == user.id) {
                             tables.push(tmptable);
-                        }
-                        if (parseInt(tmp_tr.attr("stat")) == 1) tables.push(tmptable);
+                        } else tables.push(tmptable);
                     }
                     tmptable = table.clone();
                     v = result.recordset[i].version;
@@ -75,13 +76,17 @@ $(function () {
                 } else if (result.recordset[i].stat == 2) {
                     tr.append($("<td>").text("Being approved"))
                 } else if (result.recordset[i].stat == 3) {
-                    tr.append($("<td>").append("<font color=red><b>Rejected</b></font> ").append($("<button>").text("Restart").addClass("btn btn-success btn-sm").attr("tag","restart").on("click",function(){
-                        if(!confirm("You will withdraw the approval and rework on your drawing. Confirm?")) return;
-                        sqltxt = "update st_drawings set stat=0 where code = '"+result.recordset[i].code+"' and version = "+result.recordset[i].version+";";
-                        executeMsSql(sqltxt, (e)=>{
+                    var btn_restart = $("<button>").text("Restart").addClass("btn btn-success btn-sm").attr("tag", "restart");
+                    var rs = result.recordset[i]
+                    btn_restart.click(function(){
+                        if (!confirm("You will withdraw the approval and rework on your drawing. Confirm?")) return;
+                        sqltxt = "update st_drawings set stat=0 where code = '" + rs.code + "' and version = " + rs.version + ";";
+                        console.log(sqltxt)
+                        executeMsSql(sqltxt, (e) => {
                             loadPanel("drawingdis");
                         })
-                    })));
+                    });
+                    tr.append($("<td>").append("<font color=red><b>Rejected</b></font> ").append(btn_restart));
                 }
                 tmptable.find("tbody").append(tr);
             }
@@ -215,11 +220,11 @@ $(function () {
                         alert("Please check if checked by or approved by user existed");
                         return;
                     }
-                    if(checkedid == user.id || approvedid == user.id){
+                    if (checkedid == user.id || approvedid == user.id) {
                         alert("You cannot set yourself as checker or approver!");
                         return;
                     }
-                    if(checkedid == approvedid){
+                    if (checkedid == approvedid) {
                         alert("You cannot set same person as checker or approver!");
                         return;
                     }
@@ -270,7 +275,7 @@ $(function () {
                 else
                     approvals["v" + r.recordset[x].version] = [r.recordset[x]];
             }
-            console.log(approvals)
+            //console.log(approvals)
             for (var m in tables) {
                 pdiv.append(div.clone().append("<h5> Drawings of <b>" + code + "</b> Version <b>" + tables[m].attr("version") + "</b></h5>").append(tables[m]));
 
@@ -294,16 +299,16 @@ $(function () {
                             }
                         }
                         tabtmp.append(tbody);
-                        var tdiv = $("<div>").css("margin-left", "20px").attr("v",v);
+                        var tdiv = $("<div>").css("margin-left", "20px").attr("v", v);
                         tdiv.append("<h6 style='display:inline-block; margin-right:20px;'>Approval history #" + (i + 1) + " for version " + tables[m].attr("version") + "</h6>");
                         if (ff) {
                             tdiv.attr("tag", "first");
                             ff = false;
-                            if(approvals[v].length>1) tdiv.append($("<button>").addClass("btn btn-warning btn-sm").text("Approval History").on("click", function(){
-                                pdiv.find("div[tag=nonfirst][v="+v+"]").toggle("slow");
+                            if (approvals[v].length > 1) tdiv.append($("<button>").addClass("btn btn-warning btn-sm").text("Approval History").on("click", function () {
+                                pdiv.find("div[tag=nonfirst][v=" + v + "]").toggle("slow");
                             }));
                         } else {
-                            tdiv.attr("tag", "nonfirst").css("display","none");
+                            tdiv.attr("tag", "nonfirst").css("display", "none");
                         }
                         tdiv.append(tabtmp);
                         pdiv.append(tdiv);
@@ -380,7 +385,7 @@ $(function () {
                     password: config.serverconfig.password,
                     database: config.serverconfig.user
                 });
-                connection.query(query, value, function (error, results, fields) {
+                connection.query(query, function (error, results, fields) {
                     sqltxt = "update st_drawings set filename='null', filesize=0, size='-' where sn = " + data.sn + ";";
                     executeMsSql(sqltxt, function (err) {
                         if (err) throw err;
@@ -511,4 +516,5 @@ $(function () {
             maxItems: 5,
         });
     });
+
 })

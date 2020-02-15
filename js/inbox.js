@@ -129,8 +129,28 @@ $(function () {
 
     function updateInbox(page = 0, pageCount = 10) {
         if (pageCount < 10) pageCount = 10;
-        sqltxt = "select top " + pageCount + " * from st_inbox where opid=" + user.id + " and sn not in (select top " + (page * pageCount) + " sn from st_inbox where opid=" + user.id + " order by sn desc) order by sn desc;";
         var tbody = $("table[bid=inbox] tbody").html("");
+        var div = $("div[bid=inbox]");
+        sqltxt = "select count(*) as cnt from st_inbox where opid=" + user.id ;
+        executeMsSql(sqltxt, (err, result) => {
+            if(!err){
+                var cnt = result.recordset[0].cnt;
+                if(page == 0) {
+                    div.find("button[bid='prev']").prop("disabled",true);
+                }
+                else{
+                    div.find("button[bid='prev']").prop("disabled",false);
+                }
+                if(cnt>(page+1)*10){
+                    div.find("button[bid='next']").prop("disabled",false);
+                }
+                else{
+                    div.find("button[bid='next']").prop("disabled",true);
+                }
+            }
+        });
+        sqltxt = "select top " + pageCount + " * from st_inbox where opid=" + user.id + " and sn not in (select top " + (page * pageCount) + " sn from st_inbox where opid=" + user.id + " order by sn desc) order by sn desc;";
+        console.log(sqltxt);
         executeMsSql(sqltxt, (err, result) => {
             var rs = result.recordset;
             for (var i in rs) {
@@ -176,6 +196,18 @@ $(function () {
     updateContentData();
     updateInbox();
     updateDrawingProcess();
+
+    $("div[bid=inbox] button[bid=prev]").on("click", function(){
+        var page= parseInt($("div[bid=inbox] input[bid=page]").val());
+        if(page<=1) return;
+        updateInbox(page-2);
+        $("div[bid=inbox] input[bid=page]").val(page-1);
+    });
+    $("div[bid=inbox] button[bid=next]").on("click", function(){
+        var page= parseInt($("div[bid=inbox] input[bid=page]").val());
+        updateInbox(page);
+        $("div[bid=inbox] input[bid=page]").val(page+1);
+    });
 })
 
 // function stampPDF(drawing,flowinfo){

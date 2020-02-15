@@ -110,8 +110,8 @@ $(() => {
             showClose: false
         });
     } else {
-        user.id = 33;
-        user.name = "张瑞";
+        user.id = 29;
+        user.name = "柳慧芳";
         user.perm = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 20, 21, 22, 23, 30, 31, 32, 33];
         updateUserinfo();
     }

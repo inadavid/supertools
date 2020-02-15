@@ -1,5 +1,5 @@
 <div class="card" meta="importHistory">
-    <div class="card-body">
+    <div class="card-body" bid="inbox">
         <h5>收件箱 Message inbox</h5>
         <table class="table table-sm table-hover" bid="inbox">
             <thead>
@@ -15,6 +15,11 @@
                 </tr>
             </tbody>
         </table>
+        <div style="text-align: right">
+            <button bid="prev" class="btn btn-warning">Prev</button>
+            <input type="text" bid="page" class="form-control" style="width:50px;display:inline-block;" readonly value="1">
+            <button bid="next" class="btn btn-warning">Next</button>
+        </div>
     </div>
     <div class="card-body">
         <h5>提交图纸审核状态 Drawing approval request stat</h5>
