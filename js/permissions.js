@@ -9,13 +9,14 @@ $(function () {
     pem["5"] = "Picklist management";
     pem["6"] = "Read drawing data;*";
     pem["7"] = "Drawing new";
-    pem["8"] = "Drawing ECO / New Version";
+    pem["8"] = "Drawing ECO / New Version / Drawing approval";
     pem["11"] = "BOM Import / Import history";
     pem["12"] = "Picklist Import to ERP";
     pem["13"] = "Drawing Import(Portable and Victor)";
     pem["14"] = "Picklist mass export";
     pem["20"] = "Bill DR export";
     pem["21"] = "Synchronization of codes in ERP";
+    pem["25"] = "Revert BOM ECO";
     pem["30"] = "Migration database";
     pem["31"] = "Permission management";
 
