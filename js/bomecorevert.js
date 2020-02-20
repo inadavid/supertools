@@ -23,15 +23,17 @@ $(function () {
             if(!confirm("Are you sure to revert "+data.length+" records in BOM ECO "+ecosn+"?")) return;
             sqltxt="";
             for(var i in data){
+                if(data[i].action == "addition"){
+                    sqltxt+="delete from st_goodsbom where goodsid ='" + result.recordset[0].parentgid + "' and elemgid ='" + data[i].data.code+"' and endDate = '2099-01-01';"
+                }
+            }
+            for(var i in data){
                 if(data[i].action=="deletion"){
                     sqltxt+="update st_goodsbom set endDate = '2099-01-01' where sn = "+data[i].sn+";";
                 }
-                if(data[i].action == "addition"){
-                    sqltxt+="delete from st_goodsbom where goodsid ='" + result.recordset[0].parentgid + "' and elemgid ='" + data[i].data.code+"';"
-                }
             }
             sqltxt+="delete from st_bomeco where sn = "+ ecosn +"; delete from st_bomeco_children where ecosn = "+ ecosn +";"
-            console.log(sqltxt);
+            $('div[bid="output"]').html("").append($("<textarea>").prop("readonly",true).css("width","600px").css("height","300px").val(sqltxt.split(";").join(";\n")));
         })
     })
 })
