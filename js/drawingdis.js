@@ -78,7 +78,7 @@ $(function () {
                 } else if (result.recordset[i].stat == 3) {
                     var btn_restart = $("<button>").text("Restart").addClass("btn btn-success btn-sm").attr("tag", "restart");
                     var rs = result.recordset[i]
-                    btn_restart.click(function(){
+                    btn_restart.click(function () {
                         if (!confirm("You will withdraw the approval and rework on your drawing. Confirm?")) return;
                         sqltxt = "update st_drawings set stat=0 where code = '" + rs.code + "' and version = " + rs.version + ";";
                         console.log(sqltxt)
@@ -210,6 +210,7 @@ $(function () {
                     }
                     var checked = dlg.find("input[bid=checkedby]").val().trim();
                     var approved = dlg.find("input[bid=approvedby]").val().trim();
+                    var reason = dlg.find("input[bid=reason]").val().trim();
                     var checkedid = checked,
                         approvedid = approved;
                     for (var i in userlist) {
@@ -240,27 +241,28 @@ $(function () {
                         sqltxt += "or sn = " + esn[g];
                     }
                     sqltxt += ";";
-                    executeMsSql(sqltxt);
-                    var history = [{
-                        type: "check",
-                        opid: checkedid,
-                        date: false,
-                        result: 0,
-                        comment: ''
-                    }, {
-                        type: "approve",
-                        opid: approvedid,
-                        date: false,
-                        result: 0,
-                        comment: ''
-                    }];
-                    sqltxt = "insert into st_approval (code, version, date, flownext, flowinfo, data, stat) values ('" + drawingCode + "', " + maxVersion + ", GETDATE(), '" + checkedid + "', '" + JSON.stringify(history) + "', '{\"author\":" + user.id + "}', 0);";
-                    executeMsSql(sqltxt, function (err) {
-                        if (err) throw err;
-                        loglog("ReleaseNewDrawingVersion", '{"DrawingNumber":"' + drawingCode + '", "NewVersion":' + maxVersion + ', "DrawingSN":' + JSON.stringify(dsn) + '}');
-                        loadPanel("drawingdis");
+                    executeMsSql(sqltxt,()=>{
+                        var history = [{
+                            type: "check",
+                            opid: checkedid,
+                            date: false,
+                            result: 0,
+                            comment: ''
+                        }, {
+                            type: "approve",
+                            opid: approvedid,
+                            date: false,
+                            result: 0,
+                            comment: ''
+                        }];
+                        sqltxt = "insert into st_approval (code, version, date, flownext, flowinfo, data, stat) values ('" + drawingCode + "', " + maxVersion + ", GETDATE(), '" + checkedid + "', '" + JSON.stringify(history) + "', '{\"author\":" + user.id + ",\"reason\":\"" + reason + "\"}', 0);";
+                        console.log(sqltxt)
+                        executeMsSql(sqltxt, function (err) {
+                            if (err) console.log(err);
+                            loglog("ReleaseNewDrawingVersion", '{"DrawingNumber":"' + drawingCode + '", "NewVersion":' + maxVersion + ', "DrawingSN":' + JSON.stringify(dsn) + '}');
+                            loadPanel("drawingdis");
+                        });
                     });
-
                 });
 
                 return;
@@ -287,6 +289,7 @@ $(function () {
                         tabtmp.append($("<thead>").append($("<tr>").append($("<th>").text("Category")).append($("<th>").text("Name")).append($("<th>").text("Result")).append($("<th>").text("Date/Time")).append($("<th>").text("Comment"))))
                         var tbody = $("<tbody>")
                         var flowinfo = JSON.parse(approvals[v][i].flowinfo);
+                        var appdata = JSON.parse(approvals[v][i].data);
                         var fp = true; //processing flag
                         var fr = false; //reject flag
                         for (var n in flowinfo) {
@@ -301,6 +304,7 @@ $(function () {
                         tabtmp.append(tbody);
                         var tdiv = $("<div>").css("margin-left", "20px").attr("v", v);
                         tdiv.append("<h6 style='display:inline-block; margin-right:20px;'>Approval history #" + (i + 1) + " for version " + tables[m].attr("version") + "</h6>");
+                        if("reason" in appdata) tdiv.append("<br> Reason: "+appdata.reason);
                         if (ff) {
                             tdiv.attr("tag", "first");
                             ff = false;

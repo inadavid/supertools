@@ -69,6 +69,7 @@ $(function () {
             }
             tr.append($("<td>").text(rs[i].version));
             tr.append($("<td>").text(userlistall[adata.author]));
+            tr.append($("<td>").text(adata.reason||""));
             tr.append($("<th>").text(curflow.type));
             tr.append($("<td>").text(moment(rs[i].date).utc().format("YYYY-MM-DD HH:mm:ss")));
             tr.append($("<td>").html("<span><input type='radio' name='r" + rs[i].sn + "' sn='" + rs[i].sn + "' value='1' checked>Approve</span> &nbsp; <span><input type='radio' name='r" + rs[i].sn + "' sn='" + rs[i].sn + "' value='2'>Reject</span>"));
@@ -176,11 +177,11 @@ $(function () {
             var rs = result.recordset;
             for (var i in rs) {
                 var tr = $("<tr>");
+                var data = JSON.parse(rs[i].flowinfo);
                 tr.append($("<td>").html(rs[i].sn));
                 tr.append($("<td>").html(rs[i].code));
                 tr.append($("<td>").html(rs[i].version));
                 tr.append($("<td>").html(moment(rs[i].date).utc().format("YYYY-MM-DD HH:mm:ss")));
-                var data = JSON.parse(rs[i].flowinfo);
                 for (var j in data) {
                     if (data[j].result == 0) {
                         tr.append($("<td>").html(data[j].type));
