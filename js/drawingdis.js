@@ -74,7 +74,7 @@ $(function () {
                 } else if (result.recordset[i].stat == 1) {
                     tr.append($("<td>").html("<span class='iconfont icon-open' bid='dopen'></span> <span class='iconfont icon-Addtodownload' bid='ddl'></span>"))
                 } else if (result.recordset[i].stat == 2) {
-                    tr.append($("<td>").text("Being approved"))
+                    tr.append($("<td>").html("Being approved"+(result.recordset[i].opid == user.id?"<span class='iconfont icon-open' bid='dopen'></span>":"")))
                 } else if (result.recordset[i].stat == 3) {
                     var btn_restart = $("<button>").text("Restart").addClass("btn btn-success btn-sm").attr("tag", "restart");
                     var rs = result.recordset[i]

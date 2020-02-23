@@ -113,9 +113,11 @@ $(function () {
                 } else { //proceed to next approval
                     sqltxt = "update st_approval set flowinfo='" + JSON.stringify(flowinfo) + "', flownext = " + flownext + " where sn = " + data.sn + ";";
                 }
+                sqltxt += "insert into st_inbox (opid, stat, msg, info_data, type) values (" + user.id + ", 0, 'Drawing " + data.code + " has been <font color=green><b>Approved</b></font> by you.', '{\"code\":\"" + data.code + "\",\"version\":\"" + data.version + "\",\"stat\":1}', 1);";
             } else { //reject this one.
                 sqltxt = "update st_approval set flowinfo='" + JSON.stringify(flowinfo) + "', flownext = -1, stat = 2 where sn = " + data.sn + "; update st_drawings set stat = 3 where code = '" + data.code + "' and version = " + data.version + "; ";
                 sqltxt += "insert into st_inbox (opid, stat, msg, info_data, type) values (" + data.data.author + ", 0, 'Your drawing " + data.code + " has been <font color=red><b>REJECTED</b></font> by " + userlistall[user.id] + ".<br>Comments: " + comment + "', '{\"code\":\"" + data.code + "\",\"version\":\"" + data.version + "\",\"stat\":2,\"opid\":" + user.id + ",\"msg\":\"" + comment + "\"}', 1);";
+                sqltxt += "insert into st_inbox (opid, stat, msg, info_data, type) values (" + user.id + ", 0, 'Drawing " + data.code + " has been <font color=red><b>REJECTED</b></font> by you.', '{\"code\":\"" + data.code + "\",\"version\":\"" + data.version + "\",\"stat\":2}', 1);";
             }
             executeMsSql(sqltxt, (e) => {
                 loadPanel("inbox");
