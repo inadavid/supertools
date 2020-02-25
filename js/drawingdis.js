@@ -308,8 +308,8 @@ $(function () {
                         if (ff) {
                             tdiv.attr("tag", "first");
                             ff = false;
-                            if (approvals[v].length > 1) tdiv.append($("<button>").addClass("btn btn-warning btn-sm").text("Approval History").on("click", function () {
-                                pdiv.find("div[tag=nonfirst][v=" + v + "]").toggle("slow");
+                            if (approvals[v].length > 1) tdiv.append($("<button>").attr("v",v).addClass("btn btn-warning btn-sm").text("Approval History").off("click").on("click", function () {
+                                pdiv.find("div[tag=nonfirst][v=" + $(this).attr("v") + "]").toggle("slow");
                             }));
                         } else {
                             tdiv.attr("tag", "nonfirst").css("display", "none");

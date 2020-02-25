@@ -157,18 +157,21 @@ $(function () {
         executeMsSql(sqltxt, (err, result) => {
             var rs = result.recordset;
             for (var i in rs) {
+                var drawing = JSON.parse(rs[i].info_data);
                 var tr = $("<tr>");
                 tr.append($("<td>").html(rs[i].sn));
+                tr.append($("<td>").html("<a href='#' bid='open' code='"+drawing.code+"'>"+drawing.code+"</a>"));
+                tr.append($("<td>").html(drawing.version));
                 tr.append($("<td>").html(rs[i].type == 1 ? "Drawing" : "BOM"));
                 tr.append($("<td>").html(moment(rs[i].date).utc().format("YYYY-MM-DD HH:mm:ss")));
                 tr.append($("<td>").html(rs[i].msg));
-                tr.append($("<td>").append(rs[i].type == 1 ? $("<button>").addClass("btn btn-primary btn-sm").text("open").attr("info_data", rs[i].info_data).off("click").on("click", function () {
-                    var info_data = JSON.parse($(this).attr("info_data"));
-                    drawingCode = info_data.code;
-                    loadPanel("drawingdis");
-                }) : ""));
                 tbody.append(tr);
             }
+            tbody.find("a[bid=open]").off("click").on("click",function(){
+                drawingCode = $(this).attr("code");
+                console.log(drawingCode)
+                loadPanel("drawingdis");
+            })
         });
     }
 
@@ -181,7 +184,7 @@ $(function () {
                 var tr = $("<tr>");
                 var data = JSON.parse(rs[i].flowinfo);
                 tr.append($("<td>").html(rs[i].sn));
-                tr.append($("<td>").html(rs[i].code));
+                tr.append($("<td>").html("<a href='#' bid='open' code='" + rs[i].code + "'>"+rs[i].code+"</a>"));
                 tr.append($("<td>").html(rs[i].version));
                 tr.append($("<td>").html(moment(rs[i].date).utc().format("YYYY-MM-DD HH:mm:ss")));
                 for (var j in data) {
@@ -193,6 +196,11 @@ $(function () {
                 }
                 tbody.append(tr);
             }
+            tbody.find("a[bid=open]").off("click").on("click",function(){
+                var code = $(this).attr("code");
+                drawingCode = code;
+                loadPanel("drawingdis");
+            })
         });
     }
 

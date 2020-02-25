@@ -512,16 +512,18 @@ function data2csv(data = null, columnDelimiter = ",", lineDelimiter = "\n") { //
                 result += columnDelimiter
             }
 
-            result += typeof item[key] === "string" && item[key].includes(columnDelimiter) ? `"${item[key]}"` : item[key]
+            result += `"${item[key]}"`
             ctr++
         })
         result += lineDelimiter
     })
+    console.log("data 2 length:"+data.length)
 
     return result
 }
 
 function savedata(filepath, data, open = false, cb = false) {
+    console.log("data 1 length:"+data.length)
     var msExcelBuffer = Buffer.concat([
         new Buffer.from('\xEF\xBB\xBF', 'binary'),
         new Buffer.from(data2csv(data))
