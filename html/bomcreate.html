@@ -1,40 +1,43 @@
 <div class="card">
     <div class="card-body">
         <div class="form-group">
-            <h5>创建新的BOM（带有层级的）</h5>
-            <input class="form-control" meta="bomtop" placeholder="Finish Goods number" value="" id="testauto">
+            <h5>创建新的BOM（带有层级的）Create new BOM with level</h5>
+            <input class="form-control" style="display:inline-block; width:200px;" bid="bomtop" value="">
+            <button type="submit" class="btn btn-form btn-primary btn-sm" bid="query">Create</button>
         </div>
-        <div class="form-group" id="bom">
-            <table class="bom">
-                <tr class="header">
-                    <td>层级</td>
-                    <td>物料号</td>
-                    <td>物料名</td>
-                    <td>物料规格</td>
-                    <td>数量</td>
-                    <td>单位</td>
-                    <td>物料类型</td>
-                    <td>采购类型</td>
-                    <td>PFEP</td>
-                    <td>其他注释</td>
-                </tr>
-                <tr v-for="item in bom" sn="{{item.sn}}">
-                    <td>{{item.level}}</td>
-                    <td>{{item.code}}</td>
-                    <td>{{item.codename}}</td>
-                    <td>{{item.codespec}}</td>
-                    <td>{{item.qty}}</td>
-                    <td>{{item.unit}}</td>
-                    <td>{{item.unit}}</td>
-                    <td>{{item.unit}}</td>
-                    <td>
-                        <a href="#" v-on:click="udelete(item.Id)">删除</a>
-                        <a href="#" v-on:click="updateu(item)">更新</a>
-                    </td>
-                </tr>
+        <div class="form-group" bid="bom">
+            <table class="treetable" bid="bom" style="width:95%" disabled>
+                <thead>
+                    <tr class="header">
+                        <td style="width:50px">Level</td>
+                        <td style="width:50px">Order</td>
+                        <td style="width:100px">Code</td>
+                        <td style="width:100px">Name</td>
+                        <td style="width:150px">Spec</td>
+                        <td style="width:50px">Qty</td>
+                        <td style="width:50px">Unit</td>
+                        <td >Action</td>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>1</td>
+                        <td>?</td>
+                        <td><input bid="code" type="text" style="width:100px;border:1px solid;padding:1px;" \></td>
+                        <td bid="name"></td>
+                        <td bid="spec"></td>
+                        <td><input bid="qty" type="text" style="width:50px;border:1px solid;padding:1px;" \></td>
+                        <td bid="unit"></td>
+                        <td><button class="btn btn-primary btn-sm">Add</button></td>
+                    </tr>
+                </tfoot>
             </table>
-            <div class="form-actions">
-                <button type="submit" class="btn btn-form btn-primary btn-sm" meta="next" step="1">下一步</button>
+            <div class="form-actions" style="margin-top:50px">
+                <button type="submit" class="btn btn-form btn-primary btn-sm" bid="save" disabled>Save</button>
+                <button type="submit" class="btn btn-form btn-primary btn-sm" bid="submit" disabled>Submit</button>
             </div>
         </div>
     </div>
