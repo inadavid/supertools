@@ -431,3 +431,8 @@ textarea[bid="plme-namespec"] {
   width: 400px;
   height: 500px;
 }
+
+.highlightTest {
+  color: #ffffff;
+  background-color: #FF0000
+}

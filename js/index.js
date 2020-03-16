@@ -368,11 +368,28 @@ function updateSQLserver() {
     }
     a.html(text);
     if (config.fSQLserver == -1 || config.fSQLserver == 3) a.addClass("list-group-item-danger");
-    if (config.fSQLserver == 4) a.addClass("list-group-item-success");
+    if (config.fSQLserver == 4){
+        if (config.testmode == 1) {
+            config.testmode = 0;
+            config.serverconfig.database = config.dbbak;
+            delete config.dbbak ;
+            //config.serverconfig.options.database = config.serverconfig.database
+            $("div[bid=sidebar] a[perm=32]").prop("disabled",true).off("click").on("click",()=>{
+                return false;
+            });
+            setInterval(function() {
+                $("div[bid=sidebar] a[perm=32]").toggleClass("highlightTest")
+            },500)
+        }
+        a.addClass("list-group-item-success");
+    }
     fs.writeFileSync(configFile, ini.stringify(config));
 }
 
-function connectSQLserver() {
+function disconnectSQLserver(){
+    sql.close();
+}
+function connectSQLserver(cb) {
     sql.connect(config.serverconfig, err => {
         if (err) {
             config.fSQLserver = 3;
@@ -389,6 +406,7 @@ function connectSQLserver() {
                     userlistall[result.recordset[i].opid+""]=result.recordset[i].opname;
                 }
             })
+            if(typeof (cb) == "function") cb();
         }
         updateSQLserver();
         if (argv[2] == "dev") updatePerminfo();

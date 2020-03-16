@@ -189,7 +189,7 @@ function gFormatBOM(bom_top, setup, index = 0, top = false) {
             // }
             //check if quantity if reasonable
             var qty = parseFloat(bomexcel_arr[i][setup.qty]);
-            if (isNaN(qty) || qty < 0) {
+            if (isNaN(qty)) {
                 alert("BOM PType error: line[" + (i + 1) + "], code " + bomexcel_arr[i][setup.code] + " have wrong QUANTITY " + bomexcel_arr[i][setup.qty]);
                 return false;
             }
