@@ -245,16 +245,8 @@ function stampPDF(drawing, flow) {
         }
     }
     //1. get the drawing data.
-    var mysql = require('mysql');
-    var connection = mysql.createConnection({
-        host: config.mysqlServer,
-        user: config.serverconfig.user,
-        password: config.serverconfig.password,
-        database: config.serverconfig.user
-    });
-    connection.connect();
     query = "select data from st_drawings where dsn=" + dsn;
-    connection.query(query, function (error, results, fields) {
+    executeMySql(query, function (error, results) {
         var ddata = results[0].data;
         //fs.writeFileSync(filepath, results[0].data);
         //2. import pdf lib. open current pdf data. get page information.
@@ -391,7 +383,7 @@ function stampPDF(drawing, flow) {
             const pdfBytes = await pdfDoc.save()
             //update to database
             query = "delete from st_drawings where dsn = " + dsn;
-            connection.query(query, () => {
+            executeMySql(query, () => {
                 var fn = app.getPath("temp") + "/SuperTools/" + "t.pdf"
                 fs.writeFileSync(fn, pdfBytes);
                 query = "INSERT INTO st_drawings SET ? ";
@@ -399,7 +391,7 @@ function stampPDF(drawing, flow) {
                     dsn: dsn,
                     data: fs.readFileSync(fn)
                 }
-                connection.query(query, value);
+                executeMySql(query, value);
             });
 
             sqltxt = "update st_drawings set size = '" + size + "' where sn = " + dsn;

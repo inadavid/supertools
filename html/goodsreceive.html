@@ -1,0 +1,33 @@
+<div class="card" meta="importHistory">
+    <div class="card-body" bid="inbox">
+        <h5>收货操作 Goods receive</h5>
+        <div>
+            <input type="checkbox" bid="directentry" value="1" checked>确认订单和物料编码存在后自动输入
+            <input type="text" bid="infoinput"  class="form-control form-inline" style="width:200px" autofocus>
+        </div>
+    </div>
+    <div class="card-body">
+        <h5>收货历史 Goods receive history</h5>
+        <div>
+            Keywords:<input type="text" bid="kw" class="form-control form-inline" style="width:200px" placeholder="Code or PO">
+            <button class="btn btn-form btn-sx">Filter</button>
+        </div>
+        <table class="table table-sm table-hover" bid="dtable">
+            <thead>
+                <th style="width: 20px;">#</th>
+                <th style="width: 100px;">Code</th>
+                <th style="width: 50px;">Qty</th>
+                <th style="width: 50px;">PO</th>
+                <th style="width: 150px;">Vender</th>
+                <th style="width: 150px;">ReceivingDate</th>
+                <th>Comment</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="7">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="../js/goodsreceive.js"></script>

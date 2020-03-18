@@ -15,7 +15,7 @@ const request = require('request');
 
 let win;
 let flash;
-global.version = "V02124";
+global.version = "V02128";
 global.appPath = app.getAppPath();
 global.argv = process.argv;
 global.flashClosed = false;
@@ -28,9 +28,9 @@ var config = ini.parse(fs.readFileSync(configFile, 'utf-8'));
 
 config.updateServer = "10.11.50.168";
 config.mysqlServer = "10.11.50.168";
-config.database = "SD30602_STJ201907";
-config.serverconfig.database = "SD30602_STJ201907";
-config.serverconfig.options.database = "SD30602_STJ201907";
+if(config.mysqlDatabase !="SuperTools" && config.mysqlDatabase!="TEST_SuperTools") config.mysqlDatabase = "SuperTools";
+if(config.database !="SD30602_STJ201907" && config.database!="TEST_SD30602_STJ201907") config.database = "SD30602_STJ201907";
+if(config.serverconfig.database !="SD30602_STJ201907" && config.serverconfig.database!="TEST_SD30602_STJ201907") config.serverconfig.database = "SD30602_STJ201907";
 config.updatePort = 8082;
 fs.writeFileSync(configFile, ini.stringify(config));
 ////////////////////////////Config ini////////////////////////////

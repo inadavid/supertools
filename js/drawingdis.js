@@ -147,15 +147,7 @@ $(function () {
                 }
                 mysqltxt += ";"
                 executeMsSql(sqltxt, function () {
-                    var mysql = require('mysql');
-                    var connection = mysql.createConnection({
-                        host: config.mysqlServer,
-                        user: config.serverconfig.user,
-                        password: config.serverconfig.password,
-                        database: config.serverconfig.user
-                    });
-                    connection.connect();
-                    if (dsn.length > 0) connection.query(mysqltxt);
+                    if (dsn.length > 0) executeMySql(mysqltxt);
                     loadPanel("drawingdis");
                 })
             })
@@ -350,14 +342,7 @@ $(function () {
                     data: filedata
                 }
 
-                var mysql = require('mysql');
-                var connection = mysql.createConnection({
-                    host: config.mysqlServer,
-                    user: config.serverconfig.user,
-                    password: config.serverconfig.password,
-                    database: config.serverconfig.user
-                });
-                connection.query(query, value, function (error, results, fields) {
+                executeMySql(query, value, function (error, results) {
                     if (error) throw error;
                     sqltxt = "update st_drawings set filename='" + filename + "', filesize=" + info.size;
                     if (/(.)*\_[SV][0-9]+\_[AB][0-9]\_(.)*\.[a-zA-Z]+/g.test(filename)) {
@@ -382,14 +367,7 @@ $(function () {
                 data.filesize = parseInt(data.filesize);
                 data.sn = parseInt(data.sn);
                 var query = "delete from st_drawings where dsn=" + data.sn + ";";
-                var mysql = require('mysql');
-                var connection = mysql.createConnection({
-                    host: config.mysqlServer,
-                    user: config.serverconfig.user,
-                    password: config.serverconfig.password,
-                    database: config.serverconfig.user
-                });
-                connection.query(query, function (error, results, fields) {
+                executeMySql(query, function () {
                     sqltxt = "update st_drawings set filename='null', filesize=0, size='-' where sn = " + data.sn + ";";
                     executeMsSql(sqltxt, function (err) {
                         if (err) throw err;

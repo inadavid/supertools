@@ -245,14 +245,7 @@ $('button[step=3]').click(function () {
                 progressDiv.append('<div class="progress"> <div class="progress-bar" bid="upload" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"> 0% </div> </div>');
                 $('div[step="4"]').show().append(progressDiv);
 
-                var mysql = require('mysql');
-                var connection = mysql.createConnection({
-                    host: config.mysqlServer,
-                    user: config.serverconfig.user,
-                    password: config.serverconfig.password,
-                    database: config.serverconfig.user
-                });
-                connection.connect();
+                
                 $([document.documentElement, document.body]).animate({
                     scrollTop: $('div[step="4"]').offset().top
                 }, 500);
@@ -262,15 +255,13 @@ $('button[step=3]').click(function () {
                         dsn: result.recordset[m].sn,
                         data: fs.readFileSync(drawingfilepath + "/" + result.recordset[m].filename)
                     }
-                    connection.query(query, value, function (error, results, fields) {
+                    executeMySql(query, value, function (error, results, fields) {
                         if (error) throw error;
                         var rate = (++uploadedQty / drawingQty * 100).toFixed(2);
                         $('div[step="4"] div[bid=upload]').css("width", rate + "%").attr("aria-valuenow", rate).text(rate + "%");
                         if (uploadedQty == drawingQty) popup("All drawings are uploaded!", "success");
                     });
                 }
-
-                connection.end();
             });
         }
     })

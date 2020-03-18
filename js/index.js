@@ -6,6 +6,8 @@ const app = require('electron').remote.app;
 const clipboard = require('electron').remote.clipboard;
 const moment = require('moment');
 const sql = require('mssql');
+var mysql = require('mysql');
+var mysqlconn = false;
 const {
     ipcRenderer
 } = require('electron')
@@ -75,6 +77,9 @@ var drawingType = [{
     },
 ];
 
+
+if (!fs.existsSync(app.getPath("temp") + "/SuperTools")) fs.mkdirSync(app.getPath("temp") + "/SuperTools");
+
 function updateUserinfo() {
     $("a[bid=userinfo]").text("User:" + user.name + "; UID:" + user.id)
 }
@@ -112,7 +117,7 @@ $(() => {
     } else {
         user.id = 28;
         user.name = "魏亮";
-        user.perm = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 20, 21, 22, 23, 25, 30, 31, 32, 33];
+        user.perm = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 20, 21, 22, 23, 25, 30, 31, 32, 33,40];
         updateUserinfo();
     }
 
@@ -389,6 +394,15 @@ function connectSQLserver() {
                     userlistall[result.recordset[i].opid+""]=result.recordset[i].opname;
                 }
             })
+
+            //connect to mysql server
+            mysqlconn = mysql.createConnection({
+                host: config.mysqlServer,
+                user: config.serverconfig.user,
+                password: config.serverconfig.password,
+                database: config.serverconfig.user
+            });
+            mysqlconn.connect();
         }
         updateSQLserver();
         if (argv[2] == "dev") updatePerminfo();
@@ -745,19 +759,11 @@ function downloadDrawing(code, version = false, path = false, cb = false, filety
             filepath = p.dirname(path) + "/" + nfn + p.extname(result.recordset[0].filename).toLowerCase();
         }
 
-        var mysql = require('mysql');
-        var connection = mysql.createConnection({
-            host: config.mysqlServer,
-            user: config.serverconfig.user,
-            password: config.serverconfig.password,
-            database: config.serverconfig.user
-        });
-        connection.connect();
         query = "select data from st_drawings where dsn=" + result.recordset[0].sn;
-        connection.query(query, function (error, results, fields) {
+        executeMySql(query, function (error, results) {
+            console.log(error,results)
             //if (filetype == 5) console.log(results, query, filepath)
             fs.writeFileSync(filepath, results[0].data);
-            connection.destroy();
             if (typeof (cb) == "function") cb(filepath);
         });
     });
@@ -830,6 +836,52 @@ function executeMsSql(sqlArr, cb = false, rlt = false) {
                     }
                     if (sqlArr.length == 0) return cb(err, rlt);
                     else return executeMsSql(sqlArr, cb, rlt);
+                }
+            });
+        } else {
+            return cb(false, rlt);
+        }
+    }
+}
+function executeMySql(sqlArr, ...args) {
+    console.log("mysql:",sqlArr);
+    var cb = false;
+    if (!Array.isArray(sqlArr) && typeof (sqlArr) == "string") {
+        if(typeof(args[0]) == "object"){
+            cb = args[1];
+            mysqlconn.query(sqlArr, args[0], function (err, result, fields){
+                if (cb && typeof (cb) == "function") cb(err, result, fields);
+            });
+        }
+        else{
+            cb=args[0];
+            mysqlconn.query(sqlArr, function (err, result, fields){
+                if (cb && typeof (cb) == "function") cb(err, result, fields);
+            });
+        }
+    } else if (Array.isArray(sqlArr)) {
+        //var sqltext = sqlArr.splice(sqlArr.length - 1, 1);
+        var sqltext = sqlArr.pop();
+        cb = args[0];
+        var rlt = args[1]?args[1]:false;
+        if (typeof (sqltext) == "string") {
+            console.log("current my sql:", sqltext)
+            mysqlconn.query(sqltext, function (err, result, fields){
+                console.log("returned result", result)
+                if (err) {
+                    if (cb && typeof (cb) == "function") cb(err, rlt);
+                } else {
+                    if (rlt === false) rlt = {
+                        recordset: result
+                    }
+                    else {
+                        if (result.length > 0) {
+                            if (Array.isArray(rlt.recordset)) rlt.recordset.concat(result);
+                            else rlt.recordset = result;
+                        }
+                    }
+                    if (sqlArr.length == 0) return cb(err, rlt);
+                    else return executeMySql(sqlArr, cb, rlt);
                 }
             });
         } else {

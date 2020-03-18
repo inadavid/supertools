@@ -247,20 +247,21 @@ function showBOM(dbom) {
         btn.prop("disabled", true);
         var top = $("input[bid=bomtop]").val().trim();
         var cloneArr = JSON.parse(JSON.stringify(dbom));
-        var rdata = [{
-            SN: "-",
-            Level: "-",
-            Order: "-",
-            Code: top,
-            "Drawing.Ver": "-",
-            Qty: "-",
-            Unit: codesInfo[top].unit,
-            //PT: "-",
-            Name: codesInfo[top].name,
-            Spec: codesInfo[top].spec,
-            //PFEP: ""
-        }];
-        var count = 1;
+        // var rdata = [{
+        //     SN: "-",
+        //     Level: "-",
+        //     Order: "-",
+        //     Code: top,
+        //     "Drawing.Ver": "-",
+        //     Qty: "-",
+        //     Unit: codesInfo[top].unit,
+        //     //PT: "-",
+        //     Name: codesInfo[top].name,
+        //     Spec: codesInfo[top].spec,
+        //     //PFEP: ""
+        // }];
+        var rdata = []
+        var count = 0;
         for (var i in cloneArr) {
             var obj = {};
             obj.SN = count++;
@@ -271,8 +272,8 @@ function showBOM(dbom) {
             obj.Qty = cloneArr[i].Qty;
             obj.Unit = cloneArr[i].Unit;
             //obj.PT = cloneArr[i].ProchasingType;
-            obj.Name = cloneArr[i].Name;
-            obj.Spec = cloneArr[i].Spec;
+            obj.Name = cloneArr[i].Name.replace("\"","_").replace("\'","_");
+            obj.Spec = cloneArr[i].Spec.replace("\"","_").replace("\'","_");
             //obj.PFEP = cloneArr[i].PFEP;
             rdata.push(obj);
         }
@@ -405,15 +406,15 @@ function searchBOM(code) {
     if (code.length <6) return false;
 
     displayBOM = [];
-    if (lastbom && lastbom[0].Code == code) {
-        console.log("using cache BOM data;")
-        setTimeout(function () {
-            displayBOM = lastbom;
-            showBOM(displayBOM);
-            $("button[bid=bomSearch]").prop("disabled", false);
-        }, 500);
-        return;
-    }
+    // if (lastbom && lastbom[0].Code == code) {
+    //     console.log("using cache BOM data;")
+    //     setTimeout(function () {
+    //         displayBOM = lastbom;
+    //         showBOM(displayBOM);
+    //         $("button[bid=bomSearch]").prop("disabled", false);
+    //     }, 500);
+    //     return;
+    // }
     $("div[bid=bomcard]").html("<h5>Searching BOM, please wait...</h5>");
     sqltext = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.quantity*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid where b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT a.*, (select max(b.version) from st_drawings as b where b.code = a.elemgid and b.filetype=0 and b.stat=1) as dversion  FROM CTE as a order by pid asc,itemno asc;";
     executeMsSql(sqltext, (err, result) => {
