@@ -19,6 +19,7 @@ $(function () {
     pem["25"] = "Revert BOM ECO";
     pem["30"] = "Migration database";
     pem["31"] = "Permission management";
+    pem["32"] = "Switch to test system/database";
 
     var permDiv = $("div[bid=perms]");
     var sel = $("select[bid=opt]");
