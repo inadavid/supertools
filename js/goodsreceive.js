@@ -10,7 +10,7 @@ $(function(){
         if (e.which == 13) processScan();
     })
     
-    if(user.perm.indexOf(41)==-1) $('button[bid="export"]').hide();
+    //if(user.perm.indexOf(41)==-1) $('button[bid="export"]').hide();
 
     $('div[bid="goodsReceiveInfo"] button[tag=cancel]').off("click").on("click",function(){
         $.modal.close();
