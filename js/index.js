@@ -7,7 +7,7 @@ const clipboard = require('electron').remote.clipboard;
 const moment = require('moment');
 const sql = require('mssql');
 var mysql = require('mysql');
-var mysqlconn = false;
+var mysqlpool = false;
 const {
     ipcRenderer
 } = require('electron')
@@ -82,6 +82,18 @@ if (!fs.existsSync(app.getPath("temp") + "/SuperTools")) fs.mkdirSync(app.getPat
 
 function updateUserinfo() {
     $("a[bid=userinfo]").text("User:" + user.name + "; UID:" + user.id)
+    console.log("database", config.mysqlDatabase.substring(0,5))
+    if(config.mysqlDatabase.substring(0,4)=="TEST_") {
+        if(user.perm.indexOf(32)==-1){
+            alert("You do not have permission to use test system.");
+            ipcRenderer.send("quit");
+        }
+        else{
+            setInterval(function(){
+                $("div[bid=sidebar] a[perm=32]").toggleClass("highlightTest")
+            },500)
+        }
+    }
 }
 
 (function (old) {
@@ -117,7 +129,7 @@ $(() => {
     } else {
         user.id = 28;
         user.name = "魏亮";
-        user.perm = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 20, 21, 22, 23, 25, 30, 31, 32, 33,40];
+        user.perm = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 20, 21, 22, 23, 25, 30, 31, 32, 33, 40, 41, 42];
         updateUserinfo();
     }
 
@@ -128,6 +140,7 @@ $(() => {
     tryHost(0);
 
     if (!require("electron").remote.getGlobal("flashClosed")) require("electron").remote.getGlobal("flash").close();
+    
 });
 
 $(document).on("keydown", function (e) {
@@ -411,19 +424,14 @@ function connectSQLserver(cb) {
                     userlistall[result.recordset[i].opid+""]=result.recordset[i].opname;
                 }
             })
-<<<<<<< HEAD
-
             //connect to mysql server
-            mysqlconn = mysql.createConnection({
+            mysqlpool = mysql.createPool({
                 host: config.mysqlServer,
                 user: config.serverconfig.user,
                 password: config.serverconfig.password,
                 database: config.serverconfig.user
             });
-            mysqlconn.connect();
-=======
             if(typeof (cb) == "function") cb();
->>>>>>> b8afe7ace962801076dfa25570e0f8eb47c92de6
         }
         updateSQLserver();
         if (argv[2] == "dev") updatePerminfo();
@@ -870,14 +878,22 @@ function executeMySql(sqlArr, ...args) {
     if (!Array.isArray(sqlArr) && typeof (sqlArr) == "string") {
         if(typeof(args[0]) == "object"){
             cb = args[1];
-            mysqlconn.query(sqlArr, args[0], function (err, result, fields){
-                if (cb && typeof (cb) == "function") cb(err, result, fields);
+            mysqlpool.getConnection(function(err, mysqlconn) {
+                mysqlconn.query(sqlArr, args[0], function (err, result, fields){
+                    if (cb && typeof (cb) == "function") cb(err, result, fields);
+                    mysqlconn.end();
+                });
+
             });
         }
         else{
             cb=args[0];
-            mysqlconn.query(sqlArr, function (err, result, fields){
-                if (cb && typeof (cb) == "function") cb(err, result, fields);
+            
+            mysqlpool.getConnection(function(err, mysqlconn) {
+                mysqlconn.query(sqlArr, function (err, result, fields){
+                    if (cb && typeof (cb) == "function") cb(err, result, fields);
+                    mysqlconn.end();
+                });
             });
         }
     } else if (Array.isArray(sqlArr)) {
@@ -887,24 +903,28 @@ function executeMySql(sqlArr, ...args) {
         var rlt = args[1]?args[1]:false;
         if (typeof (sqltext) == "string") {
             console.log("current my sql:", sqltext)
-            mysqlconn.query(sqltext, function (err, result, fields){
-                console.log("returned result", result)
-                if (err) {
-                    if (cb && typeof (cb) == "function") cb(err, rlt);
-                } else {
-                    if (rlt === false) rlt = {
-                        recordset: result
-                    }
-                    else {
-                        if (result.length > 0) {
-                            if (Array.isArray(rlt.recordset)) rlt.recordset.concat(result);
-                            else rlt.recordset = result;
+            mysqlpool.getConnection(function(err, mysqlconn) {
+                mysqlconn.query(sqltext, function (err, result, fields){
+                    console.log("returned result", result)
+                    if (err) {
+                        if (cb && typeof (cb) == "function") cb(err, rlt);
+                    } else {
+                        if (rlt === false) rlt = {
+                            recordset: result
                         }
+                        else {
+                            if (result.length > 0) {
+                                if (Array.isArray(rlt.recordset)) rlt.recordset.concat(result);
+                                else rlt.recordset = result;
+                            }
+                        }
+                        if (sqlArr.length == 0) return cb(err, rlt);
+                        else return executeMySql(sqlArr, cb, rlt);
                     }
-                    if (sqlArr.length == 0) return cb(err, rlt);
-                    else return executeMySql(sqlArr, cb, rlt);
-                }
+                    mysqlconn.end();
+                });
             });
+            
         } else {
             return cb(false, rlt);
         }

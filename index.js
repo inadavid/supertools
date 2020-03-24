@@ -15,7 +15,7 @@ const request = require('request');
 
 let win;
 let flash;
-global.version = "V02128";
+global.version = "V02141";
 global.appPath = app.getAppPath();
 global.argv = process.argv;
 global.flashClosed = false;
@@ -207,6 +207,9 @@ app.on('window-all-closed', () => {
 //   }
 // })
 
+ipcMain.on("quit", function(){
+    app.quit();
+})
 
 const download = (url, dest, cb) => {
     const file = fs.createWriteStream(dest);

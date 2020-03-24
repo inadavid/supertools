@@ -107,6 +107,48 @@
         </p>
         <p style="text-align: right"> <button class="btn btn-success" tag="submit">Submit</button> </p>
     </div>
+    <div class="modal" bid="goodsReceiveInfo" style="display:none;z-index: 999999;">
+        <h2>收货扫描内容</h2>
+        <table class="table table-sm" style="width: 100%; font-size: 18px;">
+            <tr>
+                <td>订单号</td>
+                <td bid="gr.pocode"></td>
+            </tr>
+            <tr>
+                <td>供应商</td>
+                <td bid="gr.trader"></td>
+            </tr>
+            <tr>
+                <td width="40%">物料号</td>
+                <td bid="gr.code"></td>
+            </tr>
+            <tr>
+                <td>物料名称</td>
+                <td bid="gr.name"></td>
+            </tr>
+            <tr>
+                <td>规格</td>
+                <td bid="gr.spec"></td>
+            </tr>
+            <tr>
+                <td>送货数量</td>
+                <td bid="gr.qty.receive"><input type="text" class="form-control" style="display: inline;width: 100px;" bid="gr.qty.receive"></td>
+            </tr>
+            <tr>
+                <td>订单数量</td>
+                <td bid="gr.qty.order"></td>
+            </tr>
+            <tr>
+                <td>单位</td>
+                <td bid="gr.unit"></td>
+            </tr>
+        </table>
+        <p style="text-align: right"> 
+            <button class="btn btn-success" tag="confirm">Confirm确认</button> 
+            <button class="btn btn-danger" tag="cancel">Cancel取消</button>
+        </p>
+    </div>
+    
 
     <script src="../js/index.js"></script>
     <script src="../js/lib/jquery.modal.min.js"></script>

@@ -20,6 +20,8 @@ $(function () {
     pem["30"] = "Migration database";
     pem["31"] = "Permission management";
     pem["32"] = "Switch to test system/database";
+    pem["40"] = "Goods receive and history check";
+    pem["41"] = "Goods receive delete and history export";
 
     var permDiv = $("div[bid=perms]");
     var sel = $("select[bid=opt]");

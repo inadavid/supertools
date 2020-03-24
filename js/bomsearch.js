@@ -220,7 +220,7 @@ function showBOM(dbom) {
             else alert(rtn.err)
         });
     });
-    $("div[bid=bomcard]").html("<h5><strong>" + $("input[bid=bomtop]").val() + "</strong> BOM Tree View &nbsp; &nbsp; &nbsp; <input type='input' bid='keyword' class='form-control' style='width:200px; display: inline-block;' placeholder='Keyword' title='Press Enter to search\n按回车键搜索'> &nbsp; &nbsp; &nbsp; <button class='btn btn-form btn-warning btn-sm' bid='exportBOM'>Export BOM</button> <!--button class='btn btn-form btn-primary btn-sm' bid='exportPL'>Export Picklist</button--> " + (user.perm.indexOf(6) != -1 ? "<button class='btn btn-form btn-success btn-sm' bid='dlAllDrawings'>Download drawings(pdf)</button><div bid='downProgress'></div> " : "") + "</h5>").append(table);
+    $("div[bid=bomcard]").html("<h5><strong>" + $("input[bid=bomtop]").val() + "</strong> BOM Tree View &nbsp; &nbsp; &nbsp; <input type='input' bid='keyword' class='form-control' style='width:200px; display: inline-block;' placeholder='Keyword' title='Press Enter to search\n按回车键搜索'> &nbsp; &nbsp; &nbsp; <button class='btn btn-form btn-warning btn-sm' bid='exportBOM'>Export BOM</button> <!--button class='btn btn-form btn-primary btn-sm' bid='exportPL'>Export Picklist</button--> <button class='btn btn-form btn-warning btn-sm' bid='exportBOMQTY'>Export BOM with Qty</button> " + (user.perm.indexOf(6) != -1 ? "<button class='btn btn-form btn-success btn-sm' bid='dlAllDrawings'>Download drawings(pdf)</button><div bid='downProgress'></div> " : "") + "</h5>").append(table);
 
     var jstt = com_github_culmat_jsTreeTable;
     // $("div[bid=bomcard] table").treetable({
@@ -272,8 +272,8 @@ function showBOM(dbom) {
             obj.Qty = cloneArr[i].Qty;
             obj.Unit = cloneArr[i].Unit;
             //obj.PT = cloneArr[i].ProchasingType;
-            obj.Name = cloneArr[i].Name.replace("\"","_").replace("\'","_");
-            obj.Spec = cloneArr[i].Spec.replace("\"","_").replace("\'","_");
+            obj.Name = cloneArr[i].Name.split("\"").join("_").split("\'").join("_");
+            obj.Spec = cloneArr[i].Spec.split("\"").join("_").split("\'").join("_");
             //obj.PFEP = cloneArr[i].PFEP;
             rdata.push(obj);
         }
@@ -284,6 +284,45 @@ function showBOM(dbom) {
         var toLocalPath = path.resolve(app.getPath("documents"));
         var filepath = path.resolve(tmppath + "/Export-" + moment().format("YYYYMMDD-HHmmss") + ".temp.csv");
         savedata(filepath, rdata, true, function (fp) {
+            btn.prop("disabled", false);
+        });
+
+    });
+    $("button[bid=exportBOMQTY]").click(function () {
+        var btn = $(this);
+        btn.prop("disabled", true);
+        var top = $("input[bid=bomtop]").val().trim();
+        var cloneArr = JSON.parse(JSON.stringify(dbom));
+        var rdata = {};
+        var tdata = [];
+        var count = 0;
+        for (var i in cloneArr) {
+            if (cloneArr[i].Code in rdata) {
+                rdata[cloneArr[i].Code].Qty += cloneArr[i].rQty;
+            } else {
+                var obj = {};
+                obj.Code = cloneArr[i].Code;
+                obj.Qty = cloneArr[i].rQty;
+                obj.Unit = cloneArr[i].Unit;
+                //obj.PT = cloneArr[i].ProchasingType;
+                obj.Name = cloneArr[i].Name.split("\"").join("_").split("\'").join("_");
+                obj.Spec = cloneArr[i].Spec.split("\"").join("_").split("\'").join("_");
+                //obj.PFEP = cloneArr[i].PFEP;
+                rdata[cloneArr[i].Code]=obj;
+            }
+
+        }
+
+        for (var j in rdata) {
+            if(rdata[j].Qty>0) tdata.push(rdata[j]);
+        }
+        tdata = _.sortBy(tdata, "Code");
+        console.log(tdata,rdata);
+        var path = require('path');
+        var tmppath = app.getPath("temp") + "/SuperTools/BOMExportQTY"+ moment().format("YYYYMMDD-HHmmss") + ".csv";
+
+        var filepath = path.resolve(tmppath);
+        savedata(filepath, tdata, true, function (fp) {
             btn.prop("disabled", false);
         });
 
@@ -403,7 +442,7 @@ function showBOM(dbom) {
 }
 
 function searchBOM(code) {
-    if (code.length <6) return false;
+    if (code.length < 6) return false;
 
     displayBOM = [];
     // if (lastbom && lastbom[0].Code == code) {
