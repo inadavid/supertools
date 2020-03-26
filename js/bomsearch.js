@@ -272,8 +272,8 @@ function showBOM(dbom) {
             obj.Qty = cloneArr[i].Qty;
             obj.Unit = cloneArr[i].Unit;
             //obj.PT = cloneArr[i].ProchasingType;
-            obj.Name = cloneArr[i].Name.split("\"").join("_").split("\'").join("_");
-            obj.Spec = cloneArr[i].Spec.split("\"").join("_").split("\'").join("_");
+            obj.Name = cloneArr[i].Name==null?"":cloneArr[i].Name.split("\"").join("_").split("\'").join("_");
+            obj.Spec = cloneArr[i].Spec==null?"":cloneArr[i].Spec.split("\"").join("_").split("\'").join("_");
             //obj.PFEP = cloneArr[i].PFEP;
             rdata.push(obj);
         }
@@ -305,8 +305,8 @@ function showBOM(dbom) {
                 obj.Qty = cloneArr[i].rQty;
                 obj.Unit = cloneArr[i].Unit;
                 //obj.PT = cloneArr[i].ProchasingType;
-                obj.Name = cloneArr[i].Name.split("\"").join("_").split("\'").join("_");
-                obj.Spec = cloneArr[i].Spec.split("\"").join("_").split("\'").join("_");
+                obj.Name = cloneArr[i].Name==null?"":cloneArr[i].Name.split("\"").join("_").split("\'").join("_");
+                obj.Spec = cloneArr[i].Spec==null?"":cloneArr[i].Spec.split("\"").join("_").split("\'").join("_");
                 //obj.PFEP = cloneArr[i].PFEP;
                 rdata[cloneArr[i].Code]=obj;
             }
@@ -455,7 +455,8 @@ function searchBOM(code) {
     //     return;
     // }
     $("div[bid=bomcard]").html("<h5>Searching BOM, please wait...</h5>");
-    sqltext = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.quantity*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid where b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT a.*, (select max(b.version) from st_drawings as b where b.code = a.elemgid and b.filetype=0 and b.stat=1) as dversion  FROM CTE as a order by pid asc,itemno asc;";
+    sqltext = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.rQty*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid where b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT a.*, (select max(b.version) from st_drawings as b where b.code = a.elemgid and b.filetype=0 and b.stat=1) as dversion  FROM CTE as a order by pid asc,itemno asc;";
+    console.log(sqltext)
     executeMsSql(sqltext, (err, result) => {
         console.log("using new BOM data;")
         // ... error checks
