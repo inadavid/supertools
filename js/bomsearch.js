@@ -178,6 +178,7 @@ function showBOM(dbom) {
         .append("<th style='width:10px'>Qty</th>")
         .append("<th style='width:20px'>Unit</th>")
         //.append("<th style='width:10px'>PType</th>")
+        .append("<th style='width:10px' title='Commodity Type'>CType</th>")
         .append("<th style='width:250px'>Name</th>")
         .append("<th style='width:300px'>Desc</th>")
         //.append("<th style='width:150px'>Warehouse</th>")
@@ -195,6 +196,7 @@ function showBOM(dbom) {
             .append("<td><input did='Qty' value='" + dbom[i].Qty + "' readonly></td>")
             .append("<td>" + dbom[i].Unit + "</td>")
             //.append("<td bid='ptype'>" + dbom[i].ProchasingType + "</td>")
+            .append("<td bid='ptype' title='"+commodityType[dbom[i].CType]+"'>" + dbom[i].CType + "</td>")
             .append("<td><input did='Name' value='" + dbom[i].Name + "' readonly></td>")
             .append("<td><input did='Spec' value='" + dbom[i].Spec + "' readonly></td>")
             //.append("<td><input did='whpos' value='" + dbom[i].Warehouse + "' readonly></td>")
@@ -475,6 +477,7 @@ function searchBOM(code) {
                     //Warehouse: codesInfo[result.recordset[i].elemgid].warehouse && codesInfo[result.recordset[i].elemgid].warehouse.length > 0 ? codesInfo[result.recordset[i].elemgid].warehouse : "",
                     //ProchasingType: result.recordset[i].ptype,
                     //PFEP: result.recordset[i].pfep,
+                    CType: codesInfo[result.recordset[i].elemgid].ctype,
                     pid: result.recordset[i].pid,
                     rQty: result.recordset[i].rQty,
                     dversion: result.recordset[i].dversion,
@@ -495,6 +498,7 @@ function searchBOM(code) {
                 //Warehouse: codesInfo[code].warehouse && codesInfo[code].warehouse.length > 0 ? codesInfo[code].warehouse : "",
                 //ProchasingType: "",
                 //PFEP: "",
+                CType: codesInfo[code].ctype,
                 pid: "",
                 rQty: 0,
                 dversion: result.recordset.length == 1 ? result.recordset[0].version : null,

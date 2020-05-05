@@ -39,6 +39,26 @@ const ptypeList = {
     "V": "Virtual material physically",
     "M": "Manufactured in hourse"
 };
+
+const commodityType = {
+    'MMI': 'Mechanical-Machining',
+    'MWN': 'Mechanical-Sheetmatel non-welded',
+    'MWA': 'Mechanical-Sheetmatel welding Assy',
+    'MWS': 'Mechanical-Sheetmatel welding Subs',
+    'MIN': 'Mechanical-Injection',
+    'ECS': 'Electrical-Customized',
+    'ASM': 'Assembly-Misc',
+    'SME': 'Standard-Mechanical',
+    'SEL': 'Standard-Electrical',
+    'SPN': 'Standard-Pnewmatic',
+    'SFS': 'Standard-Fasteners',
+    'OPR': 'Others-Printed',
+    'OLB': 'Others-Label',
+    'OPD': 'Others-Program or Design',
+    'ONC': 'Others-Non-categorized',
+    '---': 'No Commodity Type yet'
+}
+
 var ptypeKeys = _.keys(ptypeList);
 var user = {};
 var ecosn = 0;
@@ -82,16 +102,15 @@ if (!fs.existsSync(app.getPath("temp") + "/SuperTools")) fs.mkdirSync(app.getPat
 
 function updateUserinfo() {
     $("a[bid=userinfo]").text("User:" + user.name + "; UID:" + user.id)
-    console.log("database", config.mysqlDatabase.substring(0,5))
-    if(config.mysqlDatabase.substring(0,4)=="TEST_") {
-        if(user.perm.indexOf(32)==-1){
+    console.log("database", config.mysqlDatabase.substring(0, 5))
+    if (config.mysqlDatabase.substring(0, 4) == "TEST_") {
+        if (user.perm.indexOf(32) == -1) {
             alert("You do not have permission to use test system.");
             ipcRenderer.send("quit");
-        }
-        else{
-            setInterval(function(){
+        } else {
+            setInterval(function () {
                 $("div[bid=sidebar] a[perm=32]").toggleClass("highlightTest")
-            },500)
+            }, 500)
         }
     }
 }
@@ -140,7 +159,7 @@ $(() => {
     tryHost(0);
 
     if (!require("electron").remote.getGlobal("flashClosed")) require("electron").remote.getGlobal("flash").close();
-    
+
 });
 
 $(document).on("keydown", function (e) {
@@ -386,27 +405,28 @@ function updateSQLserver() {
     }
     a.html(text);
     if (config.fSQLserver == -1 || config.fSQLserver == 3) a.addClass("list-group-item-danger");
-    if (config.fSQLserver == 4){
+    if (config.fSQLserver == 4) {
         if (config.testmode == 1) {
             config.testmode = 0;
             config.serverconfig.database = config.dbbak;
-            delete config.dbbak ;
+            delete config.dbbak;
             //config.serverconfig.options.database = config.serverconfig.database
-            $("div[bid=sidebar] a[perm=32]").prop("disabled",true).off("click").on("click",()=>{
+            $("div[bid=sidebar] a[perm=32]").prop("disabled", true).off("click").on("click", () => {
                 return false;
             });
-            setInterval(function() {
+            setInterval(function () {
                 $("div[bid=sidebar] a[perm=32]").toggleClass("highlightTest")
-            },500)
+            }, 500)
         }
         a.addClass("list-group-item-success");
     }
     fs.writeFileSync(configFile, ini.stringify(config));
 }
 
-function disconnectSQLserver(){
+function disconnectSQLserver() {
     sql.close();
 }
+
 function connectSQLserver(cb) {
     sql.connect(config.serverconfig, err => {
         if (err) {
@@ -420,8 +440,8 @@ function connectSQLserver(cb) {
                     console.error(err);
                     return;
                 }
-                for(var i in result.recordset){
-                    userlistall[result.recordset[i].opid+""]=result.recordset[i].opname;
+                for (var i in result.recordset) {
+                    userlistall[result.recordset[i].opid + ""] = result.recordset[i].opname;
                 }
             })
             //connect to mysql server
@@ -431,7 +451,7 @@ function connectSQLserver(cb) {
                 password: config.serverconfig.password,
                 database: config.serverconfig.user
             });
-            if(typeof (cb) == "function") cb();
+            if (typeof (cb) == "function") cb();
         }
         updateSQLserver();
         if (argv[2] == "dev") updatePerminfo();
@@ -503,7 +523,7 @@ function fetchAllCodes() {
     if (argv[2] != "dev" || flag) {
         //sqltxt = "select dbo.l_goods.goodsid,dbo.l_goods.code,dbo.l_goods.name,dbo.l_goods.specs,dbo.l_goodsunit.unitname, dbo.l_goods.guserdef1 as whpos from dbo.l_goods inner join l_goodsunit on l_goods.goodsid=l_goodsunit.goodsid and l_goods.unitid=l_goodsunit.unitid ;";
         //changed to another way to read unit from 20190801
-        sqltxt = "select dbo.l_goods.goodsid,dbo.l_goods.code,dbo.l_goods.name,dbo.l_goods.specs,dbo.l_goodsunit.unitname, dbo.l_goods.guserdef1 as whpos from dbo.l_goods inner join l_goodsunit on l_goods.goodsid=l_goodsunit.goodsid and l_goodsunit.unittype=0;";
+        sqltxt = "select dbo.l_goods.goodsid,dbo.l_goods.code,dbo.l_goods.name,dbo.l_goods.specs,dbo.l_goodsunit.unitname, dbo.l_goods.guserdef1 as whpos, dbo.l_goods.guserdef5 as ctype from dbo.l_goods inner join l_goodsunit on l_goods.goodsid=l_goodsunit.goodsid and l_goodsunit.unittype=0;";
         codesList = [];
         codesInfo = {};
         executeMsSql(sqltxt, function (err, recordset) {
@@ -517,6 +537,7 @@ function fetchAllCodes() {
                     name: rs[i].name,
                     spec: rs[i].specs,
                     unit: rs[i].unitname,
+                    ctype: (rs[i].ctype in commodityType ? rs[i].ctype : "---"),
                     warehouse: (typeof (rs[i].whpos) == "string" && rs[i].whpos.length > 6 ? rs[i].whpos : "")
                     ///[a-zA-Z]+[0-9]+\-[a-zA-Z]+[0-9]+\-[a-zA-Z]+[0-9]+\-[0-9]+/g.test(rs[i].whpos) ? .whpos : "",
                 }
@@ -560,13 +581,13 @@ function data2csv(data = null, columnDelimiter = ",", lineDelimiter = "\n") { //
         })
         result += lineDelimiter
     })
-    console.log("data 2 length:"+data.length)
+    console.log("data 2 length:" + data.length)
 
     return result
 }
 
 function savedata(filepath, data, open = false, cb = false) {
-    console.log("data 1 length:"+data.length)
+    console.log("data 1 length:" + data.length)
     var msExcelBuffer = Buffer.concat([
         new Buffer.from('\xEF\xBB\xBF', 'binary'),
         new Buffer.from(data2csv(data))
@@ -790,7 +811,7 @@ function downloadDrawing(code, version = false, path = false, cb = false, filety
 
         query = "select data from st_drawings where dsn=" + result.recordset[0].sn;
         executeMySql(query, function (error, results) {
-            console.log(error,results)
+            console.log(error, results)
             //if (filetype == 5) console.log(results, query, filepath)
             fs.writeFileSync(filepath, results[0].data);
             if (typeof (cb) == "function") cb(filepath);
@@ -872,25 +893,25 @@ function executeMsSql(sqlArr, cb = false, rlt = false) {
         }
     }
 }
+
 function executeMySql(sqlArr, ...args) {
-    console.log("mysql:",sqlArr);
+    console.log("mysql:", sqlArr);
     var cb = false;
     if (!Array.isArray(sqlArr) && typeof (sqlArr) == "string") {
-        if(typeof(args[0]) == "object"){
+        if (typeof (args[0]) == "object") {
             cb = args[1];
-            mysqlpool.getConnection(function(err, mysqlconn) {
-                mysqlconn.query(sqlArr, args[0], function (err, result, fields){
+            mysqlpool.getConnection(function (err, mysqlconn) {
+                mysqlconn.query(sqlArr, args[0], function (err, result, fields) {
                     if (cb && typeof (cb) == "function") cb(err, result, fields);
                     mysqlconn.end();
                 });
 
             });
-        }
-        else{
-            cb=args[0];
-            
-            mysqlpool.getConnection(function(err, mysqlconn) {
-                mysqlconn.query(sqlArr, function (err, result, fields){
+        } else {
+            cb = args[0];
+
+            mysqlpool.getConnection(function (err, mysqlconn) {
+                mysqlconn.query(sqlArr, function (err, result, fields) {
                     if (cb && typeof (cb) == "function") cb(err, result, fields);
                     mysqlconn.end();
                 });
@@ -900,11 +921,11 @@ function executeMySql(sqlArr, ...args) {
         //var sqltext = sqlArr.splice(sqlArr.length - 1, 1);
         var sqltext = sqlArr.pop();
         cb = args[0];
-        var rlt = args[1]?args[1]:false;
+        var rlt = args[1] ? args[1] : false;
         if (typeof (sqltext) == "string") {
             console.log("current my sql:", sqltext)
-            mysqlpool.getConnection(function(err, mysqlconn) {
-                mysqlconn.query(sqltext, function (err, result, fields){
+            mysqlpool.getConnection(function (err, mysqlconn) {
+                mysqlconn.query(sqltext, function (err, result, fields) {
                     console.log("returned result", result)
                     if (err) {
                         if (cb && typeof (cb) == "function") cb(err, rlt);
@@ -924,7 +945,7 @@ function executeMySql(sqlArr, ...args) {
                     mysqlconn.end();
                 });
             });
-            
+
         } else {
             return cb(false, rlt);
         }
