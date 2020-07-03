@@ -1,5 +1,10 @@
 $(function () {
     var drs = [];
+    $("input[bid=inboxDisplayApproved]").prop("checked", config.inboxDisplayApproved).change(function(){
+        config.inboxDisplayApproved = $("input[bid=inboxDisplayApproved]").prop("checked");
+        fs.writeFileSync(configFile, ini.stringify(config));
+        updateInbox();
+    })
 
     function updateContentData() {
         sqltxt = "select * from st_approval where stat = 0 and flownext = " + user.id + " order by date asc;";
@@ -135,6 +140,7 @@ $(function () {
         var tbody = $("table[bid=inbox] tbody").html("");
         var div = $("div[bid=inbox]");
         sqltxt = "select count(*) as cnt from st_inbox where opid=" + user.id ;
+        if(!config.inboxDisplayApproved) sqltxt += " and info_data like '%\"stat\":2%'";
         executeMsSql(sqltxt, (err, result) => {
             if(!err){
                 var cnt = result.recordset[0].cnt;
@@ -152,13 +158,16 @@ $(function () {
                 }
             }
         });
-        sqltxt = "select top " + pageCount + " * from st_inbox where opid=" + user.id + " and sn not in (select top " + (page * pageCount) + " sn from st_inbox where opid=" + user.id + " order by sn desc) order by sn desc;";
+        sqltxt = "select top " + pageCount + " * from st_inbox where opid=" + user.id + " and sn not in (select top " + (page * pageCount) + " sn from st_inbox where opid=" + user.id + " order by sn desc) ";
+        if(!config.inboxDisplayApproved) sqltxt += " and info_data like '%\"stat\":2%'";
+        sqltxt += "order by sn desc;";
         console.log(sqltxt);
         executeMsSql(sqltxt, (err, result) => {
             var rs = result.recordset;
             for (var i in rs) {
                 var drawing = JSON.parse(rs[i].info_data);
-                var tr = $("<tr>");
+                rs[i].info_data_json = drawing;
+                var tr = $("<tr>").attr("data", JSON.stringify(rs[i]));
                 tr.append($("<td>").html(rs[i].sn));
                 tr.append($("<td>").html("<a href='#' bid='open' code='"+drawing.code+"'>"+drawing.code+"</a>"));
                 tr.append($("<td>").html(drawing.version));
@@ -171,6 +180,13 @@ $(function () {
                 drawingCode = $(this).attr("code");
                 console.log(drawingCode)
                 loadPanel("drawingdis");
+            })
+            tbody.find("tr").off("dblclick").on("dblclick",function(){
+                var data = JSON.parse($(this).attr("data"));
+                if(data.info_data_json.stat==2 && !confirm("你确定删除这个\"拒绝REJECT\"的通知么？")) return;
+                executeMsSql("delete from st_inbox where sn = "+data.sn, (err, result) => {
+                    updateInbox();
+                }) 
             })
         });
     }

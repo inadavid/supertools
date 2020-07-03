@@ -10,7 +10,8 @@ $(function(){
         if (e.which == 13) processScan();
     })
     
-    //if(user.perm.indexOf(41)==-1) $('button[bid="export"]').hide();
+    if(user.perm.indexOf(42)==-1) $('div[bid="input"]').hide();
+    if(user.perm.indexOf(41)==-1) $('button[bid="export"]').hide();
 
     $('div[bid="goodsReceiveInfo"] button[tag=cancel]').off("click").on("click",function(){
         $.modal.close();
@@ -115,7 +116,7 @@ $(function(){
         var fromdate = moment($("input[bid=fromdate]").val()).format('YYYY-MM-DD');
         var todate = moment($("input[bid=todate]").val()).format('YYYY-MM-DD');
         var sqltext="select * from st_goodsreceive where 1 ";
-        if(user.perm.indexOf(41)==-1) $("table[bid=dtable] th[bid=action]").hide();
+        if(user.perm.indexOf(43)==-1) $("table[bid=dtable] th[bid=action]").hide();
         if(filter.length>0) sqltext+=" and ( code = '"+filter+"' or po = '"+filter+"') ";
         sqltext+=" and date >= '"+fromdate+"' and date<= '"+todate+"' order by sn desc limit "+(pageCount+1)+" offset "+((page-1)*pageCount)+";";
 
@@ -135,7 +136,7 @@ $(function(){
                 $tmptr.append($("<td>").attr("bid","trader").text(result[i].trader));
                 $tmptr.append($("<td>").attr("bid","opname").text(userlistall[result[i].opid]));
                 $tmptr.append($("<td>").attr("bid","date").text(moment(result[i].date).format("YYYY-MM-DD HH:mm:ss")));
-                if(user.perm.indexOf(41)!=-1) $tmptr.append($("<td>").attr("bid","delete").html("<button class='btn btn-danger btn-sm' bid='delete' sn='"+result[i].sn+"'>Delete</button>"));
+                if(user.perm.indexOf(43)!=-1) $tmptr.append($("<td>").attr("bid","delete").html("<button class='btn btn-danger btn-sm' bid='delete' sn='"+result[i].sn+"'>Delete</button>"));
                 $tbody.append($tmptr);
             }
             $("input[bid='page']").val(page);

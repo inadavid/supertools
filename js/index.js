@@ -18,6 +18,13 @@ const ini = require('ini');
 var configFile = appPath + '/config.ini';
 if (argv[2] != "dev") configFile = appPath + '/../config.ini';
 var config = ini.parse(fs.readFileSync(configFile, 'utf-8'));
+if(config.inboxDisplayApproved == undefined) {
+    config.inboxDisplayApproved = true;
+}
+else{
+    config.inboxDisplayApproved = config.inboxDisplayApproved?true:false;
+}
+fs.writeFileSync(configFile, ini.stringify(config));
 
 var action = "dashboard";
 var bomexcel_arr = [];

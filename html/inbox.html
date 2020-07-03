@@ -1,6 +1,11 @@
 <div class="card" meta="importHistory">
     <div class="card-body" bid="inbox">
         <h5>收件箱 Message inbox</h5>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" bid="inboxDisplayApproved"> 显示已经通过的图纸 Display approved drawings.
+            </label>
+        </div>
         <table class="table table-sm table-hover" bid="inbox">
             <thead>
                 <th style="width: 20px;">#</th>
@@ -18,7 +23,8 @@
         </table>
         <div style="text-align: right">
             <button bid="prev" class="btn btn-warning">Prev</button>
-            <input type="text" bid="page" class="form-control" style="width:50px;display:inline-block;" readonly value="1">
+            <input type="text" bid="page" class="form-control" style="width:50px;display:inline-block;" readonly
+                value="1">
             <button bid="next" class="btn btn-warning">Next</button>
         </div>
     </div>

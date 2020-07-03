@@ -174,7 +174,7 @@ function showBOM(dbom) {
         .append("<th style='width:150px'>Level</th>")
         .append("<th style='width:10px'>SN</th>")
         .append("<th style='width:10px'>Order</th>")
-        .append("<th style='width:100px'>Code#</th>")
+        .append("<th style='width:110px'>Code#</th>")
         .append("<th style='width:10px'>Qty</th>")
         .append("<th style='width:20px'>Unit</th>")
         //.append("<th style='width:10px'>PType</th>")
@@ -196,12 +196,13 @@ function showBOM(dbom) {
             .append("<td><input did='Qty' value='" + dbom[i].Qty + "' readonly></td>")
             .append("<td>" + dbom[i].Unit + "</td>")
             //.append("<td bid='ptype'>" + dbom[i].ProchasingType + "</td>")
-            .append("<td bid='ptype' title='"+commodityType[dbom[i].CType]+"'>" + dbom[i].CType + "</td>")
+            .append("<td bid='ctype' title='" + commodityType[dbom[i].CType] + "' val='" + dbom[i].CType + "'>" + dbom[i].CType + "</td>")
             .append("<td><input did='Name' value='" + dbom[i].Name + "' readonly></td>")
             .append("<td><input did='Spec' value='" + dbom[i].Spec + "' readonly></td>")
             //.append("<td><input did='whpos' value='" + dbom[i].Warehouse + "' readonly></td>")
-            .append("<td>" + (user.perm.indexOf(6) != -1 ? "<span class='iconfont icon-drawing' bid='drawing' code='" + dbom[i].Code + "'>" + (dbom[i].dversion !== null ? "</span> <span class='iconfont icon-open' bid='dopen' code='" + dbom[i].Code + "' version='" + dbom[i].dversion + "'></span> <span>V" + dbom[i].dversion + "</span>" : "") : "-") + "</td>");
+            .append("<td>" + (user.perm.indexOf(6) != -1 ? "<span class='iconfont icon-drawing"+(dbom[i].dcnt>0?" dwgIconRed":"")+"' bid='drawing' code='" + dbom[i].Code + "'>" + (dbom[i].dversion !== null ? "</span> <span class='iconfont icon-open' bid='dopen' code='" + dbom[i].Code + "' version='" + dbom[i].dversion + "'></span> <span>V" + dbom[i].dversion + "</span>" : "") : "-") + "</td>");
         tbody.append(tr);
+        //console.log("dcnt for code "+dbom[i].Code+" is "+dbom[i].dcnt);
     }
     table.append(tbody);
 
@@ -222,7 +223,7 @@ function showBOM(dbom) {
             else alert(rtn.err)
         });
     });
-    $("div[bid=bomcard]").html("<h5><strong>" + $("input[bid=bomtop]").val() + "</strong> BOM Tree View &nbsp; &nbsp; &nbsp; <input type='input' bid='keyword' class='form-control' style='width:200px; display: inline-block;' placeholder='Keyword' title='Press Enter to search\n按回车键搜索'> &nbsp; &nbsp; &nbsp; <button class='btn btn-form btn-warning btn-sm' bid='exportBOM'>Export BOM</button> <!--button class='btn btn-form btn-primary btn-sm' bid='exportPL'>Export Picklist</button--> <button class='btn btn-form btn-warning btn-sm' bid='exportBOMQTY'>Export BOM with Qty</button> " + (user.perm.indexOf(6) != -1 ? "<button class='btn btn-form btn-success btn-sm' bid='dlAllDrawings'>Download drawings(pdf)</button><div bid='downProgress'></div> " : "") + "</h5>").append(table);
+    $("div[bid=bomcard]").html("<h5><strong>" + $("input[bid=bomtop]").val() + "</strong> BOM Tree View &nbsp; &nbsp; &nbsp; <input type='input' bid='keyword' class='form-control' style='width:200px; display: inline-block;' placeholder='Keyword' title='Press Enter to search\n按回车键搜索'> &nbsp; &nbsp; &nbsp; <button class='btn btn-form btn-warning btn-sm' bid='exportBOM'>Export BOM</button> <!--button class='btn btn-form btn-primary btn-sm' bid='exportPL'>Export Picklist</button--> <button class='btn btn-form btn-warning btn-sm' bid='exportBOMQTY'>Export BOM with Qty</button> " + (user.perm.indexOf(6) != -1 ? "<div align='right'> <div align='left' style='display: inline-block; width: 300px'><select bid='MCat' multiple></select></div> &nbsp; <button class='btn btn-form btn-success btn-sm' bid='dlAllDrawings'>Download drawings(pdf)</button><div bid='downProgress'></div></div> " : "") + "</h5>").append(table);
 
     var jstt = com_github_culmat_jsTreeTable;
     // $("div[bid=bomcard] table").treetable({
@@ -274,8 +275,10 @@ function showBOM(dbom) {
             obj.Qty = cloneArr[i].Qty;
             obj.Unit = cloneArr[i].Unit;
             //obj.PT = cloneArr[i].ProchasingType;
-            obj.Name = cloneArr[i].Name==null?"":cloneArr[i].Name.split("\"").join("_").split("\'").join("_");
-            obj.Spec = cloneArr[i].Spec==null?"":cloneArr[i].Spec.split("\"").join("_").split("\'").join("_");
+            obj.CType = cloneArr[i].CType;
+            obj.CName = commodityType[cloneArr[i].CType];
+            obj.Name = cloneArr[i].Name == null ? "" : cloneArr[i].Name.split("\"").join("_").split("\'").join("_");
+            obj.Spec = cloneArr[i].Spec == null ? "" : cloneArr[i].Spec.split("\"").join("_").split("\'").join("_");
             //obj.PFEP = cloneArr[i].PFEP;
             rdata.push(obj);
         }
@@ -307,21 +310,23 @@ function showBOM(dbom) {
                 obj.Qty = cloneArr[i].rQty;
                 obj.Unit = cloneArr[i].Unit;
                 //obj.PT = cloneArr[i].ProchasingType;
-                obj.Name = cloneArr[i].Name==null?"":cloneArr[i].Name.split("\"").join("_").split("\'").join("_");
-                obj.Spec = cloneArr[i].Spec==null?"":cloneArr[i].Spec.split("\"").join("_").split("\'").join("_");
+                obj.CType = cloneArr[i].CType;
+                obj.CName = commodityType[cloneArr[i].CType];
+                obj.Name = cloneArr[i].Name == null ? "" : cloneArr[i].Name.split("\"").join("_").split("\'").join("_");
+                obj.Spec = cloneArr[i].Spec == null ? "" : cloneArr[i].Spec.split("\"").join("_").split("\'").join("_");
                 //obj.PFEP = cloneArr[i].PFEP;
-                rdata[cloneArr[i].Code]=obj;
+                rdata[cloneArr[i].Code] = obj;
             }
 
         }
 
         for (var j in rdata) {
-            if(rdata[j].Qty>0) tdata.push(rdata[j]);
+            if (rdata[j].Qty > 0) tdata.push(rdata[j]);
         }
         tdata = _.sortBy(tdata, "Code");
-        console.log(tdata,rdata);
+        console.log(tdata, rdata);
         var path = require('path');
-        var tmppath = app.getPath("temp") + "/SuperTools/BOMExportQTY"+ moment().format("YYYYMMDD-HHmmss") + ".csv";
+        var tmppath = app.getPath("temp") + "/SuperTools/BOMExportQTY" + moment().format("YYYYMMDD-HHmmss") + ".csv";
 
         var filepath = path.resolve(tmppath);
         savedata(filepath, tdata, true, function (fp) {
@@ -352,7 +357,7 @@ function showBOM(dbom) {
         var fpath = dfp[0];
 
         var downArray = [];
-        $('div[bid=bomcard] table').find("tr span[bid='dopen']").each(function () {
+        $('div[bid=bomcard] table').find("tr:visible span[bid='dopen']").each(function () {
             var btype = $(this).parents("tr").find("td[bid='ptype']").text();
             if (!alldrawing && btype.trim() == "A") return;
             var code = $(this).attr("code");
@@ -441,6 +446,52 @@ function showBOM(dbom) {
         }
     })
 
+    var $optgrp = $("<optgroup>").prop("label","Mechanical");
+    $optgrp.append($("<option>").text("MMI | Machining (各种材质的机加工成型零件，同步带轮、链轮等基于标准件的加工件)").val("MMI"));
+    $optgrp.append($("<option>").text("MWN | Sheetmatel non-welded (外壳，护罩等等非焊接钣金零件)").val("MWN"));
+    $optgrp.append($("<option>").text("MWA | Sheetmatel welding Assy (焊接总成)").val("MWA"));
+    $optgrp.append($("<option>").text("MWS | Sheetmatel welding Subs (焊接子件，包含钣金和机加工焊接子件)").val("MWS"));
+    $optgrp.append($("<option>").text("MIN | Injection (注塑等热成型零件)").val("MIN"));
+    $("select[bid=MCat]").append($optgrp);
+
+    var $optgrp = $("<optgroup>").prop("label","Electrical");
+    $optgrp.append($("<option>").text("ECS | Customized (PCB，线束，定制电缆等零件)").val("ECS"));
+    $("select[bid=MCat]").append($optgrp);
+
+    var $optgrp = $("<optgroup>").prop("label","Assembly");
+    $optgrp.append($("<option>").text("ASM | Misc (装配体零件)").val("ASM"));
+    $("select[bid=MCat]").append($optgrp);
+
+    var $optgrp = $("<optgroup>").prop("label","Standard");
+    $optgrp.append($("<option>").text("SME | Mechanical (轴承、链条、强磁、合页、把手、滑膜、同步带、弹簧、脚轮、滚筒等)").val("SME"));
+    $optgrp.append($("<option>").text("SEL | Electrical (电机、变频器、伺服器、电源、PLC、继电器、接触器等)").val("SEL"));
+    $optgrp.append($("<option>").text("SPN | Pnewmatic (气缸、气管、接头、电磁阀、磁开)").val("SPN"));
+    $optgrp.append($("<option>").text("SFS | Fasteners (各种：螺钉、螺母、垫片、销轴、定位轴等有对应标准的紧固、定位零件)").val("SFS"));
+    $("select[bid=MCat]").append($optgrp);
+
+    var $optgrp = $("<optgroup>").prop("label","Others");
+    $optgrp.append($("<option>").text("OPR | Printed (说明书、手册、卡片等)").val("OPR"));
+    $optgrp.append($("<option>").text("OLB | Label (Logo、标牌、警示标签、铭牌、按钮标牌等)").val("OLB"));
+    $optgrp.append($("<option>").text("OPD | Program or Design (程序、印刷丝印、菲林文件等)").val("OPD"));
+    $optgrp.append($("<option>").text("ONC | Non-categorized (其他无法分类)").val("ONC"));
+    $("select[bid=MCat]").append($optgrp);
+
+    $("select[bid=MCat]").multiselect({
+        selectAll          : true, // add select all option
+    });
+    $("select[bid=MCat]").on("change",function(){
+        var val = $(this).val()
+        if(val.length==0){
+            table.find("tbody tr").show();
+            return;
+        }
+        table.find("tbody tr").each(function(){
+            var tr = $(this);
+            if(val.indexOf(tr.find("td[bid='ctype']").attr("val"))!=-1) tr.show();
+            else tr.hide();
+        })
+    });
+
 }
 
 function searchBOM(code) {
@@ -457,7 +508,7 @@ function searchBOM(code) {
     //     return;
     // }
     $("div[bid=bomcard]").html("<h5>Searching BOM, please wait...</h5>");
-    sqltext = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.rQty*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid where b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT a.*, (select max(b.version) from st_drawings as b where b.code = a.elemgid and b.filetype=0 and b.stat=1) as dversion  FROM CTE as a order by pid asc,itemno asc;";
+    sqltext = "WITH CTE AS (SELECT b.*,cast('" + code + "' as varchar(2000)) as pid , lvl=1, convert(FLOAT, b.quantity) as rQty FROM dbo.st_goodsbom as b WHERE goodsid='" + code + "' and startDate<='" + appliedDate + "' and endDate>='" + appliedDate + "' UNION ALL SELECT b.*, cast(c.pid+'.'+b.goodsid as varchar(2000)) as pid, lvl+1, CONVERT(FLOAT, c.rQty*b.quantity) as rQty FROM dbo.st_goodsbom as b INNER JOIN CTE as c ON b.goodsid=c.elemgid where b.startDate<='" + appliedDate + "' and b.endDate>='" + appliedDate + "') SELECT a.*, (select max(b.version) from st_drawings as b where b.code = a.elemgid and b.filetype=0 and b.stat=1) as dversion , (select count(*) from st_drawings as g where g.code = a.elemgid and g.stat=1) as dcnt  FROM CTE as a order by pid asc,itemno asc;";
     console.log(sqltext)
     executeMsSql(sqltext, (err, result) => {
         console.log("using new BOM data;")
@@ -481,6 +532,7 @@ function searchBOM(code) {
                     pid: result.recordset[i].pid,
                     rQty: result.recordset[i].rQty,
                     dversion: result.recordset[i].dversion,
+                    dcnt: result.recordset[i].dcnt
                 });
             }
             displayBOM = reOrderBOM(displayBOM, code);

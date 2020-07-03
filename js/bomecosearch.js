@@ -11,7 +11,7 @@ $(function () {
     }
 
     new Awesomplete('table.optionTable tr[name="byName"] input[name=name]', {
-        list: ["柳慧芳", "王世静", "王佳宇", "毕磊", "张瑞", "魏亮"],
+        list: ["柳慧芳", "王佳宇", "毕磊", "张瑞"],
         minChars: 0
     });
     var sqltext = "select goodsid from st_bomtop;";
