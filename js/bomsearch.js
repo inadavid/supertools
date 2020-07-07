@@ -537,7 +537,17 @@ function searchBOM(code) {
             }
             displayBOM = reOrderBOM(displayBOM, code);
         }
-        executeMsSql("select top 1 b.version from st_drawings as b where b.code = '" + code + "' and b.filetype=0 and b.stat=1 order by b.version desc;", (err, result) => {
+        executeMsSql("select * from st_drawings as g where g.code = '" + code + "' and g.stat=1 order by g.version desc;", (err, result) => {
+            console.log("debug:",result.recordset);
+            var dcnt=result.recordset.length;
+            var dversion=null;
+            if(dcnt>0) 
+                for(var rst in result.recordset){
+                    if(result.recordset[rst].filetype==0){
+                        dversion = result.recordset[rst].version;
+                        break;
+                    }
+                }
             displayBOM.splice(0, 0, {
                 Level: 0,
                 Order: 1,
@@ -553,8 +563,8 @@ function searchBOM(code) {
                 CType: codesInfo[code].ctype,
                 pid: "",
                 rQty: 0,
-                dversion: result.recordset.length == 1 ? result.recordset[0].version : null,
-
+                dversion: dversion,
+                dcnt: dcnt,
             })
             lastbom = displayBOM;
             showBOM(displayBOM);
