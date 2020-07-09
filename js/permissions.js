@@ -14,6 +14,7 @@ $(function () {
     pem["12"] = "Picklist Import to ERP";
     pem["13"] = "Drawing Import(Portable and Victor)";
     pem["14"] = "Picklist mass export";
+    pem["15"] = "Drawing deleteion";
     pem["20"] = "Bill DR export";
     pem["21"] = "Synchronization of codes in ERP";
     pem["25"] = "Revert BOM ECO";

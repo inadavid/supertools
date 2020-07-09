@@ -24,6 +24,10 @@ if(config.inboxDisplayApproved == undefined) {
 else{
     config.inboxDisplayApproved = config.inboxDisplayApproved?true:false;
 }
+if(config.serverconfig.user !== undefined){
+    delete config.serverconfig.user;
+    delete config.serverconfig.password;
+}
 fs.writeFileSync(configFile, ini.stringify(config));
 
 var action = "dashboard";
@@ -103,7 +107,10 @@ var drawingType = [{
         ext: ["zip", "jpg", "jpeg", "png"]
     },
 ];
-
+var sqlConfig={
+    user:"SuperTools",
+    password:"be5ad9d0b797040743f4bd5fe0b9f26a"
+};
 
 if (!fs.existsSync(app.getPath("temp") + "/SuperTools")) fs.mkdirSync(app.getPath("temp") + "/SuperTools");
 
@@ -435,7 +442,7 @@ function disconnectSQLserver() {
 }
 
 function connectSQLserver(cb) {
-    sql.connect(config.serverconfig, err => {
+    sql.connect(Object.assign(sqlConfig,config.serverconfig), err => {
         if (err) {
             config.fSQLserver = 3;
         } else {
@@ -454,9 +461,9 @@ function connectSQLserver(cb) {
             //connect to mysql server
             mysqlpool = mysql.createPool({
                 host: config.mysqlServer,
-                user: config.serverconfig.user,
-                password: config.serverconfig.password,
-                database: config.serverconfig.user
+                user: sqlConfig.user,
+                password: sqlConfig.password,
+                database: sqlConfig.user
             });
             if (typeof (cb) == "function") cb();
         }
